@@ -1,26 +1,213 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --green-primary: #098327;
+  --green-dark: #086020;
+  --green-light: #e9f5cf;
+  --off-white: #F5F5F0;
+  --charcoal: #1A1A1A;
+  --gray-muted: #6B7280;
+  --white: #FFFFFF;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-green-primary: var(--green-primary);
+  --color-green-dark: var(--green-dark);
+  --color-green-light: var(--green-light);
+  --color-off-white: var(--off-white);
+  --color-charcoal: var(--charcoal);
+  --color-gray-muted: var(--gray-muted);
+
+  --font-display: "Playfair Display", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  background: var(--off-white);
+  overflow-x: hidden;
+}
+
+/* Paper texture overlay */
+.paper-texture {
+  position: relative;
+  background-color: var(--off-white);
+}
+.paper-texture::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  pointer-events: none;
+  z-index: 1;
+}
+.paper-texture > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* Glassmorphism card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.12);
+}
+
+/* Glass card on dark background */
+.glass-card-dark {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.glass-card-dark:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Gradient text utility */
+.gradient-text {
+  background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Green glow button */
+.btn-glow {
+  background: linear-gradient(135deg, var(--green-primary), var(--green-dark));
+  color: white;
+  padding: 14px 36px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn-glow::before {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 50px;
+  background: linear-gradient(135deg, var(--green-primary), var(--green-light));
+  z-index: -1;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  filter: blur(12px);
+}
+.btn-glow:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(9, 131, 39, 0.4);
+}
+.btn-glow:hover::before {
+  opacity: 1;
+}
+
+/* Section shared padding */
+.section-padding {
+  padding: 100px 24px;
+}
+
+/* Heading styles */
+.section-heading {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  line-height: 1.15;
+}
+
+/* Timeline vertical line */
+.timeline-line {
+  width: 3px;
+  background: linear-gradient(180deg, var(--green-light), var(--green-primary), var(--green-dark));
+}
+.timeline-dot {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--green-primary);
+  border: 3px solid var(--green-light);
+  box-shadow: 0 0 0 4px rgba(9, 131, 39, 0.2);
+}
+
+/* Mentor card with pop-out image */
+.mentor-card {
+  position: relative;
+  padding-top: 60px;
+  margin-top: 60px;
+}
+.mentor-card .mentor-image {
+  position: absolute;
+  top: -50px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  border: 4px solid var(--green-primary);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  object-fit: cover;
+  z-index: 10;
+  background: var(--off-white);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--off-white);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--green-primary);
+  border-radius: 4px;
+}
+
+/* Focus Areas carousel card */
+.focus-card {
+  min-width: 280px;
+  height: 360px;
+  border-radius: 20px;
+  overflow: hidden;
+  position: relative;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.4s ease;
+}
+.focus-card:hover {
+  transform: scale(1.03);
+}
+.focus-card .focus-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  background: linear-gradient(0deg, var(--green-dark) 0%, transparent 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
 }
