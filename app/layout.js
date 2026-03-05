@@ -27,6 +27,7 @@ export default function RootLayout({ children }) {
     <html lang="en" className="scroll-smooth">
       <body
         className={`${playfair.variable} ${inter.variable} antialiased`}
+        suppressHydrationWarning
       >
         {children}
       </body>

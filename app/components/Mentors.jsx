@@ -12,28 +12,42 @@ if (typeof window !== "undefined") {
 
 export default function Mentors() {
   const sectionRef = useRef(null);
-  const overlayTextRef = useRef(null);
+  const headingRef = useRef(null);
   const cardsWrapRef = useRef(null);
+  const bottomTextRef = useRef(null);
 
   useEffect(() => {
+    gsap.set([headingRef.current, bottomTextRef.current], {
+      autoAlpha: 0,
+      y: 40,
+    });
+    gsap.set(cardsWrapRef.current?.children ?? [], { autoAlpha: 0, y: 60 });
+
     const ctx = gsap.context(() => {
-      // Overlay text fades in from below
-      gsap.from(overlayTextRef.current, {
-        y: 60,
-        opacity: 0,
-        duration: 1.1,
+      gsap.to(headingRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1.0,
         ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 72%" },
       });
 
-      // Cards slide up staggered
-      gsap.from(cardsWrapRef.current.children, {
-        y: 80,
-        opacity: 0,
-        duration: 0.85,
-        stagger: 0.12,
+      gsap.to(cardsWrapRef.current?.children ?? [], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
         ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+      });
+
+      gsap.to(bottomTextRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        delay: 0.2,
+        scrollTrigger: { trigger: bottomTextRef.current, start: "top 90%" },
       });
     }, sectionRef);
 
@@ -45,62 +59,65 @@ export default function Mentors() {
       ref={sectionRef}
       id="mentors"
       className="relative overflow-hidden"
-      style={{ background: "#F0F0EB", minHeight: "520px" }}
+      style={{ background: "#F0F0EB" }}
     >
-      {/* ── Cards strip ── */}
-      <div
-        ref={cardsWrapRef}
-        className="flex items-end justify-center gap-4 px-8 pt-16 pb-0"
-        style={{ minHeight: "420px" }}
-      >
-        {mentors.map((mentor, i) => (
-          <MentorCard key={i} mentor={mentor} />
-        ))}
-      </div>
-
-      {/* ── Overlay text centred on top of cards ── */}
-      <div
-        ref={overlayTextRef}
-        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
-        style={{ paddingBottom: "60px" }}
-      >
-        <h2
-          className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight drop-shadow-2xl"
-          style={{
-            fontFamily: "var(--font-display)",
-            color: "white",
-            textShadow: "0 4px 32px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.4)",
-          }}
+      {/* ── Cards strip — no gap, flush together ── */}
+      <div className="relative">
+        <div
+          ref={cardsWrapRef}
+          className="flex items-end justify-center"
+          style={{ gap: "2px" }} // almost flush
         >
-          Deep Tech Leadership
-          <br />
-          Think Tank
-        </h2>
-        <p
-          className="mt-4 text-2xl sm:text-3xl font-semibold italic drop-shadow-xl"
-          style={{
-            color: "rgba(255,255,255,0.9)",
-            textShadow: "0 2px 16px rgba(0,0,0,0.5)",
-          }}
-        >
-          (DTLTT)
-        </p>
-      </div>
+          {mentors.map((mentor, i) => (
+            <MentorCard key={i} mentor={mentor} />
+          ))}
+        </div>
 
-      {/* ── Bottom name strip ── */}
-      <div
-        className="relative z-10 flex items-center justify-center gap-4 px-8 py-5 flex-wrap"
-        style={{ background: "rgba(8,96,32,0.06)", borderTop: "1px solid rgba(8,96,32,0.1)" }}
-      >
-        {mentors.map((mentor, i) => (
-          <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full"
-            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(8,96,32,0.12)" }}
+        {/* ── Heading overlay — centred on cards ── */}
+        <div
+          ref={headingRef}
+          className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+        >
+          <h2
+            className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight"
+            style={{
+              fontFamily: "var(--font-display)",
+              color: "white",
+              textShadow:
+                "0 4px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5)",
+            }}
           >
-            <span className="text-xs font-bold" style={{ color: "#086020" }}>{mentor.name}</span>
-            <span className="text-[10px] text-gray-400">·</span>
-            <span className="text-[10px] text-gray-500">{mentor.role}</span>
-          </div>
-        ))}
+            Deep Tech Leadership
+            <br />
+            Think Tank
+          </h2>
+          <p
+            className="mt-3 text-2xl font-semibold italic"
+            style={{
+              color: "rgba(255,255,255,0.9)",
+              textShadow: "0 2px 16px rgba(0,0,0,0.6)",
+            }}
+          >
+            (DTLTT)
+          </p>
+        </div>
+      </div>
+
+      {/* ── Bottom description text ── */}
+      <div
+        ref={bottomTextRef}
+        className="max-w-4xl mx-auto px-8 py-12 text-center"
+      >
+        <p
+          className="text-base sm:text-lg leading-relaxed font-medium"
+          style={{ color: "#086020" }}
+        >
+          DTLTT is a national strategic council founded by FIRST–IIT Kanpur that
+          provides independent, high-credibility guidance to align industry,
+          government, and academia on long-term deep-tech strategy and to
+          accelerate the translation of research into scalable national
+          outcomes.
+        </p>
       </div>
     </section>
   );

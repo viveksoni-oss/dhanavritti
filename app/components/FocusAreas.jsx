@@ -1,9 +1,10 @@
 "use client";
 
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import useEmblaCarousel from "embla-carousel-react";
 import FocusCard from "./focusareas/FocusCard";
 import { focusAreas } from "./focusareas/focusData";
 
@@ -11,160 +12,155 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// Build an infinite looped array: clone last 2 + original + clone first 2
-const VISIBLE = 4;
-const buildLoop = (items) => [
-  ...items.slice(-2).map((item) => ({ ...item, _key: `pre-${item.title}` })),
-  ...items.map((item) => ({ ...item, _key: item.title })),
-  ...items.slice(0, 2).map((item) => ({ ...item, _key: `post-${item.title}` })),
-];
+// 3× repeat so Embla always has enough slides for true infinite loop
+const slides = [...focusAreas, ...focusAreas, ...focusAreas];
+const TOTAL = focusAreas.length;
 
 export default function FocusAreas() {
   const sectionRef = useRef(null);
-  const OFFSET = 2; // number of prepended clones
-  // activeIndex points to the REAL first visible card in the looped array
-  const [activeIndex, setActiveIndex] = useState(OFFSET);
-  const [animating, setAnimating] = useState(false);
-  const looped = buildLoop(focusAreas);
-  const total = focusAreas.length;
+  const headingRef = useRef(null);
+  const trackRef = useRef(null);
 
-  // The two center positions in the 4-visible window are index 1 and 2
-  const isCenterPosition = (pos) => pos === 1 || pos === 2;
+  const [selectedIndex, setSelectedIndex] = useState(TOTAL); // start in middle set
 
-  const slide = useCallback(
-    (dir) => {
-      if (animating) return;
-      setAnimating(true);
-      setActiveIndex((prev) => prev + dir);
-      setTimeout(() => setAnimating(false), 450);
-    },
-    [animating]
-  );
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: "center",
+    slidesToScroll: 1,
+    containScroll: false,
+    startIndex: TOTAL,
+  });
 
-  // Loop jump: when we reach clone territory, silently reset to real item
+  const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
+  const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
+
   useEffect(() => {
-    // Jumped into pre-clones
-    if (activeIndex < OFFSET) {
-      setTimeout(() => {
-        setActiveIndex(OFFSET + total - (OFFSET - activeIndex));
-      }, 450);
-    }
-    // Jumped into post-clones
-    if (activeIndex > OFFSET + total - 1) {
-      setTimeout(() => {
-        setActiveIndex(OFFSET + (activeIndex - (OFFSET + total)));
-      }, 450);
-    }
-  }, [activeIndex, total]);
+    if (!emblaApi) return;
+    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    onSelect();
+    emblaApi.on("select", onSelect);
+    emblaApi.on("reInit", onSelect);
+    return () => {
+      emblaApi.off("select", onSelect);
+      emblaApi.off("reInit", onSelect);
+    };
+  }, [emblaApi]);
 
-  // The 4 cards to render
-  const visibleItems = looped.slice(activeIndex - 1, activeIndex + VISIBLE - 1);
-
-  // Real index for dot indicators (0-based within original array)
-  const realActive = ((activeIndex - OFFSET) % total + total) % total;
-
-  // Entrance animation
   useEffect(() => {
+    const onKey = (e) => {
+      if (e.key === "ArrowLeft") scrollPrev();
+      if (e.key === "ArrowRight") scrollNext();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [scrollPrev, scrollNext]);
+
+  useEffect(() => {
+    gsap.set([headingRef.current, trackRef.current], { autoAlpha: 0, y: 30 });
     const ctx = gsap.context(() => {
-      gsap.from(".fa-heading", {
-        y: 40, opacity: 0, duration: 0.9,
+      gsap.to(headingRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
         ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
       });
-      gsap.from(".focus-card-wrap", {
-        y: 60, opacity: 0, duration: 0.6,
-        stagger: 0.1, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+      gsap.to(trackRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        delay: 0.15,
+        ease: "power3.out",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
       });
     }, sectionRef);
     return () => ctx.revert();
   }, []);
 
-  // Keyboard support
-  useEffect(() => {
-    const onKey = (e) => {
-      if (e.key === "ArrowLeft") slide(-1);
-      if (e.key === "ArrowRight") slide(1);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [slide]);
+  // Only the exact selected slide is in focus
+  const isCenter = (i) => i % TOTAL === selectedIndex % TOTAL;
+
+  const ArrowBtn = ({ onClick, label, children }) => (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-10"
+      style={{
+        background: "linear-gradient(135deg, #22c55e, #086020)",
+        boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
+        color: "white",
+      }}
+    >
+      {children}
+    </button>
+  );
 
   return (
     <section
       ref={sectionRef}
       id="focus-areas"
-      className="section-padding overflow-hidden"
+      className="relative overflow-hidden py-24"
       style={{ background: "#F5F5F0" }}
     >
-      <div className="max-w-7xl mx-auto">
+      <h2
+        ref={headingRef}
+        className="text-center text-4xl sm:text-5xl font-bold mb-14"
+        style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
+      >
+        Focus Areas
+      </h2>
 
-        {/* Header */}
-        <div className="flex items-end justify-between mb-12">
-          <h2
-            className="fa-heading section-heading"
-            style={{ fontFamily: "var(--font-display)" }}
+      <div
+        ref={trackRef}
+        className="flex items-center gap-4 px-6"
+        style={{ minHeight: "480px" }}
+      >
+        <ArrowBtn onClick={scrollPrev} label="Previous">
+          <ChevronLeft size={22} strokeWidth={2.5} />
+        </ArrowBtn>
+
+        {/* Embla viewport */}
+        <div ref={emblaRef} className="overflow-hidden flex-1">
+          <div
+            className="flex items-center"
+            style={{ paddingTop: "52px", paddingBottom: "52px" }}
           >
-            Focus Areas
-          </h2>
-          <div className="flex gap-3">
-            <button
-              onClick={() => slide(-1)}
-              className="w-11 h-11 rounded-full border-2 border-green-700 text-green-700 flex items-center justify-center hover:bg-green-700 hover:text-white transition-all duration-300"
-            >
-              <ChevronLeft size={20} />
-            </button>
-            <button
-              onClick={() => slide(1)}
-              className="w-11 h-11 rounded-full border-2 border-green-700 text-green-700 flex items-center justify-center hover:bg-green-700 hover:text-white transition-all duration-300"
-            >
-              <ChevronRight size={20} />
-            </button>
+            {slides.map((area, i) => {
+              const center = isCenter(i);
+              return (
+                <div
+                  key={i}
+                  className="flex-shrink-0 flex justify-center"
+                  style={{
+                    // All slides same fixed width — critical for Embla loop
+                    flexBasis: "300px",
+                    paddingLeft: "10px",
+                    paddingRight: "10px",
+                  }}
+                  onClick={() => {
+                    if (!center) emblaApi?.scrollTo(i);
+                  }}
+                >
+                  <div
+                    className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                    style={{
+                      transform: center ? "scale(1.12)" : "scale(0.85)",
+                      opacity: center ? 1 : 0.5,
+                      filter: center ? "blur(0px)" : "blur(0.5px)",
+                      cursor: center ? "default" : "pointer",
+                    }}
+                  >
+                    <FocusCard area={area} isCenter={center} />
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
 
-        {/* 4-card track */}
-        <div
-          className="flex items-center justify-center gap-5"
-          style={{ minHeight: "420px" }}
-        >
-          {visibleItems.map((area, pos) => {
-            const center = isCenterPosition(pos);
-            return (
-              <div
-                key={area._key}
-                className="focus-card-wrap transition-all duration-450 ease-out"
-                style={{
-                  opacity: center ? 1 : 0.5,
-                  transform: center ? "scale(1)" : "scale(0.85)",
-                  transition: "opacity 0.45s ease, transform 0.45s ease",
-                }}
-              >
-                <FocusCard area={area} isCenter={center} />
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Dot indicators */}
-        <div className="flex justify-center gap-2 mt-10">
-          {focusAreas.map((_, i) => (
-            <button
-              key={i}
-              onClick={() => setActiveIndex(OFFSET + i)}
-              className="rounded-full transition-all duration-300"
-              style={{
-                width: i === realActive || i === (realActive + 1) % total ? "24px" : "8px",
-                height: "8px",
-                background:
-                  i === realActive || i === (realActive + 1) % total
-                    ? "#16a34a"
-                    : "#d1d5db",
-              }}
-            />
-          ))}
-        </div>
-
+        <ArrowBtn onClick={scrollNext} label="Next">
+          <ChevronRight size={22} strokeWidth={2.5} />
+        </ArrowBtn>
       </div>
     </section>
   );

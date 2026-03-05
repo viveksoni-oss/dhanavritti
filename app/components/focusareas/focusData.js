@@ -1,32 +1,18 @@
 export const focusAreas = [
   {
-    title: "Semiconductor & Fabless Chip Design",
-    desc: "Next-gen chip architectures for AI, IoT, and edge computing",
-    icon: "Cpu",
+    title: "Semiconductor\nfabless chip design",
+    img: "/Focus Area/focus_area_1.png",
   },
   {
     title: "AI and ML",
-    desc: "Deep learning, NLP, computer vision, and intelligent automation",
-    icon: "BrainCircuit",
+    img: "/Focus Area/focus_area_2.png",
   },
   {
-    title: "Battery Technology & Energy Storage",
-    desc: "Solid-state batteries, fuel cells, and grid-scale energy solutions",
-    icon: "BatteryCharging",
+    title: "Battery technology &\nenergy storage",
+    img: "/Focus Area/focus_area_3.png",
   },
   {
     title: "Cybersecurity",
-    desc: "Zero-trust architectures, quantum-safe cryptography, and threat intelligence",
-    icon: "ShieldCheck",
-  },
-  {
-    title: "Quantum Computing",
-    desc: "Quantum processors, error correction, and quantum-safe applications",
-    icon: "Atom",
-  },
-  {
-    title: "Advanced Materials",
-    desc: "Metamaterials, composites, and nano-engineered surfaces for defense & space",
-    icon: "Layers",
+    img: "/Focus Area/focus_area_4.png",
   },
 ];

@@ -3,8 +3,6 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import PillarCard from "./about/PillarCard";
-import { pillars } from "./about/aboutData";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -12,41 +10,57 @@ if (typeof window !== "undefined") {
 
 export default function AboutUs() {
   const sectionRef = useRef(null);
-  const cardsRef = useRef([]);
-  const arrowRefs = useRef([]);
+  const imageRef = useRef(null);
+  const headingRef = useRef(null);
+  const descRef = useRef(null);
+  const tagRef = useRef(null);
 
   useEffect(() => {
+    gsap.set(
+      [tagRef.current, headingRef.current, descRef.current, imageRef.current],
+      {
+        autoAlpha: 0,
+        y: 30,
+      },
+    );
+
     const ctx = gsap.context(() => {
-      const triggerConfig = { trigger: sectionRef.current, start: "top 75%" };
+      const trigger = { trigger: sectionRef.current, start: "top 72%" };
 
-      gsap.from(".about-heading", {
-        y: 40, opacity: 0, duration: 0.9,
-        ease: "power3.out", scrollTrigger: triggerConfig,
+      gsap.to(tagRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power3.out",
+        scrollTrigger: trigger,
       });
 
-      gsap.from(".about-desc", {
-        y: 25, opacity: 0, duration: 0.8, delay: 0.15,
-        ease: "power3.out", scrollTrigger: triggerConfig,
+      gsap.to(headingRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.1,
+        ease: "power3.out",
+        scrollTrigger: trigger,
       });
 
-      cardsRef.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.from(card, {
-          y: 50, opacity: 0, scale: 0.93,
-          duration: 0.65, delay: 0.25 + i * 0.12,
-          ease: "back.out(1.4)",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
-        });
+      gsap.to(descRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        delay: 0.2,
+        ease: "power3.out",
+        scrollTrigger: trigger,
       });
 
-      arrowRefs.current.forEach((arrow, i) => {
-        if (!arrow) return;
-        gsap.from(arrow, {
-          scaleX: 0, opacity: 0,
-          duration: 0.4, delay: 0.55 + i * 0.12,
-          ease: "power2.out",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
-        });
+      gsap.to(imageRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        scale: 1,
+        duration: 0.8,
+        delay: 0.3,
+        ease: "back.out(1.4)",
+        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
       });
     }, sectionRef);
 
@@ -57,53 +71,104 @@ export default function AboutUs() {
     <section
       ref={sectionRef}
       id="about"
-      className="section-padding relative overflow-hidden"
+      className="relative overflow-hidden py-24 px-6"
       style={{
-        background: "linear-gradient(150deg, #2d8a4e 0%, #1e7a3e 45%, #27964a 100%)",
+        background:
+          "linear-gradient(150deg, #0f5c28 0%, #1a7a3a 50%, #0e4d22 100%)",
       }}
     >
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          className="absolute top-0 right-0 w-96 h-96 rounded-full opacity-10"
-          style={{ background: "radial-gradient(circle, white, transparent 70%)", transform: "translate(25%, -25%)" }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-64 h-64 rounded-full opacity-10"
-          style={{ background: "radial-gradient(circle, white, transparent 70%)", transform: "translate(-25%, 25%)" }}
-        />
-      </div>
+      {/* Background texture dots */}
+      <div
+        className="absolute inset-0 pointer-events-none opacity-[0.04]"
+        style={{
+          backgroundImage: "radial-gradient(circle, #fff 1px, transparent 1px)",
+          backgroundSize: "28px 28px",
+        }}
+      />
+
+      {/* Glow orbs */}
+      <div
+        className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(193,255,114,0.08) 0%, transparent 70%)",
+          transform: "translate(20%, -20%)",
+        }}
+      />
+      <div
+        className="absolute bottom-0 left-0 w-80 h-80 rounded-full pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 70%)",
+          transform: "translate(-25%, 25%)",
+        }}
+      />
 
       <div className="max-w-7xl mx-auto relative z-10">
-        <h2
-          className="about-heading section-heading text-white mb-6"
-          style={{ fontFamily: "var(--font-display)" }}
-        >
-          About Us
-        </h2>
-
-        <div className="about-desc max-w-3xl mb-14">
-          <p className="text-white/90 text-lg leading-relaxed">
-            Dhanavritti Ventures (DV) is a{" "}
-            <span className="font-semibold italic" style={{ color: "#d4f5a0" }}>
-              deep-tech investment and venture support
-            </span>{" "}
-            initiative focused on backing science-driven startups built on strong
-            intellectual property. We combine technical diligence with commercial
-            insight to support founders building globally competitive technologies
-            from India.
-          </p>
+        {/* Top tag */}
+        <div ref={tagRef} className="flex justify-start mb-5">
+          <span
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full"
+            style={{
+              background: "rgba(193,255,114,0.12)",
+              color: "#c1ff72",
+              border: "1px solid rgba(193,255,114,0.25)",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-[#c1ff72] animate-pulse" />
+            Who We Are
+          </span>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {pillars.map((pillar, i) => (
-            <PillarCard
-              key={i}
-              pillar={pillar}
-              cardRef={(el) => (cardsRef.current[i] = el)}
-              arrowRef={(el) => (arrowRefs.current[i] = el)}
-              isLast={i === pillars.length - 1}
-            />
-          ))}
+        {/* Heading + desc: two-column on large */}
+        <div className="grid lg:grid-cols-2 gap-10 mb-16 items-end">
+          <h2
+            ref={headingRef}
+            className="text-4xl sm:text-5xl font-bold leading-[1.1] text-white"
+            style={{ fontFamily: "var(--font-display)" }}
+          >
+            Built on Science.
+            <br />
+            <span style={{ color: "#c1ff72" }}>Backed by Conviction.</span>
+          </h2>
+
+          <div ref={descRef}>
+            <p
+              className="text-base leading-relaxed mb-4"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+            >
+              Dhanavritti Ventures (DV) is a{" "}
+              <span className="font-semibold italic text-white">
+                deep-tech investment and venture support
+              </span>{" "}
+              initiative focused on backing science-driven startups built on
+              strong intellectual property.
+            </p>
+            <p
+              className="text-base leading-relaxed"
+              style={{ color: "rgba(255,255,255,0.75)" }}
+            >
+              We combine technical diligence with commercial insight to support
+              founders building globally competitive technologies from India.
+            </p>
+          </div>
+        </div>
+
+        {/* Pillar image */}
+        <div
+          ref={imageRef}
+          className="relative w-full overflow-hidden rounded-3xl"
+          style={{
+            boxShadow: "0 24px 60px rgba(0,0,0,0.4)",
+            // start slightly scaled for the GSAP entrance
+            transform: "scale(0.97)",
+          }}
+        >
+          <img
+            src="/aboutus/image.png"
+            alt="Science-First Evaluation → Ecosystem Leverage → IIT Kanpur Access → Hands-on Scale Support"
+            className="w-full h-auto object-cover block"
+          />
         </div>
       </div>
     </section>

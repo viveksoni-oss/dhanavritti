@@ -11,49 +11,42 @@ if (typeof window !== "undefined") {
 }
 
 export default function Ecosystem() {
-  const sectionRef = useRef(null);
-  const cardRefs = useRef([]);
-  const centerRef = useRef(null);
-  const ringRef = useRef(null);
+  const sectionRef  = useRef(null);
+  const cardRefs    = useRef([]);
+  const centerRef   = useRef(null);
+  const ringRef     = useRef(null);
+  const headingRef  = useRef(null);
 
   useEffect(() => {
+    gsap.set(headingRef.current, { autoAlpha: 0, y: 30 });
+    gsap.set(centerRef.current, { autoAlpha: 0, scale: 0 });
+    gsap.set(cardRefs.current.filter(Boolean), { autoAlpha: 0, scale: 0.9 });
+
     const ctx = gsap.context(() => {
-      const trigger = { trigger: sectionRef.current, start: "top 72%" };
+      const trigger   = { trigger: sectionRef.current, start: "top 72%" };
+      const trigger65 = { trigger: sectionRef.current, start: "top 65%" };
 
-      gsap.from(".eco-heading", {
-        y: 40, opacity: 0, duration: 0.9,
-        ease: "power3.out", scrollTrigger: trigger,
+      gsap.to(headingRef.current, {
+        autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out",
+        scrollTrigger: trigger,
       });
 
-      gsap.from(centerRef.current, {
-        scale: 0, opacity: 0, duration: 0.8, delay: 0.2,
+      gsap.to(centerRef.current, {
+        autoAlpha: 1, scale: 1, duration: 0.8, delay: 0.3,
         ease: "back.out(1.7)",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+        scrollTrigger: trigger65,
       });
 
-      // Pulse ring
+      gsap.to(cardRefs.current.filter(Boolean), {
+        autoAlpha: 1, scale: 1, duration: 0.65, stagger: 0.1, delay: 0.15,
+        ease: "back.out(1.4)",
+        scrollTrigger: trigger65,
+      });
+
+      // Pulse ring loop
       gsap.to(ringRef.current, {
-        scale: 1.15, opacity: 0,
-        duration: 2, ease: "power1.out",
-        repeat: -1, repeatDelay: 0.5,
-      });
-
-      cardRefs.current.forEach((card, i) => {
-        if (!card) return;
-        gsap.from(card, {
-          scale: 0.85, opacity: 0, duration: 0.65,
-          delay: 0.15 + i * 0.1,
-          ease: "back.out(1.4)",
-          scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
-        });
-      });
-
-      // Connector lines draw in
-      gsap.from(".eco-line", {
-        scaleX: 0, scaleY: 0, opacity: 0,
-        duration: 0.6, delay: 0.5, stagger: 0.1,
-        ease: "power2.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+        scale: 1.2, opacity: 0, duration: 2,
+        ease: "power1.out", repeat: -1, repeatDelay: 0.5,
       });
     }, sectionRef);
 
@@ -64,101 +57,110 @@ export default function Ecosystem() {
     <section
       ref={sectionRef}
       id="ecosystem"
-      className="section-padding relative overflow-hidden"
-      style={{ background: "#e9f5cf" }}
+      className="relative overflow-hidden py-24 px-6"
+      style={{ background: "#f0f7e0" }}
     >
-      {/* Background texture blobs */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-30"
-          style={{ background: "radial-gradient(circle, rgba(134,239,172,0.5) 0%, transparent 70%)", transform: "translate(20%, -20%)" }} />
-        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-20"
-          style={{ background: "radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 70%)", transform: "translate(-20%, 20%)" }} />
+      {/* Background blobs */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div
+          className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-40"
+          style={{
+            background: "radial-gradient(circle, rgba(134,239,172,0.5) 0%, transparent 70%)",
+            transform: "translate(20%,-20%)",
+          }}
+        />
+        <div
+          className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-30"
+          style={{
+            background: "radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 70%)",
+            transform: "translate(-20%,20%)",
+          }}
+        />
       </div>
 
-      <div className="max-w-6xl mx-auto relative z-10">
+      <div className="max-w-5xl mx-auto relative z-10">
 
         {/* Heading */}
-        <h2
-          className="eco-heading section-heading text-center mb-16"
-          style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
-        >
+        <div ref={headingRef} className="text-center mb-14">
           <span
-            className="inline-block mr-2 px-4 py-1 rounded-xl shadow-sm"
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"
             style={{
-              background: "white",
-              border: "1.5px solid rgba(8,96,32,0.2)",
-              transform: "rotate(-1.5deg)",
-              display: "inline-block",
+              background: "rgba(8,96,32,0.08)",
+              color: "#086020",
+              border: "1px solid rgba(8,96,32,0.2)",
             }}
           >
-            IIT Kanpur
+            <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
+            India's #1 Technical Institution
           </span>
-          <span className="gradient-text">Ecosystem</span>
-        </h2>
 
-        {/* Layout: 2-col cards with center badge between them */}
-        <div className="relative grid grid-cols-1 md:grid-cols-[1fr_160px_1fr] gap-6 items-center">
+          <h2
+            className="text-4xl sm:text-5xl font-bold leading-tight"
+            style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
+          >
+            IIT Kanpur{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Ecosystem
+            </span>
+          </h2>
+        </div>
 
-          {/* LEFT cards */}
-          <div className="flex flex-col gap-6">
-            {quadrants.slice(0, 2).map((q, i) => (
+        {/* 2×2 grid with IITK center */}
+        <div className="relative">
+
+          {/* 2×2 card grid */}
+          <div className="grid grid-cols-2 gap-4">
+            {quadrants.map((q, i) => (
               <EcoCard
-                key={i}
+                key={q.id}
                 quadrant={q}
+                position={i < 2 ? "top" : "bottom"}
                 cardRef={(el) => (cardRefs.current[i] = el)}
               />
             ))}
           </div>
 
-          {/* CENTER badge */}
-          <div className="flex items-center justify-center relative">
+          {/* IITK center badge — absolutely over the grid intersection */}
+          <div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20"
+          >
             {/* Pulse ring */}
             <div
               ref={ringRef}
-              className="absolute w-32 h-32 rounded-full"
-              style={{ border: "2px solid rgba(8,96,32,0.3)" }}
+              className="absolute inset-0 rounded-full"
+              style={{ border: "2px solid rgba(8,96,32,0.35)" }}
             />
-            {/* Connector lines */}
-            <div className="eco-line absolute left-0 right-0 h-[1.5px] -z-0"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(8,96,32,0.25), transparent)", top: "calc(50% - 60px)" }} />
-            <div className="eco-line absolute left-0 right-0 h-[1.5px] -z-0"
-              style={{ background: "linear-gradient(90deg, transparent, rgba(8,96,32,0.25), transparent)", top: "calc(50% + 60px)" }} />
-
+            {/* Circle */}
             <div
               ref={centerRef}
-              className="relative z-10 w-32 h-32 rounded-full bg-white flex items-center justify-center p-5 shadow-2xl"
-              style={{ border: "2.5px solid #22c55e" }}
+              className="w-36 h-36 rounded-full bg-white flex items-center justify-center p-4 shadow-2xl"
+              style={{ border: "3px solid #22c55e" }}
             >
               <img
-                src="/IITK Logo.png"
+                src="/Icons/IITK Logo.png"
                 alt="IIT Kanpur"
                 className="w-full h-full object-contain"
               />
             </div>
           </div>
 
-          {/* RIGHT cards */}
-          <div className="flex flex-col gap-6">
-            {quadrants.slice(2, 4).map((q, i) => (
-              <EcoCard
-                key={i + 2}
-                quadrant={q}
-                cardRef={(el) => (cardRefs.current[i + 2] = el)}
-              />
-            ))}
-          </div>
         </div>
 
         {/* Bottom tagline */}
-        <p
-          className="text-center mt-12 text-base font-medium"
-          style={{ color: "#374151" }}
-        >
+        <p className="text-center mt-10 text-sm font-medium" style={{ color: "#374151" }}>
           Backed by the full strength of{" "}
           <span className="font-bold" style={{ color: "#086020" }}>
-            India's #1 technical institution
+            India&apos;s #1 technical institution
           </span>
         </p>
+
       </div>
     </section>
   );

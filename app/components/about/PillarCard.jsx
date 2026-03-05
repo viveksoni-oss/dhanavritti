@@ -1,57 +1,54 @@
-import { FlaskConical, Network, University, TrendingUp } from "lucide-react";
+"use client";
 
-const iconMap = {
-  science: FlaskConical,
-  ecosystem: Network,
-  iitk: University,
-  scale: TrendingUp,
-};
-
-export default function PillarCard({ pillar, cardRef, arrowRef, isLast }) {
-  const Icon = iconMap[pillar.icon];
+export default function PillarCard({ pillar, cardRef, isLast }) {
+  const Icon = pillar.icon;
 
   return (
-    <div className="relative flex items-stretch">
+    <div
+      ref={cardRef}
+      className="relative flex flex-col gap-4 rounded-2xl p-6 group transition-transform duration-300 hover:-translate-y-1"
+      style={{
+        background: "rgba(255,255,255,0.08)",
+        border: "1px solid rgba(255,255,255,0.15)",
+        backdropFilter: "blur(10px)",
+      }}
+    >
+      {/* Icon */}
       <div
-        ref={cardRef}
-        className="flex-1 flex flex-col items-center text-center gap-4 p-6 rounded-2xl hover:shadow-xl transition-shadow duration-300"
-        style={{
-          background: "rgba(255,255,255,0.92)",
-          border: "2px solid rgba(8,96,32,0.15)",
-        }}
+        className="w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0"
+        style={{ background: "rgba(255,255,255,0.12)" }}
       >
-        <div
-          className="w-20 h-20 rounded-2xl flex items-center justify-center"
-          style={{
-            background: "rgba(8,96,32,0.06)",
-            border: "1.5px solid rgba(8,96,32,0.15)",
-          }}
-        >
-          {Icon && <Icon size={36} color="#086020" strokeWidth={1.5} />}
-        </div>
+        <Icon size={22} color="white" strokeWidth={1.5} />
+      </div>
 
-        <h3 className="font-semibold text-base" style={{ color: "#1A1A1A" }}>
-          {pillar.title}
-        </h3>
+      {/* Stat */}
+      <div>
+        <p className="text-3xl font-bold leading-none" style={{ color: "#c1ff72" }}>
+          {pillar.stat}
+        </p>
+        <p className="text-xs mt-1 uppercase tracking-wider font-medium" style={{ color: "rgba(255,255,255,0.45)" }}>
+          {pillar.statLabel}
+        </p>
+      </div>
 
-        <p className="text-sm leading-relaxed" style={{ color: "#4B5563" }}>
+      {/* Divider */}
+      <div className="w-full h-px" style={{ background: "rgba(255,255,255,0.1)" }} />
+
+      {/* Text */}
+      <div>
+        <p className="text-base font-semibold text-white mb-1.5">{pillar.title}</p>
+        <p className="text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.6)" }}>
           {pillar.desc}
         </p>
       </div>
 
-      {!isLast && (
-        <div
-          ref={arrowRef}
-          className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 z-10 items-center"
-          style={{ transformOrigin: "left center" }}
-        >
-          <div className="w-full h-[2px] rounded-full" style={{ background: "rgba(8,96,32,0.35)" }} />
-          <div
-            className="w-0 h-0 border-t-[5px] border-t-transparent border-b-[5px] border-b-transparent border-l-[7px] flex-shrink-0"
-            style={{ borderLeftColor: "rgba(8,96,32,0.45)" }}
-          />
-        </div>
-      )}
+      {/* Hover glow from top */}
+      <div
+        className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+        style={{
+          background: "radial-gradient(circle at 50% 0%, rgba(193,255,114,0.1) 0%, transparent 70%)",
+        }}
+      />
     </div>
   );
 }
