@@ -3,91 +3,37 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import MentorCard from "./mentors/MentorCard";
+import { mentors } from "./mentors/mentorsData";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const mentors = [
-  {
-    name: "Dr. Rajesh Kumar",
-    role: "Lead Technology Advisor",
-    bio: "Former CTO at a Tier-1 semiconductor firm. 20+ years in chip design and deep-tech strategy.",
-    linkedin: "https://linkedin.com",
-    initials: "RK",
-    color: "#098327",
-  },
-  {
-    name: "Prof. Anita Sharma",
-    role: "Academic Mentor",
-    bio: "Professor of Computer Science at IIT Kanpur. Pioneer in AI/ML research with 150+ publications.",
-    linkedin: "https://linkedin.com",
-    initials: "AS",
-    color: "#086020",
-  },
-  {
-    name: "Vikram Mehta",
-    role: "Industry Partner",
-    bio: "Serial entrepreneur & angel investor. Built and exited 3 deep-tech startups in energy sector.",
-    linkedin: "https://linkedin.com",
-    initials: "VM",
-    color: "#0a7025",
-  },
-  {
-    name: "Dr. Priya Nair",
-    role: "Venture Strategist",
-    bio: "Ex-McKinsey consultant specializing in deep-tech commercialization and IP monetization.",
-    linkedin: "https://linkedin.com",
-    initials: "PN",
-    color: "#098327",
-  },
-  {
-    name: "Sanjay Gupta",
-    role: "Investment Director",
-    bio: "15+ years in venture capital. Deep expertise in semiconductor and defense tech investments.",
-    linkedin: "https://linkedin.com",
-    initials: "SG",
-    color: "#065a1c",
-  },
-  {
-    name: "Dr. Meera Iyer",
-    role: "Science Advisor",
-    bio: "DRDO veteran with 25 years in materials science. Expert in advanced composites and nano-materials.",
-    linkedin: "https://linkedin.com",
-    initials: "MI",
-    color: "#086020",
-  },
-];
-
 export default function Mentors() {
   const sectionRef = useRef(null);
+  const overlayTextRef = useRef(null);
+  const cardsWrapRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
-      gsap.from(".mentors-heading", {
-        y: 50,
+      // Overlay text fades in from below
+      gsap.from(overlayTextRef.current, {
+        y: 60,
         opacity: 0,
-        duration: 1,
+        duration: 1.1,
         ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 70%" },
       });
 
-      gsap.from(".mentors-subtitle", {
-        y: 30,
-        opacity: 0,
-        duration: 0.8,
-        delay: 0.2,
-        ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
-      });
-
-      gsap.from(".mentor-card-wrapper", {
+      // Cards slide up staggered
+      gsap.from(cardsWrapRef.current.children, {
         y: 80,
         opacity: 0,
-        duration: 0.7,
+        duration: 0.85,
         stagger: 0.12,
         ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 60%" },
+        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
       });
     }, sectionRef);
 
@@ -98,85 +44,63 @@ export default function Mentors() {
     <section
       ref={sectionRef}
       id="mentors"
-      className="section-padding relative overflow-hidden"
-      style={{ background: "linear-gradient(160deg, #086020 0%, #065a1c 50%, #098327 100%)" }}
+      className="relative overflow-hidden"
+      style={{ background: "#F0F0EB", minHeight: "520px" }}
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute top-20 left-20 w-80 h-80 rounded-full" style={{ background: "radial-gradient(circle, white, transparent 70%)" }} />
-        <div className="absolute bottom-10 right-10 w-60 h-60 rounded-full" style={{ background: "radial-gradient(circle, white, transparent 70%)" }} />
+      {/* ── Cards strip ── */}
+      <div
+        ref={cardsWrapRef}
+        className="flex items-end justify-center gap-4 px-8 pt-16 pb-0"
+        style={{ minHeight: "420px" }}
+      >
+        {mentors.map((mentor, i) => (
+          <MentorCard key={i} mentor={mentor} />
+        ))}
       </div>
 
-      <div className="max-w-7xl mx-auto relative">
-        <div className="text-center mb-20">
-          <h2
-            className="mentors-heading section-heading text-white mb-4"
-            style={{ fontFamily: "var(--font-display)" }}
+      {/* ── Overlay text centred on top of cards ── */}
+      <div
+        ref={overlayTextRef}
+        className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+        style={{ paddingBottom: "60px" }}
+      >
+        <h2
+          className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight drop-shadow-2xl"
+          style={{
+            fontFamily: "var(--font-display)",
+            color: "white",
+            textShadow: "0 4px 32px rgba(0,0,0,0.55), 0 1px 4px rgba(0,0,0,0.4)",
+          }}
+        >
+          Deep Tech Leadership
+          <br />
+          Think Tank
+        </h2>
+        <p
+          className="mt-4 text-2xl sm:text-3xl font-semibold italic drop-shadow-xl"
+          style={{
+            color: "rgba(255,255,255,0.9)",
+            textShadow: "0 2px 16px rgba(0,0,0,0.5)",
+          }}
+        >
+          (DTLTT)
+        </p>
+      </div>
+
+      {/* ── Bottom name strip ── */}
+      <div
+        className="relative z-10 flex items-center justify-center gap-4 px-8 py-5 flex-wrap"
+        style={{ background: "rgba(8,96,32,0.06)", borderTop: "1px solid rgba(8,96,32,0.1)" }}
+      >
+        {mentors.map((mentor, i) => (
+          <div key={i} className="flex items-center gap-2 px-4 py-2 rounded-full"
+            style={{ background: "rgba(255,255,255,0.7)", border: "1px solid rgba(8,96,32,0.12)" }}
           >
-            Our Mentors
-          </h2>
-          <p className="mentors-subtitle text-white/70 text-lg max-w-2xl mx-auto">
-            Backed by industry leaders, academic pioneers, and seasoned investors who guide
-            our portfolio companies to global success.
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-20">
-          {mentors.map((mentor, i) => (
-            <div key={i} className="mentor-card-wrapper">
-              <div className="mentor-card glass-card-dark p-6 pt-16 text-center relative">
-                {/* Pop-out image */}
-                <div
-                  className="mentor-image flex items-center justify-center text-white text-2xl font-bold"
-                  style={{
-                    background: `linear-gradient(135deg, ${mentor.color}, ${mentor.color}dd)`,
-                    fontFamily: "var(--font-display)",
-                  }}
-                >
-                  {mentor.initials}
-                </div>
-
-                {/* Name */}
-                <h3 className="text-white font-bold text-lg mb-1">{mentor.name}</h3>
-
-                {/* Role */}
-                <p
-                  className="text-sm font-medium mb-4"
-                  style={{ color: "#e9f5cf" }}
-                >
-                  {mentor.role}
-                </p>
-
-                {/* Bio */}
-                <p className="text-white/60 text-sm leading-relaxed mb-5">{mentor.bio}</p>
-
-                {/* LinkedIn Button */}
-                <a
-                  href={mentor.linkedin}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full text-sm font-semibold transition-all duration-300 hover:scale-105"
-                  style={{
-                    background: "rgba(233, 245, 207, 0.12)",
-                    border: "1px solid rgba(233, 245, 207, 0.2)",
-                    color: "#e9f5cf",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "rgba(233, 245, 207, 0.25)";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "rgba(233, 245, 207, 0.12)";
-                  }}
-                >
-                  <svg className="w-4 h-4" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
-                  </svg>
-                  Connect
-                </a>
-              </div>
-            </div>
-          ))}
-        </div>
+            <span className="text-xs font-bold" style={{ color: "#086020" }}>{mentor.name}</span>
+            <span className="text-[10px] text-gray-400">·</span>
+            <span className="text-[10px] text-gray-500">{mentor.role}</span>
+          </div>
+        ))}
       </div>
     </section>
   );

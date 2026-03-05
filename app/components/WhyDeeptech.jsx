@@ -140,88 +140,23 @@ export default function WhyDeeptech() {
           </div>
 
           {/* India Map Visual */}
-          <div className="wdt-map relative">
-            <div
-              className="rounded-2xl overflow-hidden aspect-square max-w-md mx-auto shadow-xl"
-              style={{
-                background: "linear-gradient(135deg, #0a0a0a 0%, #1a2a1a 100%)",
-              }}
-            >
-              {/* Stylized India map with tech overlay */}
-              <div className="relative w-full h-full flex items-center justify-center p-8">
-                {/* Grid pattern */}
-                <div className="absolute inset-0 opacity-20">
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div
-                      key={`h-${i}`}
-                      className="absolute w-full"
-                      style={{
-                        top: `${(i / 12) * 100}%`,
-                        height: "1px",
-                        background: "#098327",
-                      }}
-                    />
-                  ))}
-                  {Array.from({ length: 12 }).map((_, i) => (
-                    <div
-                      key={`v-${i}`}
-                      className="absolute h-full"
-                      style={{
-                        left: `${(i / 12) * 100}%`,
-                        width: "1px",
-                        background: "#098327",
-                      }}
-                    />
-                  ))}
-                </div>
-
-                {/* India outline (simplified SVG) */}
-                <svg viewBox="0 0 200 250" className="w-full h-full max-w-[200px] relative z-10">
-                  <path
-                    d="M100 20 L115 25 L130 35 L140 50 L145 65 L155 80 L160 95 L165 110 L170 130 L165 150 L155 165 L140 178 L125 190 L110 200 L100 210 L95 220 L90 230 L85 225 L80 210 L70 195 L60 180 L50 165 L45 150 L40 135 L38 120 L40 105 L45 90 L55 75 L65 60 L75 45 L85 33 L95 25 Z"
-                    fill="none"
-                    stroke="#098327"
-                    strokeWidth="1.5"
-                    className="drop-shadow-lg"
-                  />
-                  <path
-                    d="M100 20 L115 25 L130 35 L140 50 L145 65 L155 80 L160 95 L165 110 L170 130 L165 150 L155 165 L140 178 L125 190 L110 200 L100 210 L95 220 L90 230 L85 225 L80 210 L70 195 L60 180 L50 165 L45 150 L40 135 L38 120 L40 105 L45 90 L55 75 L65 60 L75 45 L85 33 L95 25 Z"
-                    fill="url(#indiaGrad)"
-                    opacity="0.3"
-                  />
-                  <defs>
-                    <radialGradient id="indiaGrad" cx="50%" cy="50%">
-                      <stop offset="0%" stopColor="#22d3ee" />
-                      <stop offset="100%" stopColor="#098327" stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-
-                  {/* Glowing dots for tech hubs */}
-                  {[
-                    { cx: 100, cy: 80 },
-                    { cx: 75, cy: 120 },
-                    { cx: 120, cy: 100 },
-                    { cx: 90, cy: 160 },
-                    { cx: 130, cy: 140 },
-                  ].map((dot, i) => (
-                    <g key={i}>
-                      <circle cx={dot.cx} cy={dot.cy} r="4" fill="#22d3ee" opacity="0.8" />
-                      <circle cx={dot.cx} cy={dot.cy} r="8" fill="#22d3ee" opacity="0.2" />
-                    </g>
-                  ))}
-                </svg>
-
-                {/* Glow effect */}
-                <div
-                  className="absolute w-32 h-32 rounded-full"
-                  style={{
-                    top: "40%",
-                    left: "45%",
-                    background: "radial-gradient(circle, rgba(34, 211, 238, 0.3), transparent 70%)",
-                    filter: "blur(20px)",
-                  }}
-                />
-              </div>
+          <div className="wdt-map relative flex items-center justify-center">
+            <div className="relative max-w-md mx-auto w-full">
+              {/* Soft glow behind the map */}
+              <div
+                className="absolute inset-0 rounded-full pointer-events-none"
+                style={{
+                  background: "radial-gradient(circle, rgba(9,131,39,0.15) 0%, transparent 70%)",
+                  filter: "blur(40px)",
+                  transform: "scale(1.1)",
+                }}
+              />
+              <img
+                src="/india_map.png"
+                alt="India Map – Deeptech Ecosystem"
+                className="relative z-10 w-full h-auto object-contain drop-shadow-xl"
+                style={{ maxHeight: "480px" }}
+              />
             </div>
           </div>
         </div>

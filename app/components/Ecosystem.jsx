@@ -3,118 +3,56 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import EcoCard from "./ecosystem/EcoCard";
+import { quadrants } from "./ecosystem/ecosystemData";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-const quadrants = [
-  {
-    title: "Research Infrastructure",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
-        <rect x="6" y="8" width="28" height="20" rx="2" stroke="#098327" strokeWidth="1.5" />
-        <path d="M6 14h28" stroke="#098327" strokeWidth="1.5" />
-        <circle cx="20" cy="22" r="3" stroke="#098327" strokeWidth="1.5" />
-        <path d="M14 32h12" stroke="#098327" strokeWidth="1.5" strokeLinecap="round" />
-      </svg>
-    ),
-    items: [
-      "25+ advanced research centres",
-      "National Cybersecurity Hub (C3iHub)",
-      "National Drone Hub",
-    ],
-    position: "top-left",
-  },
-  {
-    title: "Dhanavritti",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
-        <circle cx="20" cy="20" r="14" stroke="#098327" strokeWidth="1.5" />
-        <text x="20" y="25" textAnchor="middle" fill="#098327" fontSize="14" fontWeight="bold">₹</text>
-      </svg>
-    ),
-    items: [
-      "Part of IITK ecosystem",
-      "Preferred ecosystem access",
-    ],
-    position: "top-right",
-  },
-  {
-    title: "Mentors & Alumni Network",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
-        <circle cx="20" cy="14" r="5" stroke="#098327" strokeWidth="1.5" />
-        <circle cx="10" cy="26" r="4" stroke="#098327" strokeWidth="1.5" />
-        <circle cx="30" cy="26" r="4" stroke="#098327" strokeWidth="1.5" />
-        <path d="M15 18l-3 5M25 18l3 5" stroke="#098327" strokeWidth="1" />
-      </svg>
-    ),
-    items: [
-      "45K+ global alumni network",
-      "Access to professors & PhDs",
-      "IITK unicorn founders (~20%)",
-    ],
-    position: "bottom-left",
-  },
-  {
-    title: "Incubator",
-    icon: (
-      <svg viewBox="0 0 40 40" fill="none" className="w-8 h-8">
-        <path d="M12 32V18l8-10 8 10v14H12z" stroke="#098327" strokeWidth="1.5" strokeLinejoin="round" />
-        <rect x="17" y="24" width="6" height="8" stroke="#098327" strokeWidth="1.5" />
-        <circle cx="20" cy="17" r="2" stroke="#098327" strokeWidth="1.5" />
-      </svg>
-    ),
-    items: [
-      "500+ startups nurtured",
-      "Grant support available",
-      "MOUs with DRDO, BEL, HAL",
-    ],
-    position: "bottom-right",
-  },
-];
-
 export default function Ecosystem() {
   const sectionRef = useRef(null);
+  const cardRefs = useRef([]);
+  const centerRef = useRef(null);
+  const ringRef = useRef(null);
 
   useEffect(() => {
     const ctx = gsap.context(() => {
+      const trigger = { trigger: sectionRef.current, start: "top 72%" };
+
       gsap.from(".eco-heading", {
-        y: 50,
-        opacity: 0,
-        duration: 1,
-        ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 75%" },
+        y: 40, opacity: 0, duration: 0.9,
+        ease: "power3.out", scrollTrigger: trigger,
       });
 
-      // Center badge
-      gsap.from(".eco-center", {
-        scale: 0,
-        opacity: 0,
-        duration: 0.8,
-        delay: 0.3,
+      gsap.from(centerRef.current, {
+        scale: 0, opacity: 0, duration: 0.8, delay: 0.2,
         ease: "back.out(1.7)",
         scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
       });
 
-      // Quadrant cards
-      gsap.from(".eco-card", {
-        scale: 0.8,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.12,
-        ease: "back.out(1.4)",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+      // Pulse ring
+      gsap.to(ringRef.current, {
+        scale: 1.15, opacity: 0,
+        duration: 2, ease: "power1.out",
+        repeat: -1, repeatDelay: 0.5,
       });
 
-      // Connector dots
-      gsap.from(".eco-dot", {
-        scale: 0,
-        duration: 0.4,
-        stagger: 0.1,
-        delay: 0.6,
-        ease: "back.out(2)",
+      cardRefs.current.forEach((card, i) => {
+        if (!card) return;
+        gsap.from(card, {
+          scale: 0.85, opacity: 0, duration: 0.65,
+          delay: 0.15 + i * 0.1,
+          ease: "back.out(1.4)",
+          scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
+        });
+      });
+
+      // Connector lines draw in
+      gsap.from(".eco-line", {
+        scaleX: 0, scaleY: 0, opacity: 0,
+        duration: 0.6, delay: 0.5, stagger: 0.1,
+        ease: "power2.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 65%" },
       });
     }, sectionRef);
@@ -126,86 +64,101 @@ export default function Ecosystem() {
     <section
       ref={sectionRef}
       id="ecosystem"
-      className="section-padding"
+      className="section-padding relative overflow-hidden"
       style={{ background: "#e9f5cf" }}
     >
-      <div className="max-w-7xl mx-auto">
+      {/* Background texture blobs */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] rounded-full opacity-30"
+          style={{ background: "radial-gradient(circle, rgba(134,239,172,0.5) 0%, transparent 70%)", transform: "translate(20%, -20%)" }} />
+        <div className="absolute bottom-0 left-0 w-96 h-96 rounded-full opacity-20"
+          style={{ background: "radial-gradient(circle, rgba(34,197,94,0.4) 0%, transparent 70%)", transform: "translate(-20%, 20%)" }} />
+      </div>
+
+      <div className="max-w-6xl mx-auto relative z-10">
+
+        {/* Heading */}
         <h2
-          className="eco-heading section-heading text-center mb-20"
+          className="eco-heading section-heading text-center mb-16"
           style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
         >
-          <span className="bg-white px-4 py-1 rounded-lg border border-green-primary/20 shadow-sm inline-block rotate-[-2deg] mr-2">IIT Kanpur</span> 
+          <span
+            className="inline-block mr-2 px-4 py-1 rounded-xl shadow-sm"
+            style={{
+              background: "white",
+              border: "1.5px solid rgba(8,96,32,0.2)",
+              transform: "rotate(-1.5deg)",
+              display: "inline-block",
+            }}
+          >
+            IIT Kanpur
+          </span>
           <span className="gradient-text">Ecosystem</span>
         </h2>
 
-        {/* Grid with center badge */}
-        <div className="relative max-w-4xl mx-auto">
-          {/* Center badge */}
-          <div className="eco-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 w-36 h-36 rounded-full bg-white shadow-2xl flex items-center justify-center p-6"
-            style={{ border: "2px solid #098327" }}
-          >
-            <img 
-              src="/IITK Logo.png" 
-              alt="IIT Kanpur" 
-              className="w-full h-full object-contain"
-            />
+        {/* Layout: 2-col cards with center badge between them */}
+        <div className="relative grid grid-cols-1 md:grid-cols-[1fr_160px_1fr] gap-6 items-center">
+
+          {/* LEFT cards */}
+          <div className="flex flex-col gap-6">
+            {quadrants.slice(0, 2).map((q, i) => (
+              <EcoCard
+                key={i}
+                quadrant={q}
+                cardRef={(el) => (cardRefs.current[i] = el)}
+              />
+            ))}
           </div>
 
-          {/* Ring around center */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-36 h-36 rounded-full z-10"
-            style={{ border: "2px solid rgba(9, 131, 39, 0.2)" }}
-          />
-
-          {/* Connector dots */}
-          {["top-1/2 left-[calc(50%-72px)] -translate-y-1/2",
-            "top-1/2 left-[calc(50%+64px)] -translate-y-1/2",
-            "top-[calc(50%-64px)] left-1/2 -translate-x-1/2",
-            "top-[calc(50%+56px)] left-1/2 -translate-x-1/2",
-          ].map((pos, i) => (
+          {/* CENTER badge */}
+          <div className="flex items-center justify-center relative">
+            {/* Pulse ring */}
             <div
-              key={i}
-              className={`eco-dot absolute ${pos} w-3 h-3 rounded-full z-20`}
-              style={{ background: "#098327" }}
+              ref={ringRef}
+              className="absolute w-32 h-32 rounded-full"
+              style={{ border: "2px solid rgba(8,96,32,0.3)" }}
             />
-          ))}
+            {/* Connector lines */}
+            <div className="eco-line absolute left-0 right-0 h-[1.5px] -z-0"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(8,96,32,0.25), transparent)", top: "calc(50% - 60px)" }} />
+            <div className="eco-line absolute left-0 right-0 h-[1.5px] -z-0"
+              style={{ background: "linear-gradient(90deg, transparent, rgba(8,96,32,0.25), transparent)", top: "calc(50% + 60px)" }} />
 
-          {/* 2x2 Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {quadrants.map((q, i) => (
-              <div
-                key={i}
-                className="eco-card glass-card p-6"
-                style={{
-                  minHeight: "200px",
-                  border: "1px solid rgba(9, 131, 39, 0.12)",
-                }}
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center"
-                    style={{ background: "rgba(9, 131, 39, 0.08)" }}
-                  >
-                    {q.icon}
-                  </div>
-                  <h3
-                    className="font-bold text-sm uppercase tracking-wider"
-                    style={{ color: "#086020" }}
-                  >
-                    {q.title}
-                  </h3>
-                </div>
-                <ul className="space-y-2">
-                  {q.items.map((item, j) => (
-                    <li key={j} className="flex items-start gap-2 text-sm text-charcoal">
-                      <span className="w-1.5 h-1.5 rounded-full bg-green-primary mt-1.5 flex-shrink-0" />
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div
+              ref={centerRef}
+              className="relative z-10 w-32 h-32 rounded-full bg-white flex items-center justify-center p-5 shadow-2xl"
+              style={{ border: "2.5px solid #22c55e" }}
+            >
+              <img
+                src="/IITK Logo.png"
+                alt="IIT Kanpur"
+                className="w-full h-full object-contain"
+              />
+            </div>
+          </div>
+
+          {/* RIGHT cards */}
+          <div className="flex flex-col gap-6">
+            {quadrants.slice(2, 4).map((q, i) => (
+              <EcoCard
+                key={i + 2}
+                quadrant={q}
+                cardRef={(el) => (cardRefs.current[i + 2] = el)}
+              />
             ))}
           </div>
         </div>
+
+        {/* Bottom tagline */}
+        <p
+          className="text-center mt-12 text-base font-medium"
+          style={{ color: "#374151" }}
+        >
+          Backed by the full strength of{" "}
+          <span className="font-bold" style={{ color: "#086020" }}>
+            India's #1 technical institution
+          </span>
+        </p>
       </div>
     </section>
   );
