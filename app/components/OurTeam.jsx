@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export default function OurTeam() {
   return (
     <section className="w-full py-16 px-4 bg-white">
@@ -8,10 +10,12 @@ export default function OurTeam() {
         Our Team
       </h2>
       <div className="max-w-4xl mx-auto">
-        <img
-          src="/ourTeam/ourTeam.png"
+        <Image
+          src="/ourTeam/team.png"
           alt="Our Team"
           className="w-full h-auto rounded-2xl shadow-lg"
+          width={1000}
+          height={1000}
         />
       </div>
     </section>
