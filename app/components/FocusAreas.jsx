@@ -24,14 +24,16 @@ export default function FocusAreas() {
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    align: "center",
+    // ✅ KEY FIX: instead of "center" (which centers 1 card),
+    // this function centers the PAIR by offsetting exactly 1 card width from left
+    // Result: [full side] [BIG] [BIG] [full side]
+    align: (viewSize, snapSize) => (viewSize - snapSize * 2) / 2,
     startIndex: TOTAL,
   });
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
-  // Track selected index
   useEffect(() => {
     if (!emblaApi) return;
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
@@ -40,7 +42,6 @@ export default function FocusAreas() {
     return () => emblaApi.off("select", onSelect);
   }, [emblaApi]);
 
-  // Keyboard arrows
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowLeft") scrollPrev();
@@ -50,7 +51,6 @@ export default function FocusAreas() {
     return () => window.removeEventListener("keydown", onKey);
   }, [scrollPrev, scrollNext]);
 
-  // Scroll-triggered fade-in
   useEffect(() => {
     gsap.set([headingRef.current, trackRef.current], { autoAlpha: 0, y: 30 });
     const ctx = gsap.context(() => {
@@ -73,13 +73,11 @@ export default function FocusAreas() {
     return () => ctx.revert();
   }, []);
 
-  // A slide is "focused" if it's the selected or the one right after
   const isFocused = (i) => {
     const mod = i % TOTAL;
     return mod === selectedIndex % TOTAL || mod === (selectedIndex + 1) % TOTAL;
   };
 
-  // First of the focused pair nudges left, second nudges right → gap between them
   const isFirst = (i) => i % TOTAL === selectedIndex % TOTAL;
 
   return (
@@ -118,7 +116,7 @@ export default function FocusAreas() {
         </button>
 
         {/* Carousel */}
-        <div ref={emblaRef} className="overflow-hidden mx-12 flex-1">
+        <div ref={emblaRef} className="overflow-hidden flex-1">
           <div className="flex items-center py-14">
             {slides.map((area, i) => {
               const focused = isFocused(i);
@@ -128,16 +126,13 @@ export default function FocusAreas() {
                 <div
                   key={i}
                   className="flex-shrink-0 flex justify-center
-                             w-full sm:w-1/2 md:w-1/4" // ✅ 1 on mobile, 2 on sm, 4 on md+
-                  style={{
-                    padding: "0 8px",
-                  }}
+                             w-full sm:w-1/2 md:w-1/4"
+                  style={{ padding: "0 8px" }}
                   onClick={() => !focused && emblaApi?.scrollTo(i)}
                 >
                   <div
                     className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
                     style={{
-                      // focused pair: scale up + nudge apart for gap
                       transform: focused
                         ? `scale(1.08) translateX(${first ? "-10px" : "10px"})`
                         : "scale(0.84)",
