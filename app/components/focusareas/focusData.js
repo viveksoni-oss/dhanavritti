@@ -15,4 +15,9 @@ export const focusAreas = [
     title: "Cybersecurity",
     img: "/Focus Area/focus_area_4.png",
   },
+  {
+    title: "Semiconductor\nfabless chip design",
+    img: "/Focus Area/focus_area_1.png",
+  },
+  
 ];

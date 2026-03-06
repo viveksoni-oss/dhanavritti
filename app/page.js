@@ -6,6 +6,7 @@ import Ecosystem from "./components/Ecosystem";
 import FocusAreas from "./components/FocusAreas";
 import Mentors from "./components/Mentors";
 import Footer from "./components/Footer";
+import OurTeam from "./components/OurTeam";
 
 export default function Home() {
   return (
@@ -16,7 +17,7 @@ export default function Home() {
       <WhyDeeptech />
       <Ecosystem />
       <FocusAreas />
-      <Mentors />
+      <OurTeam />
       <Footer />
     </main>
   );

@@ -3,6 +3,8 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import MentorCard from "./mentors/MentorCard";
+import { mentors } from "./mentors/mentorsData";
 import { teamMembers } from "./team/teamData";
 
 if (typeof window !== "undefined") {
@@ -16,9 +18,8 @@ const LinkedInIcon = () => (
 );
 
 function TeamCard({ member }) {
-  const imgRef     = useRef(null);
-  const cardRef    = useRef(null);
-  const contentRef = useRef(null);
+  const imgRef = useRef(null);
+  const cardRef = useRef(null);
 
   const handleEnter = () => {
     gsap.to(imgRef.current, {
@@ -62,7 +63,6 @@ function TeamCard({ member }) {
       onMouseEnter={handleEnter}
       onMouseLeave={handleLeave}
     >
-      {/* Image — overflows top on hover */}
       <div
         className="relative w-full overflow-hidden rounded-t-2xl flex-shrink-0"
         style={{ height: "280px" }}
@@ -74,7 +74,6 @@ function TeamCard({ member }) {
           className="w-full h-full object-cover object-top"
           style={{ transformOrigin: "top center" }}
         />
-        {/* Bottom fade into card */}
         <div
           className="absolute bottom-0 left-0 right-0 h-16 pointer-events-none"
           style={{
@@ -83,11 +82,7 @@ function TeamCard({ member }) {
         />
       </div>
 
-      {/* Content — max 2 lines */}
-      <div
-        ref={contentRef}
-        className="px-5 pt-2 pb-5 flex items-center justify-between gap-3"
-      >
+      <div className="px-5 pt-2 pb-5 flex items-center justify-between gap-3">
         <div className="min-w-0">
           <h3
             className="font-bold text-sm truncate"
@@ -102,17 +97,12 @@ function TeamCard({ member }) {
             {member.role}
           </p>
         </div>
-
-        {/* LinkedIn icon button */}
         <a
           href={member.linkedin}
           target="_blank"
           rel="noopener noreferrer"
           className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200"
-          style={{
-            background: "rgba(8,96,32,0.08)",
-            color: "#086020",
-          }}
+          style={{ background: "rgba(8,96,32,0.08)", color: "#086020" }}
           onMouseEnter={(e) => {
             e.currentTarget.style.background = "#086020";
             e.currentTarget.style.color = "white";
@@ -133,22 +123,103 @@ function TeamCard({ member }) {
 
 export default function OurTeamSection() {
   const sectionRef = useRef(null);
-  const headingRef = useRef(null);
-  const cardsRef   = useRef([]);
+  const mainHeadingRef = useRef(null);
+  const dividerRef = useRef(null);
+  const dtlttLabelRef = useRef(null);
+  const mentorCardsRef = useRef(null);
+  const dtlttHeadingRef = useRef(null);
+  const dtlttDescRef = useRef(null);
+  const teamLabelRef = useRef(null);
+  const teamCardsRef = useRef([]);
 
   useEffect(() => {
-    gsap.set(headingRef.current, { autoAlpha: 0, y: 40 });
-    gsap.set(cardsRef.current.filter(Boolean), { autoAlpha: 0, y: 50 });
+    const allFade = [
+      mainHeadingRef.current,
+      dividerRef.current,
+      dtlttLabelRef.current,
+      dtlttHeadingRef.current,
+      dtlttDescRef.current,
+      teamLabelRef.current,
+    ].filter(Boolean);
+
+    gsap.set(allFade, { autoAlpha: 0, y: 36 });
+    gsap.set(mentorCardsRef.current?.children ?? [], { autoAlpha: 0, y: 60 });
+    gsap.set(teamCardsRef.current.filter(Boolean), { autoAlpha: 0, y: 50 });
 
     const ctx = gsap.context(() => {
-      gsap.to(headingRef.current, {
-        autoAlpha: 1, y: 0, duration: 0.9, ease: "power3.out",
+      // Main heading
+      gsap.to(mainHeadingRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
         scrollTrigger: { trigger: sectionRef.current, start: "top 78%" },
       });
 
-      gsap.to(cardsRef.current.filter(Boolean), {
-        autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1, ease: "power3.out",
-        scrollTrigger: { trigger: sectionRef.current, start: "top 72%" },
+      // Divider
+      gsap.to(dividerRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        delay: 0.15,
+        scrollTrigger: { trigger: sectionRef.current, start: "top 78%" },
+      });
+
+      // DTLTT label
+      gsap.to(dtlttLabelRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: dtlttLabelRef.current, start: "top 85%" },
+      });
+
+      // DTLTT heading overlay (on cards)
+      gsap.to(dtlttHeadingRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1.0,
+        ease: "power3.out",
+        scrollTrigger: { trigger: mentorCardsRef.current, start: "top 72%" },
+      });
+
+      // Mentor cards
+      gsap.to(mentorCardsRef.current?.children ?? [], {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: mentorCardsRef.current, start: "top 65%" },
+      });
+
+      // DTLTT description
+      gsap.to(dtlttDescRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.9,
+        ease: "power3.out",
+        scrollTrigger: { trigger: dtlttDescRef.current, start: "top 90%" },
+      });
+
+      // Advisory team label
+      gsap.to(teamLabelRef.current, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        ease: "power3.out",
+        scrollTrigger: { trigger: teamLabelRef.current, start: "top 85%" },
+      });
+
+      // Advisory team cards
+      gsap.to(teamCardsRef.current.filter(Boolean), {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.7,
+        stagger: 0.1,
+        ease: "power3.out",
+        scrollTrigger: { trigger: teamLabelRef.current, start: "top 72%" },
       });
     }, sectionRef);
 
@@ -158,32 +229,67 @@ export default function OurTeamSection() {
   return (
     <section
       ref={sectionRef}
-      id="mentors"
-      className="relative overflow-hidden py-24 px-6"
+      id="our-team"
+      className="relative overflow-hidden"
       style={{ background: "#F5F5F0" }}
     >
       {/* Background glow blobs */}
       <div
         className="absolute top-0 left-0 w-96 h-96 rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(9,131,39,0.06) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(9,131,39,0.06) 0%, transparent 70%)",
           transform: "translate(-30%, -30%)",
         }}
       />
       <div
         className="absolute bottom-0 right-0 w-96 h-96 rounded-full pointer-events-none"
         style={{
-          background: "radial-gradient(circle, rgba(9,131,39,0.06) 0%, transparent 70%)",
+          background:
+            "radial-gradient(circle, rgba(9,131,39,0.06) 0%, transparent 70%)",
           transform: "translate(25%, 25%)",
         }}
       />
 
-      <div className="max-w-7xl mx-auto relative z-10">
+      <div className="relative z-10">
+        {/* ── SECTION MAIN HEADING ── */}
+        <div ref={mainHeadingRef} className="text-center pt-20 pb-4 px-6">
+          <h2
+            className="text-5xl sm:text-6xl font-bold leading-tight"
+            style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
+          >
+            Our{" "}
+            <span
+              style={{
+                background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                backgroundClip: "text",
+              }}
+            >
+              Team
+            </span>
+          </h2>
+        </div>
 
-        {/* Heading */}
-        <div ref={headingRef} className="text-center mb-16">
+        {/* Divider */}
+        <div
+          ref={dividerRef}
+          className="flex items-center justify-center pb-10 px-6"
+        >
+          <div className="h-px w-16 bg-gradient-to-r from-transparent to-green-400" />
+          <div className="mx-3 w-2 h-2 rounded-full bg-green-500" />
+          <div className="h-px w-16 bg-gradient-to-l from-transparent to-green-400" />
+        </div>
+
+        {/* ════════════════════════════════════
+            BLOCK 1 — DTLTT Mentor Cards Strip
+            ════════════════════════════════════ */}
+
+        {/* DTLTT sub-label */}
+        <div ref={dtlttLabelRef} className="text-center mb-6 px-6">
           <span
-            className="inline-flex items-center gap-2 text-[10px] font-bold px-4 py-1.5 rounded-full mb-5 uppercase tracking-widest"
+            className="inline-flex items-center gap-2 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest"
             style={{
               color: "#086020",
               background: "rgba(8,96,32,0.08)",
@@ -191,14 +297,103 @@ export default function OurTeamSection() {
             }}
           >
             <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Deep Tech Leadership
+            Deep Tech Leadership Think Tank · DTLTT
+          </span>
+        </div>
+
+        {/* Cards strip + heading overlay */}
+        <div className="relative">
+          <div
+            ref={mentorCardsRef}
+            className="flex items-end justify-center"
+            style={{ gap: "2px" }}
+          >
+            {mentors.map((mentor, i) => (
+              <MentorCard key={i} mentor={mentor} />
+            ))}
+          </div>
+
+          {/* DTLTT heading overlay centred on mentor cards */}
+          <div
+            ref={dtlttHeadingRef}
+            className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
+          >
+            <h3
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight"
+              style={{
+                fontFamily: "var(--font-display)",
+                color: "white",
+                textShadow:
+                  "0 4px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5)",
+              }}
+            >
+              Deep Tech Leadership
+              <br />
+              Think Tank
+            </h3>
+            <p
+              className="mt-3 text-2xl font-semibold italic"
+              style={{
+                color: "rgba(255,255,255,0.9)",
+                textShadow: "0 2px 16px rgba(0,0,0,0.6)",
+              }}
+            >
+              (DTLTT)
+            </p>
+          </div>
+        </div>
+
+        {/* DTLTT description */}
+        <div
+          ref={dtlttDescRef}
+          className="max-w-4xl mx-auto px-8 py-12 text-center"
+        >
+          <p
+            className="text-base sm:text-lg leading-relaxed font-medium"
+            style={{ color: "#086020" }}
+          >
+            DTLTT is a national strategic council founded by FIRST–IIT Kanpur
+            that provides independent, high-credibility guidance to align
+            industry, government, and academia on long-term deep-tech strategy
+            and to accelerate the translation of research into scalable national
+            outcomes.
+          </p>
+        </div>
+
+        {/* Horizontal rule between blocks */}
+        <div className="max-w-5xl mx-auto px-6 pb-10">
+          <div
+            className="w-full h-px"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, rgba(8,96,32,0.2), transparent)",
+            }}
+          />
+        </div>
+
+        {/* ════════════════════════════════════
+            BLOCK 2 — Advisory Team Cards Grid
+            ════════════════════════════════════ */}
+
+        {/* Advisory sub-label */}
+        <div ref={teamLabelRef} className="text-center mb-10 px-6">
+          <span
+            className="inline-flex items-center gap-2 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest"
+            style={{
+              color: "#086020",
+              background: "rgba(8,96,32,0.08)",
+              border: "1px solid rgba(8,96,32,0.18)",
+            }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+            Advisory &amp; Leadership
           </span>
 
-          <h2
-            className="text-4xl sm:text-5xl font-bold leading-tight mb-4"
+          <h3
+            className="mt-4 text-3xl sm:text-4xl font-bold leading-tight"
             style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
           >
-            Meet Our{" "}
+            Meet the{" "}
             <span
               style={{
                 background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
@@ -209,28 +404,28 @@ export default function OurTeamSection() {
             >
               Advisory Team
             </span>
-          </h2>
+          </h3>
 
-          <p className="text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
-            Visionaries and nation-builders united by one mission — turning India's
-            breakthrough research into globally scalable enterprises.
+          <p className="mt-3 text-sm text-gray-500 max-w-md mx-auto leading-relaxed">
+            Visionaries and nation-builders united by one mission — turning
+            India's breakthrough research into globally scalable enterprises.
           </p>
         </div>
 
-        {/* Cards grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {teamMembers.map((member, i) => (
-            <div
-              key={i}
-              ref={(el) => (cardsRef.current[i] = el)}
-              // padding-top gives space for image to peek out on hover
-              style={{ paddingTop: "8px" }}
-            >
-              <TeamCard member={member} />
-            </div>
-          ))}
+        {/* Advisory team cards grid */}
+        <div className="max-w-7xl mx-auto px-6 pb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {teamMembers.map((member, i) => (
+              <div
+                key={i}
+                ref={(el) => (teamCardsRef.current[i] = el)}
+                style={{ paddingTop: "8px" }}
+              >
+                <TeamCard member={member} />
+              </div>
+            ))}
+          </div>
         </div>
-
       </div>
     </section>
   );

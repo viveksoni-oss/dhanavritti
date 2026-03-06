@@ -12,7 +12,6 @@ if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// 3× repeat so Embla always has enough slides for true infinite loop
 const slides = [...focusAreas, ...focusAreas, ...focusAreas];
 const TOTAL = focusAreas.length;
 
@@ -21,31 +20,27 @@ export default function FocusAreas() {
   const headingRef = useRef(null);
   const trackRef = useRef(null);
 
-  const [selectedIndex, setSelectedIndex] = useState(TOTAL); // start in middle set
+  const [selectedIndex, setSelectedIndex] = useState(TOTAL);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
     align: "center",
-    slidesToScroll: 1,
-    containScroll: false,
     startIndex: TOTAL,
   });
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
+  // Track selected index
   useEffect(() => {
     if (!emblaApi) return;
     const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
     onSelect();
     emblaApi.on("select", onSelect);
-    emblaApi.on("reInit", onSelect);
-    return () => {
-      emblaApi.off("select", onSelect);
-      emblaApi.off("reInit", onSelect);
-    };
+    return () => emblaApi.off("select", onSelect);
   }, [emblaApi]);
 
+  // Keyboard arrows
   useEffect(() => {
     const onKey = (e) => {
       if (e.key === "ArrowLeft") scrollPrev();
@@ -55,6 +50,7 @@ export default function FocusAreas() {
     return () => window.removeEventListener("keydown", onKey);
   }, [scrollPrev, scrollNext]);
 
+  // Scroll-triggered fade-in
   useEffect(() => {
     gsap.set([headingRef.current, trackRef.current], { autoAlpha: 0, y: 30 });
     const ctx = gsap.context(() => {
@@ -77,29 +73,20 @@ export default function FocusAreas() {
     return () => ctx.revert();
   }, []);
 
-  // Only the exact selected slide is in focus
-  const isCenter = (i) => i % TOTAL === selectedIndex % TOTAL;
+  // A slide is "focused" if it's the selected or the one right after
+  const isFocused = (i) => {
+    const mod = i % TOTAL;
+    return mod === selectedIndex % TOTAL || mod === (selectedIndex + 1) % TOTAL;
+  };
 
-  const ArrowBtn = ({ onClick, label, children }) => (
-    <button
-      onClick={onClick}
-      aria-label={label}
-      className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300 hover:scale-110 active:scale-95 z-10"
-      style={{
-        background: "linear-gradient(135deg, #22c55e, #086020)",
-        boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
-        color: "white",
-      }}
-    >
-      {children}
-    </button>
-  );
+  // First of the focused pair nudges left, second nudges right → gap between them
+  const isFirst = (i) => i % TOTAL === selectedIndex % TOTAL;
 
   return (
     <section
       ref={sectionRef}
       id="focus-areas"
-      className="relative overflow-hidden py-24"
+      className="relative py-24"
       style={{ background: "#F5F5F0" }}
     >
       <h2
@@ -112,45 +99,54 @@ export default function FocusAreas() {
 
       <div
         ref={trackRef}
-        className="flex items-center gap-4 px-6"
+        className="flex items-center"
         style={{ minHeight: "480px" }}
       >
-        <ArrowBtn onClick={scrollPrev} label="Previous">
+        {/* Left Arrow */}
+        <button
+          onClick={scrollPrev}
+          aria-label="Previous"
+          className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
+                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+          style={{
+            background: "linear-gradient(135deg, #22c55e, #086020)",
+            boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
+            color: "white",
+          }}
+        >
           <ChevronLeft size={22} strokeWidth={2.5} />
-        </ArrowBtn>
+        </button>
 
-        {/* Embla viewport */}
-        <div ref={emblaRef} className="overflow-hidden flex-1">
-          <div
-            className="flex items-center"
-            style={{ paddingTop: "52px", paddingBottom: "52px" }}
-          >
+        {/* Carousel */}
+        <div ref={emblaRef} className="overflow-hidden mx-12 flex-1">
+          <div className="flex items-center py-14">
             {slides.map((area, i) => {
-              const center = isCenter(i);
+              const focused = isFocused(i);
+              const first = isFirst(i);
+
               return (
                 <div
                   key={i}
-                  className="flex-shrink-0 flex justify-center"
+                  className="flex-shrink-0 flex justify-center
+                             w-full sm:w-1/2 md:w-1/4" // ✅ 1 on mobile, 2 on sm, 4 on md+
                   style={{
-                    // All slides same fixed width — critical for Embla loop
-                    flexBasis: "300px",
-                    paddingLeft: "10px",
-                    paddingRight: "10px",
+                    padding: "0 8px",
                   }}
-                  onClick={() => {
-                    if (!center) emblaApi?.scrollTo(i);
-                  }}
+                  onClick={() => !focused && emblaApi?.scrollTo(i)}
                 >
                   <div
                     className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
                     style={{
-                      transform: center ? "scale(1.12)" : "scale(0.85)",
-                      opacity: center ? 1 : 0.5,
-                      filter: center ? "blur(0px)" : "blur(0.5px)",
-                      cursor: center ? "default" : "pointer",
+                      // focused pair: scale up + nudge apart for gap
+                      transform: focused
+                        ? `scale(1.08) translateX(${first ? "-10px" : "10px"})`
+                        : "scale(0.84)",
+                      opacity: focused ? 1 : 0.45,
+                      filter: focused ? "none" : "blur(0.6px)",
+                      cursor: focused ? "default" : "pointer",
                     }}
                   >
-                    <FocusCard area={area} isCenter={center} />
+                    <FocusCard area={area} isCenter={focused} />
                   </div>
                 </div>
               );
@@ -158,9 +154,20 @@ export default function FocusAreas() {
           </div>
         </div>
 
-        <ArrowBtn onClick={scrollNext} label="Next">
+        {/* Right Arrow */}
+        <button
+          onClick={scrollNext}
+          aria-label="Next"
+          className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
+                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+          style={{
+            background: "linear-gradient(135deg, #22c55e, #086020)",
+            boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
+            color: "white",
+          }}
+        >
           <ChevronRight size={22} strokeWidth={2.5} />
-        </ArrowBtn>
+        </button>
       </div>
     </section>
   );

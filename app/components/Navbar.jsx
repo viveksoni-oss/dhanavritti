@@ -218,13 +218,6 @@ export default function Navbar() {
                 </a>
               );
             })}
-            <Button
-              href={isHomePage ? "#mentors" : "/#mentors"}
-              onClick={(e) => handleClick(e, "#mentors")}
-              size="sm"
-            >
-              Get Started
-            </Button>
           </div>
 
           {/* ── Hamburger ── */}
@@ -292,14 +285,6 @@ export default function Navbar() {
                 </a>
               );
             })}
-            <Button
-              href={isHomePage ? "#mentors" : "/#mentors"}
-              onClick={(e) => handleClick(e, "#mentors")}
-              className="w-full mt-4"
-              size="sm"
-            >
-              Get Started
-            </Button>
           </div>
         </div>
       </nav>
