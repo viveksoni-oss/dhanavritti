@@ -1,23 +1,34 @@
 export const focusAreas = [
   {
-    title: "Semiconductor\nfabless chip design",
-    img: "/Focus Area/focus_area_1.png",
+    title: "Semiconductor\nFabless Chip Design",
+    img: "/Focus Area/Semiconductor.png",
   },
   {
-    title: "AI and ML",
-    img: "/Focus Area/focus_area_2.png",
+    title: "AI & ML",
+    img: "/Focus Area/AIML.png",
   },
   {
-    title: "Battery technology &\nenergy storage",
-    img: "/Focus Area/focus_area_3.png",
+    title: "Battery Technology &\nEnergy Storage",
+    img: "/Focus Area/Battery.png",
   },
   {
     title: "Cybersecurity",
-    img: "/Focus Area/focus_area_4.png",
+    img: "/Focus Area/Cybersecurity.png",
   },
   {
-    title: "Semiconductor\nfabless chip design",
-    img: "/Focus Area/focus_area_1.png",
+    title: "Advanced Materials",
+    img: "/Focus Area/Advanced Material.png",
   },
-  
+  {
+    title: "Aerospace",
+    img: "/Focus Area/Aerospace.png",
+  },
+  {
+    title: "Medtech",
+    img: "/Focus Area/Medtech.png",
+  },
+  {
+    title: "Robotics",
+    img: "/Focus Area/Robotics.png",
+  },
 ];

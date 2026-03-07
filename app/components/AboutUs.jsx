@@ -165,7 +165,7 @@ export default function AboutUs() {
           }}
         >
           <img
-            src="/aboutus/image.png"
+            src="/About us/image.png"
             alt="Science-First Evaluation → Ecosystem Leverage → IIT Kanpur Access → Hands-on Scale Support"
             className="w-full h-auto object-cover block"
           />

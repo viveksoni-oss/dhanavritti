@@ -84,15 +84,28 @@ export default function FocusAreas() {
     <section
       ref={sectionRef}
       id="focus-areas"
-      className="relative py-24"
-      style={{ background: "#F5F5F0" }}
+      className="relative py-24 -mt-24 bg-linear-to-b from-white to-[#F5F5F0]"
     >
       <h2
         ref={headingRef}
-        className="text-center text-4xl sm:text-5xl font-bold mb-14"
+        className="text-center text-5xl sm:text-6xl font-bold mb-14 leading-tight tracking-tight"
         style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
       >
-        Focus Areas
+        Focus{" "}
+        <span
+          style={{
+            background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            fontStyle: "italic",
+            paddingRight: "6px", // ✅ gives the italic tail room to breathe
+            marginRight: "-6px", // ✅ cancels layout shift from padding
+            display: "inline-block", // ✅ padding works correctly on inline-block, not inline
+          }}
+        >
+          Areas
+        </span>
       </h2>
 
       <div
@@ -116,7 +129,7 @@ export default function FocusAreas() {
         </button>
 
         {/* Carousel */}
-        <div ref={emblaRef} className="overflow-hidden flex-1">
+        <div ref={emblaRef} className="overflow-hidden pb-18 -mb-20 flex-1">
           <div className="flex items-center py-14">
             {slides.map((area, i) => {
               const focused = isFocused(i);

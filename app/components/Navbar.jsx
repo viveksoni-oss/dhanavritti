@@ -10,8 +10,7 @@ const navLinks = [
   { label: "Why Deep-Tech", href: "#why-deeptech" },
   { label: "Ecosystem", href: "#ecosystem" },
   { label: "Focus Areas", href: "#focus-areas" },
-  { label: "Mentors", href: "#mentors" },
-  { label: "Our Team", href: "/our-team", external: true },
+  { label: "DTLTT", href: "/dtltt", external: true },
 ];
 
 export default function Navbar() {

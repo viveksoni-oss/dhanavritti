@@ -29,65 +29,93 @@ const reasons = [
 
 export default function WhyDeeptech() {
   const sectionRef = useRef(null);
-  const tagRef     = useRef(null);
+  const tagRef = useRef(null);
   const headingRef = useRef(null);
-  const mapRef     = useRef(null);
-  const cardRefs   = useRef([]);
-  const dotRefs    = useRef([]);
-  const lineRefs   = useRef([]);
+  const mapRef = useRef(null);
+  const cardRefs = useRef([]);
+  const dotRefs = useRef([]);
+  const lineRefs = useRef([]);
 
   useEffect(() => {
-    gsap.set(tagRef.current,     { autoAlpha: 0, y: 20 });
+    gsap.set(tagRef.current, { autoAlpha: 0, y: 20 });
     gsap.set(headingRef.current, { autoAlpha: 0, y: 36 });
-    gsap.set(mapRef.current,     { autoAlpha: 0, x: 60 });
+    gsap.set(mapRef.current, { autoAlpha: 0, x: 60 });
     gsap.set(cardRefs.current.filter(Boolean), { autoAlpha: 0, x: -40 });
-    gsap.set(dotRefs.current.filter(Boolean),  { autoAlpha: 0, scale: 0 });
-    gsap.set(lineRefs.current.filter(Boolean), { scaleY: 0, transformOrigin: "top center" });
+    gsap.set(dotRefs.current.filter(Boolean), { autoAlpha: 0, scale: 0 });
+    gsap.set(lineRefs.current.filter(Boolean), {
+      scaleY: 0,
+      transformOrigin: "top center",
+    });
 
     const ctx = gsap.context(() => {
-      const trigger   = { trigger: sectionRef.current, start: "top 72%" };
+      const trigger = { trigger: sectionRef.current, start: "top 72%" };
       const trigger65 = { trigger: sectionRef.current, start: "top 65%" };
 
       gsap.to(tagRef.current, {
-        autoAlpha: 1, y: 0, duration: 0.6, ease: "power3.out",
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.6,
+        ease: "power3.out",
         scrollTrigger: trigger,
       });
 
       gsap.to(headingRef.current, {
-        autoAlpha: 1, y: 0, duration: 0.8, delay: 0.1, ease: "power3.out",
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        delay: 0.1,
+        ease: "power3.out",
         scrollTrigger: trigger,
       });
 
-      // Each item: dot → line → card
       reasons.forEach((_, i) => {
         const base = 0.2 + i * 0.18;
 
         gsap.to(dotRefs.current[i], {
-          autoAlpha: 1, scale: 1, duration: 0.4, delay: base,
-          ease: "back.out(2)", scrollTrigger: trigger65,
+          autoAlpha: 1,
+          scale: 1,
+          duration: 0.4,
+          delay: base,
+          ease: "back.out(2)",
+          scrollTrigger: trigger65,
         });
 
         if (lineRefs.current[i]) {
           gsap.to(lineRefs.current[i], {
-            scaleY: 1, duration: 0.45, delay: base + 0.1,
-            ease: "power2.out", scrollTrigger: trigger65,
+            scaleY: 1,
+            duration: 0.45,
+            delay: base + 0.1,
+            ease: "power2.out",
+            scrollTrigger: trigger65,
           });
         }
 
         gsap.to(cardRefs.current[i], {
-          autoAlpha: 1, x: 0, duration: 0.65, delay: base,
-          ease: "power3.out", scrollTrigger: trigger65,
+          autoAlpha: 1,
+          x: 0,
+          duration: 0.65,
+          delay: base,
+          ease: "power3.out",
+          scrollTrigger: trigger65,
         });
       });
 
-      // Map
       gsap.to(mapRef.current, {
-        autoAlpha: 1, x: 0, duration: 1.1, delay: 0.2,
-        ease: "power3.out", scrollTrigger: trigger65,
+        autoAlpha: 1,
+        x: 0,
+        duration: 1.1,
+        delay: 0.2,
+        ease: "power3.out",
+        scrollTrigger: trigger65,
       });
 
       gsap.to(mapRef.current, {
-        y: -12, duration: 3.5, ease: "sine.inOut", yoyo: true, repeat: -1, delay: 1.5,
+        y: -12,
+        duration: 3.5,
+        ease: "sine.inOut",
+        yoyo: true,
+        repeat: -1,
+        delay: 1.5,
       });
     }, sectionRef);
 
@@ -112,7 +140,6 @@ export default function WhyDeeptech() {
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
-
         {/* Tag */}
         <div ref={tagRef} className="flex justify-center mb-5">
           <span
@@ -136,7 +163,7 @@ export default function WhyDeeptech() {
         >
           Why{" "}
           <span
-          className=""
+            className="pr-2"
             style={{
               background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
               WebkitBackgroundClip: "text",
@@ -151,31 +178,27 @@ export default function WhyDeeptech() {
         </h2>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-
           {/* ── LEFT: timeline ── */}
           <div className="relative">
             {reasons.map((reason, i) => (
               <div key={i} className="flex gap-5 relative">
-
                 {/* Dot + line column */}
                 <div className="flex flex-col items-center flex-shrink-0">
-                  {/* Dot — bigger, with ring */}
+                  {/* ✅ Blob image as dot */}
                   <div
                     ref={(el) => (dotRefs.current[i] = el)}
-                    className="relative flex-shrink-0 flex items-center justify-center"
-                    style={{ width: 36, height: 36 }}
+                    className="flex-shrink-0"
+                    style={{ width: 52, height: 52 }}
                   >
-                    {/* Outer ring */}
-                    <div
-                      className="absolute inset-0 rounded-full"
-                      style={{ background: "rgba(8,96,32,0.12)" }}
-                    />
-                    {/* Inner dot */}
-                    <div
-                      className="w-4 h-4 rounded-full relative z-10"
+                    <img
+                      src="/blob.png"
+                      className="rotate-90"
+                      alt=""
                       style={{
-                        background: "linear-gradient(135deg, #086020, #22c55e)",
-                        boxShadow: "0 0 8px rgba(8,96,32,0.4)",
+                        width: "100%",
+                        height: "100%",
+                        objectFit: "contain",
+                        filter: "drop-shadow(0 4px 8px rgba(8,96,32,0.35))",
                       }}
                     />
                   </div>
@@ -189,30 +212,38 @@ export default function WhyDeeptech() {
                       <div
                         ref={(el) => (lineRefs.current[i] = el)}
                         className="w-full h-full rounded-full"
-                        style={{ background: "linear-gradient(180deg, #086020, #22c55e)" }}
+                        style={{
+                          background:
+                            "linear-gradient(180deg, #086020, #22c55e)",
+                        }}
                       />
                     </div>
                   )}
                 </div>
 
                 {/* Content */}
-                <div className="pb-10 pt-1">
+                <div
+                  ref={(el) => (cardRefs.current[i] = el)}
+                  className="pb-10 pt-1"
+                >
                   <h3
                     className="font-bold text-lg mb-1.5"
                     style={{ color: "#1A1A1A" }}
                   >
                     {reason.title}
                   </h3>
-                  <p className="text-sm leading-relaxed" style={{ color: "#6B7280" }}>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "#6B7280" }}
+                  >
                     {reason.desc}
                   </p>
                 </div>
-
               </div>
             ))}
           </div>
 
-          {/* ── RIGHT: India map with rounded corners ── */}
+          {/* ── RIGHT: India map ── */}
           <div
             ref={mapRef}
             className="relative flex items-center justify-center"
@@ -220,26 +251,23 @@ export default function WhyDeeptech() {
             <div
               className="absolute inset-0 pointer-events-none"
               style={{
-                background: "radial-gradient(circle, rgba(9,131,39,0.12) 0%, transparent 70%)",
+                background:
+                  "radial-gradient(circle, rgba(9,131,39,0.12) 0%, transparent 70%)",
                 filter: "blur(32px)",
               }}
             />
             <div className="rounded-2xl overflow-hidden">
-
-
-            <img
-              src="/india_map.png"
-              alt="India Map – Deeptech Ecosystem"
-              className="relative   z-10 w-full h-auto object-contain"
-              style={{
-                maxHeight: "480px",
-                filter: "drop-shadow(0 20px 40px rgba(8,96,32,0.18))",
-              }}
-            />
-          </div>
-          
+              <img
+                src="/india_map.png"
+                alt="India Map – Deeptech Ecosystem"
+                className="relative z-10 w-full h-auto object-contain"
+                style={{
+                  maxHeight: "480px",
+                  filter: "drop-shadow(0 20px 40px rgba(8,96,32,0.18))",
+                }}
+              />
             </div>
-
+          </div>
         </div>
       </div>
     </section>

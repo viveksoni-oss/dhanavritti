@@ -5,18 +5,23 @@ import { gsap } from "gsap";
 import Button from "@/app/components/ui/Button";
 
 export default function Hero() {
-  const leftRef    = useRef(null);
+  const leftRef = useRef(null);
   const contentRef = useRef(null);
 
   useEffect(() => {
-    gsap.set(leftRef.current,   { autoAlpha: 0, x: -50 });
-    gsap.set(contentRef.current, { autoAlpha: 0, x: 60 }); // ← starts from right
+    gsap.set(leftRef.current, { autoAlpha: 0, x: -50 });
+    gsap.set(contentRef.current, { autoAlpha: 0, x: 60 });
 
     const ctx = gsap.context(() => {
-      const tl = gsap.timeline({ delay: 0.1, defaults: { ease: "power3.out" } });
-      tl
-        .to(leftRef.current,    { autoAlpha: 1, x: 0, duration: 0.9 }, 0)
-        .to(contentRef.current, { autoAlpha: 1, x: 0, duration: 0.8 }, 0.25);
+      const tl = gsap.timeline({
+        delay: 0.1,
+        defaults: { ease: "power3.out" },
+      });
+      tl.to(leftRef.current, { autoAlpha: 1, x: 0, duration: 0.9 }, 0).to(
+        contentRef.current,
+        { autoAlpha: 1, x: 0, duration: 0.8 },
+        0.25,
+      );
     });
 
     return () => ctx.revert();
@@ -29,7 +34,10 @@ export default function Hero() {
       style={{ height: "calc(100svh - var(--navbar-height, 64px))" }}
     >
       {/* Background */}
-      <div className="absolute inset-0 -z-20" style={{ background: "#f0f4f0" }} />
+      <div
+        className="absolute inset-0 -z-20"
+        style={{ background: "#f0f4f0" }}
+      />
       <div
         className="absolute inset-0 -z-10"
         style={{
@@ -41,11 +49,10 @@ export default function Hero() {
       />
 
       <div className="flex h-full">
-
-        {/* ── LEFT: plain image ── */}
+        {/* ── LEFT: image ── */}
         <div
           ref={leftRef}
-          className="relative hidden lg:block w-[38%] flex-shrink-0 h-full"
+          className="relative hidden lg:block w-[42%] flex-shrink-0 h-full"
         >
           <img
             src="/Hero Image .png"
@@ -58,28 +65,35 @@ export default function Hero() {
         <div className="flex-1 flex flex-col justify-center items-center h-full">
           <div
             ref={contentRef}
-            className="flex flex-col items-center gap-4 w-full px-10 xl:px-16"
+            className="flex flex-col items-center gap-5 w-full px-8 xl:px-12"
           >
-
-            {/* Logo — centered, dominant */}
+            {/* Logo — bigger + more negative margin */}
             <img
               src="/Logo/Dhanavritti-Venture-Transparent-Logo.png"
               alt="Dhanavritti Logo"
-              className="w-120 h-120 object-contain -my-25 drop-shadow-sm"
+              className="object-contain drop-shadow-sm"
+              style={{
+                width: "420px",
+                height: "420px",
+                marginTop: "-120px",
+                marginBottom: "-120px",
+              }}
             />
 
-            {/* Heading — centered under logo */}
+            {/* Heading — much bigger */}
             <h1
-              className="text-2xl sm:text-3xl font-semibold text-center leading-snug"
+              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
             >
               Backing India&apos;s{" "}
               <span
                 style={{
-                  background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
+                  background:
+                    "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
+                  fontStyle: "italic",
                 }}
               >
                 Deep-Tech
@@ -87,20 +101,21 @@ export default function Hero() {
               Future
             </h1>
 
-            {/* Description */}
-            <p className="text-sm leading-relaxed text-center max-w-sm" style={{ color: "#4B5563" }}>
-              Enabling IP-driven startups to translate breakthrough research into
-              globally scalable enterprises.
+            {/* Description — slightly bigger */}
+            <p
+              className="text-base sm:text-lg leading-relaxed text-center max-w-xl"
+              style={{ color: "#4B5563" }}
+            >
+              Enabling IP-driven startups to translate breakthrough research
+              into globally scalable enterprises.
             </p>
 
             {/* CTA */}
             <Button href="#mentors" variant="primary" size="lg">
               Apply Here
             </Button>
-
           </div>
         </div>
-
       </div>
     </section>
   );

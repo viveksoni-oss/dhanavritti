@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Mail, MapPin } from "lucide-react";
+import { Phone, MapPin } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -146,7 +146,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               {[
                 { label: "Why Dhanavritti", href: "#why-deeptech" },
-                { label: "Our Team", href: "#mentors" },
+                { label: "DTLTT", href: "/dtltt" },
                 { label: "Contact Us", href: "#contact" },
               ].map((link) => (
                 <li key={link.label}>
@@ -181,16 +181,16 @@ export default function Footer() {
               </p>
 
               <a
-                href="mailto:contact@dhanavritti.com"
+                href="tel:9910269874"
                 className="flex items-center gap-2.5 text-sm transition-colors duration-200 hover:text-white"
                 style={{ color: "rgba(193,255,180,0.6)" }}
               >
-                <Mail
+                <Phone
                   size={14}
                   className="flex-shrink-0"
                   style={{ color: "#4ade80" }}
                 />
-                contact@dhanavritti.com
+                99102 69874
               </a>
 
               <div
@@ -203,8 +203,7 @@ export default function Footer() {
                   style={{ color: "#4ade80" }}
                 />
                 <span className="leading-relaxed">
-                  IIT Kanpur Outreach Center, C Block, Phase 2 Industrial Area,
-                  Sector 62, Noida, Ghaziabad, Uttar Pradesh 201309
+                  C Block, Phase 2, Industrial Area, Sector 62, Noida, Ghaziabad, Uttar Pradesh 201309
                 </span>
               </div>
             </div>
@@ -218,21 +217,10 @@ export default function Footer() {
         />
 
         {/* Bottom bar */}
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
           <p className="text-xs" style={{ color: "rgba(193,255,180,0.4)" }}>
             © 2026 Dhanavritti Ventures. All rights reserved.
           </p>
-          <div
-            className="flex gap-5 text-xs"
-            style={{ color: "rgba(193,255,180,0.4)" }}
-          >
-            <a href="#" className="hover:text-white transition-colors">
-              Privacy Policy
-            </a>
-            <a href="#" className="hover:text-white transition-colors">
-              Terms of Service
-            </a>
-          </div>
         </div>
       </div>
     </footer>
