@@ -3,7 +3,13 @@
 import React, { useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import { UploadCloud, CheckCircle2, Navigation, ArrowRight, FileText } from "lucide-react";
+import {
+  UploadCloud,
+  CheckCircle2,
+  Navigation,
+  ArrowRight,
+  FileText,
+} from "lucide-react";
 
 export default function ApplyPage() {
   const [file, setFile] = useState(null);
@@ -19,8 +25,7 @@ export default function ApplyPage() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setIsSubmitting(true);
-    
-    // Simulate an API call
+
     setTimeout(() => {
       setIsSubmitting(false);
       setIsSuccess(true);
@@ -30,31 +35,25 @@ export default function ApplyPage() {
   return (
     <main className="min-h-screen flex flex-col bg-[#f0f9f3]">
       <Navbar />
-      
-      {/* Spacer for fixed navbar */}
-      <div className="pt-28 md:pt-36"></div>
 
-      <div className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-6 py-12 gap-12 lg:gap-20">
-        
+      {/* ✅ Reduced spacer — tighter to header */}
+
+      <div className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-6 py-8 md:py-12 gap-8 lg:gap-16">
         {/* Left Side: Content */}
         <div className="w-full md:w-5/12 flex flex-col justify-center">
-          <div className="inline-block mb-4 px-4 py-1.5 rounded-full bg-green-100 border border-green-200">
-            <span className="text-sm font-semibold tracking-wide text-green-800 uppercase">
-              Application Portal
-            </span>
-          </div>
-          
-          <h1 
+          {/* ✅ Removed Application Portal badge */}
+
+          <h1
             className="text-4xl lg:text-5xl font-bold leading-tight mb-6"
             style={{ fontFamily: "var(--font-display)", color: "#086020" }}
           >
             Fund your Deep-Tech Innovation
           </h1>
-          
+
           <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
-            We are looking for bold, visionary founders building IP-driven startups. 
-            Submit your pitch deck and join India's foremost science-led investment 
-            platform supported by IIT Kanpur.
+            We are looking for bold, visionary founders building IP-driven
+            startups. Submit your pitch deck and join India's foremost
+            science-led investment platform supported by IIT Kanpur.
           </p>
 
           <div className="space-y-4">
@@ -79,11 +78,15 @@ export default function ApplyPage() {
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
                   <Navigation className="w-10 h-10 text-green-600" />
                 </div>
-                <h2 className="text-3xl font-bold text-gray-900 mb-4" style={{ fontFamily: "var(--font-display)" }}>
+                <h2
+                  className="text-3xl font-bold text-gray-900 mb-4"
+                  style={{ fontFamily: "var(--font-display)" }}
+                >
                   Application Received!
                 </h2>
                 <p className="text-gray-600 mb-8 max-w-md">
-                  Thank you for submitting your details. Our team will review your pitch deck and get back to you shortly.
+                  Thank you for submitting your details. Our team will review
+                  your pitch deck and get back to you shortly.
                 </p>
                 <button
                   onClick={() => setIsSuccess(false)}
@@ -96,7 +99,10 @@ export default function ApplyPage() {
               <form onSubmit={handleSubmit} className="space-y-6">
                 {/* Startup Name */}
                 <div className="space-y-2">
-                  <label htmlFor="startupName" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="startupName"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Startup Name
                   </label>
                   <input
@@ -110,7 +116,10 @@ export default function ApplyPage() {
 
                 {/* Startup Founder */}
                 <div className="space-y-2">
-                  <label htmlFor="startupFounder" className="block text-sm font-medium text-gray-700">
+                  <label
+                    htmlFor="startupFounder"
+                    className="block text-sm font-medium text-gray-700"
+                  >
                     Startup Founder
                   </label>
                   <input
@@ -127,14 +136,19 @@ export default function ApplyPage() {
                   <label className="block text-sm font-medium text-gray-700">
                     Pitch Deck / Document Upload
                   </label>
-                  
+
                   <div className="mt-2 flex justify-center rounded-xl border border-dashed border-green-300 px-6 py-10 bg-green-50/50 hover:bg-green-50 transition-colors cursor-pointer relative">
                     <div className="text-center">
                       {file ? (
                         <div className="flex flex-col items-center">
-                          <FileText className="mx-auto h-12 w-12 text-green-500" aria-hidden="true" />
+                          <FileText
+                            className="mx-auto h-12 w-12 text-green-500"
+                            aria-hidden="true"
+                          />
                           <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
-                            <span className="font-semibold text-green-600">{file.name}</span>
+                            <span className="font-semibold text-green-600">
+                              {file.name}
+                            </span>
                           </div>
                           <p className="text-xs text-gray-500 mt-1">
                             Click to change file
@@ -142,7 +156,10 @@ export default function ApplyPage() {
                         </div>
                       ) : (
                         <>
-                          <UploadCloud className="mx-auto h-12 w-12 text-green-400" aria-hidden="true" />
+                          <UploadCloud
+                            className="mx-auto h-12 w-12 text-green-400"
+                            aria-hidden="true"
+                          />
                           <div className="mt-4 flex text-sm leading-6 text-gray-600 justify-center">
                             <label
                               htmlFor="file-upload"
@@ -153,12 +170,11 @@ export default function ApplyPage() {
                             <p className="pl-1">or drag and drop</p>
                           </div>
                           <p className="text-xs leading-5 text-gray-500 mt-2">
-                            PDF, PPTX, or DOCX up to 10MB
+                            PDF, PPTX, or DOCX up to 5MB
                           </p>
                         </>
                       )}
                     </div>
-                    {/* Invisible file input covering the entire dropzone area */}
                     <input
                       id="file-upload"
                       name="file-upload"
@@ -178,7 +194,7 @@ export default function ApplyPage() {
                     disabled={isSubmitting}
                     className="w-full flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-semibold transition-all duration-300 shadow-md shadow-green-600/20 disabled:opacity-70"
                     style={{
-                      background: "linear-gradient(135deg, #22c55e, #086020)"
+                      background: "linear-gradient(135deg, #22c55e, #086020)",
                     }}
                   >
                     {isSubmitting ? (
@@ -196,7 +212,7 @@ export default function ApplyPage() {
           </div>
         </div>
       </div>
-      
+
       <Footer />
     </main>
   );
