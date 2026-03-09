@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
-import Button from "@/app/components/ui/Button";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function Hero() {
   const leftRef = useRef(null);
@@ -111,9 +112,16 @@ export default function Hero() {
             </p>
 
             {/* CTA */}
-            <Button href="#mentors" variant="primary" size="lg">
+            <Link 
+              href="/apply" 
+              className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-semibold transition-all duration-300 shadow-md shadow-green-600/20 hover:scale-105 active:scale-95 mt-2"
+              style={{
+                background: "linear-gradient(135deg, #22c55e, #086020)"
+              }}
+            >
               Apply Here
-            </Button>
+              <ArrowRight size={18} />
+            </Link>
           </div>
         </div>
       </div>
