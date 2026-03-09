@@ -3,102 +3,15 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Linkedin } from "lucide-react";
+
+import TeamCard from "./team/TeamCard";
 import MentorCard from "./mentors/MentorCard";
 import { mentors } from "./mentors/mentorsData";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
 }
-
 // ✅ Updated TeamCard to match the screenshot style
-function TeamCard({ member }) {
-  const cardRef = useRef(null);
-
-  const handleEnter = () => {
-    gsap.to(cardRef.current, {
-      y: -6,
-      boxShadow: "0 24px 60px rgba(8,96,32,0.25)",
-      duration: 0.35,
-      ease: "power3.out",
-      overwrite: true,
-    });
-  };
-
-  const handleLeave = () => {
-    gsap.to(cardRef.current, {
-      y: 0,
-      boxShadow: "0 4px 20px rgba(8,96,32,0.08)",
-      duration: 0.35,
-      ease: "power3.out",
-      overwrite: true,
-    });
-  };
-
-  return (
-    <div
-      ref={cardRef}
-      className="flex flex-col rounded-2xl overflow-hidden cursor-pointer"
-      style={{
-        background: "white",
-        border: "2px solid #22c55e", // ✅ green border like screenshot
-        boxShadow: "0 4px 20px rgba(8,96,32,0.08)",
-      }}
-      onMouseEnter={handleEnter}
-      onMouseLeave={handleLeave}
-    >
-      {/* Image — top section, fixed height */}
-      <div
-        className="w-full overflow-hidden flex-shrink-0"
-        style={{ height: "260px" }}
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={member.img}
-          alt={member.name}
-          className="w-full h-full object-cover object-top"
-        />
-      </div>
-
-      {/* Green gradient bottom strip — name + LinkedIn */}
-      <div
-        className="flex items-center justify-between px-4 py-3 flex-shrink-0"
-        style={{
-          background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
-        }}
-      >
-        <div className="min-w-0 flex-1 mr-2">
-          <p className="text-white font-bold text-sm leading-tight truncate">
-            {member.name}
-          </p>
-          {member.role ? (
-            <p className="text-green-100 text-xs mt-0.5 truncate">
-              {member.role}
-            </p>
-          ) : null}
-        </div>
-
-        <a
-          href={member.linkedin}
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label={`${member.name} on LinkedIn`}
-          className="flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200"
-          style={{ background: "rgba(255,255,255,0.25)", color: "white" }}
-          onMouseEnter={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.45)")
-          }
-          onMouseLeave={(e) =>
-            (e.currentTarget.style.background = "rgba(255,255,255,0.25)")
-          }
-          onClick={(e) => e.stopPropagation()}
-        >
-          <Linkedin size={16} strokeWidth={2} />
-        </a>
-      </div>
-    </div>
-  );
-}
 
 export default function OurTeamSection() {
   const sectionRef = useRef(null);
@@ -110,6 +23,24 @@ export default function OurTeamSection() {
   const dtlttDescRef = useRef(null);
   const teamLabelRef = useRef(null);
   const teamCardsRef = useRef([]);
+  const headerMentors = [
+    {
+      img: "/mentor/headerMentor/Mr. Anurag Singh.png",
+      name: "Mr. Anurag Singh",
+    },
+    {
+      img: "/mentor/headerMentor/Mr. Sandeep Sharma.png",
+      name: "Mr. Sandeep Sharma",
+    },
+    {
+      img: "/mentor/headerMentor/Rajeev Sharma.png",
+      name: "Rajeev Sharma",
+    },
+    {
+      img: "/mentor/headerMentor/Air Marshal Philip Thomas.png",
+      name: "Rajeev Sharma",
+    },
+  ];
 
   useEffect(() => {
     const allFade = [
@@ -225,7 +156,7 @@ export default function OurTeamSection() {
             className="flex items-start justify-center" // ← items-start NOT items-end
             style={{ gap: "0px" }}
           >
-            {mentors.map((mentor, i) => (
+            {headerMentors.map((mentor, i) => (
               <div
                 key={i}
                 style={{ marginTop: i % 2 === 0 ? "0px" : "60px" }} // ✅ only here
@@ -324,8 +255,8 @@ export default function OurTeamSection() {
         </div>
 
         {/* DTLTT members grid */}
-        <div className="max-w-7xl mx-auto px-6 pb-24">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="max-w-7xl mx-auto px-6 py-20 pb-24">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-24">
             {mentors.map((member, i) => (
               <div key={i} ref={(el) => (teamCardsRef.current[i] = el)}>
                 <TeamCard member={member} />

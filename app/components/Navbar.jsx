@@ -6,10 +6,11 @@ import { gsap } from "gsap";
 import Button from "@/app/components/ui/Button";
 
 const navLinks = [
-  { label: "About", href: "#about" },
-  { label: "Why Deep-Tech", href: "#why-deeptech" },
-  { label: "Ecosystem", href: "#ecosystem" },
+  { label: "About Us", href: "#about" },
+  { label: "Why Deep Tech", href: "#why-deeptech" },
+  { label: "IIT Kanpur Ecosystem", href: "#ecosystem" },
   { label: "Focus Areas", href: "#focus-areas" },
+  { label: "Team", href: "#our-team" },
   { label: "DTLTT", href: "/dtltt", external: true },
 ];
 
@@ -167,12 +168,12 @@ export default function Navbar() {
           <a
             href="/"
             onClick={(e) => handleClick(e, "#")}
-            className="flex items-center gap-3 group flex-shrink-0"
+            className="flex items-center justify-center gap-3 group flex-shrink-0"
           >
             <img
               src="/Logo/OnlyLogo.png"
               alt="Dhanavritti Logo"
-              className="w-10 h-10 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
+              className="w-10 mt-1 h-10 object-contain transition-transform duration-300 group-hover:scale-105 drop-shadow-sm"
             />
             <div className="flex flex-col leading-none">
               <span

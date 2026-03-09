@@ -4,7 +4,7 @@ export const mentors = [
     img: "/mentor/Air Marshal Philip Thomas.png",
     offset: 0,
     linkedin: "https://www.linkedin.com/in/air-marshal-philip-thomas-4036b233",
-    desc: "Veteran IAF fighter pilot who held senior commands, earned AVSM, now serves as academic advisor and defence strategist.",
+    desc: "Veteran IAF fighter pilot, earned AVSM & VM. Former Asst. Chief of Air Staff, now Professor of Practice at IIT Kanpur and deep-tech mentor at SIIC.",
   },
   {
     name: "Mr. Sandeep Sharma",
@@ -27,11 +27,11 @@ export const mentors = [
     linkedin: "https://www.linkedin.com/in/anurag-singh-8a1101",
     desc: "CIO, IITK FIRST; Founder-CEO of EMS USA (exited); built sales organizations, led marketing strategy, and mentored 260+ startups.",
   },
-  {
-    name: "Mousum Pal Choudhury",
-    img: "/mentor/Mousum Pal Choudhury.png",
-    offset: 0,
-    linkedin: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
-    desc: "Director at Lok Capital with 20+ years across PE, growth capital & M&A; led investments at Lok Capital, Siguler Guff, Avigo Capital, EY, and L&T.",
-  },
+  // {
+  //   name: "Mousum Pal Choudhury",
+  //   img: "/mentor/Mousum Pal Choudhury.png",
+  //   offset: 0,
+  //   linkedin: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
+  //   desc: "Director at Lok Capital with 20+ years across PE, growth capital & M&A; led investments at Lok Capital, Siguler Guff, Avigo Capital, EY, and L&T.",
+  // },
 ];

@@ -57,7 +57,7 @@ export default function OurTeam() {
   };
 
   return (
-    <section className="w-full py-16 px-4 bg-white">
+    <section id="our-team" className="w-full py-16 px-4 bg-white">
       <div className="max-w-6xl mx-auto flex items-stretch gap-8">
         {/* ── Image with clickable LinkedIn zones ── */}
         <div className="relative flex-1">

@@ -87,6 +87,7 @@ export default function Hero() {
             >
               Backing India&apos;s{" "}
               <span
+              className="pr-2"
                 style={{
                   background:
                     "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
@@ -106,8 +107,7 @@ export default function Hero() {
               className="text-base sm:text-lg leading-relaxed text-center max-w-xl"
               style={{ color: "#4B5563" }}
             >
-              Enabling IP-driven startups to translate breakthrough research
-              into globally scalable enterprises.
+              Disciplined capital for frontier innovation
             </p>
 
             {/* CTA */}

@@ -137,19 +137,19 @@ export default function AboutUs() {
               className="text-base leading-relaxed mb-4"
               style={{ color: "rgba(255,255,255,0.75)" }}
             >
-              Dhanavritti Ventures (DV) is a{" "}
-              <span className="font-semibold italic text-white">
-                deep-tech investment and venture support
-              </span>{" "}
-              initiative focused on backing science-driven startups built on
-              strong intellectual property.
+             <strong> Dhanavritti Ventures (DV) </strong> is an IIT Kanpur–anchored
+              deep-tech investment platform focused on building
+              globally competitive science-driven companies from
+              India.
             </p>
             <p
               className="text-base leading-relaxed"
               style={{ color: "rgba(255,255,255,0.75)" }}
             >
-              We combine technical diligence with commercial insight to support
-              founders building globally competitive technologies from India.
+              DV combines <strong>scientific evaluation</strong> with <strong>commercial
+              venture underwriting</strong> to identify technologies at the
+              inflection point between research breakthrough and
+              scalable commercialization.
             </p>
           </div>
         </div>

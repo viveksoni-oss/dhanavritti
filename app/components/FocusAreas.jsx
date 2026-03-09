@@ -21,13 +21,22 @@ export default function FocusAreas() {
   const trackRef = useRef(null);
 
   const [selectedIndex, setSelectedIndex] = useState(TOTAL);
+  const [isMobile, setIsMobile] = useState(false);
+
+  // ✅ Detect mobile
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     loop: true,
-    // ✅ KEY FIX: instead of "center" (which centers 1 card),
-    // this function centers the PAIR by offsetting exactly 1 card width from left
-    // Result: [full side] [BIG] [BIG] [full side]
-    align: (viewSize, snapSize) => (viewSize - snapSize * 2) / 2,
+    // mobile: center single card | desktop: center the pair
+    align: isMobile
+      ? "center"
+      : (viewSize, snapSize) => (viewSize - snapSize * 2) / 2,
     startIndex: TOTAL,
   });
 
@@ -41,6 +50,11 @@ export default function FocusAreas() {
     emblaApi.on("select", onSelect);
     return () => emblaApi.off("select", onSelect);
   }, [emblaApi]);
+
+  // Reinit embla when mobile/desktop switches so align updates
+  useEffect(() => {
+    emblaApi?.reInit();
+  }, [isMobile, emblaApi]);
 
   useEffect(() => {
     const onKey = (e) => {
@@ -73,8 +87,11 @@ export default function FocusAreas() {
     return () => ctx.revert();
   }, []);
 
+  // Mobile: only selected is focused
+  // Desktop: selected + selected+1 are focused
   const isFocused = (i) => {
     const mod = i % TOTAL;
+    if (isMobile) return mod === selectedIndex % TOTAL;
     return mod === selectedIndex % TOTAL || mod === (selectedIndex + 1) % TOTAL;
   };
 
@@ -99,9 +116,9 @@ export default function FocusAreas() {
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
             fontStyle: "italic",
-            paddingRight: "6px", // ✅ gives the italic tail room to breathe
-            marginRight: "-6px", // ✅ cancels layout shift from padding
-            display: "inline-block", // ✅ padding works correctly on inline-block, not inline
+            paddingRight: "6px",
+            marginRight: "-6px",
+            display: "inline-block",
           }}
         >
           Areas
@@ -113,23 +130,38 @@ export default function FocusAreas() {
         className="flex items-center"
         style={{ minHeight: "480px" }}
       >
-        {/* Left Arrow */}
-        <button
-          onClick={scrollPrev}
-          aria-label="Previous"
-          className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
-                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
-          style={{
-            background: "linear-gradient(135deg, #22c55e, #086020)",
-            boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
-            color: "white",
-          }}
-        >
-          <ChevronLeft size={22} strokeWidth={2.5} />
-        </button>
+        {/* Left Arrow — hidden on mobile */}
+        {!isMobile && (
+          <button
+            onClick={scrollPrev}
+            aria-label="Previous"
+            className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
+                       transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+            style={{
+              background: "linear-gradient(135deg, #22c55e, #086020)",
+              boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
+              color: "white",
+            }}
+          >
+            <ChevronLeft size={22} strokeWidth={2.5} />
+          </button>
+        )}
 
         {/* Carousel */}
-        <div ref={emblaRef} className="overflow-hidden pb-18 -mb-20 flex-1">
+        <div
+          ref={emblaRef}
+          className="flex-1"
+          style={{
+            // ✅ No overflow:hidden on mobile so card bleeds to edges
+            // Desktop keeps overflow for clean crop
+            overflow: isMobile ? "visible" : "hidden",
+            paddingBottom: "72px",
+            marginBottom: "-80px",
+            // ✅ Padding so side cards are slightly visible on all screens
+            paddingLeft: isMobile ? "24px" : "0px",
+            paddingRight: isMobile ? "24px" : "0px",
+          }}
+        >
           <div className="flex items-center py-14">
             {slides.map((area, i) => {
               const focused = isFocused(i);
@@ -138,16 +170,22 @@ export default function FocusAreas() {
               return (
                 <div
                   key={i}
-                  className="flex-shrink-0 flex justify-center
-                             w-full sm:w-1/2 md:w-1/4"
-                  style={{ padding: "0 8px" }}
+                  className="flex-shrink-0 flex justify-center"
+                  style={{
+                    // ✅ Mobile: 80% width so side cards peek in
+                    // Desktop: 25% so 4 cards fill the row
+                    width: isMobile ? "80%" : "25%",
+                    padding: "0 8px",
+                  }}
                   onClick={() => !focused && emblaApi?.scrollTo(i)}
                 >
                   <div
                     className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
                     style={{
                       transform: focused
-                        ? `scale(1.08) translateX(${first ? "-10px" : "10px"})`
+                        ? isMobile
+                          ? "scale(1.04)" // mobile: gentle scale, no translateX
+                          : `scale(1.08) translateX(${first ? "-10px" : "10px"})` // desktop: pair gap
                         : "scale(0.84)",
                       opacity: focused ? 1 : 0.45,
                       filter: focused ? "none" : "blur(0.6px)",
@@ -162,21 +200,44 @@ export default function FocusAreas() {
           </div>
         </div>
 
-        {/* Right Arrow */}
-        <button
-          onClick={scrollNext}
-          aria-label="Next"
-          className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
-                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
-          style={{
-            background: "linear-gradient(135deg, #22c55e, #086020)",
-            boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
-            color: "white",
-          }}
-        >
-          <ChevronRight size={22} strokeWidth={2.5} />
-        </button>
+        {/* Right Arrow — hidden on mobile */}
+        {!isMobile && (
+          <button
+            onClick={scrollNext}
+            aria-label="Next"
+            className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
+                       transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+            style={{
+              background: "linear-gradient(135deg, #22c55e, #086020)",
+              boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
+              color: "white",
+            }}
+          >
+            <ChevronRight size={22} strokeWidth={2.5} />
+          </button>
+        )}
       </div>
+
+      {/* ✅ Mobile swipe hint dots */}
+      {isMobile && (
+        <div className="flex justify-center gap-1.5 mt-6">
+          {focusAreas.map((_, i) => (
+            <button
+              key={i}
+              onClick={() => emblaApi?.scrollTo(i + TOTAL)}
+              className="rounded-full transition-all duration-300"
+              style={{
+                width: i === selectedIndex % TOTAL ? "20px" : "6px",
+                height: "6px",
+                background:
+                  i === selectedIndex % TOTAL
+                    ? "linear-gradient(135deg, #22c55e, #086020)"
+                    : "rgba(8,96,32,0.2)",
+              }}
+            />
+          ))}
+        </div>
+      )}
     </section>
   );
 }

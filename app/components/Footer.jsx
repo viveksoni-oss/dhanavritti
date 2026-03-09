@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Phone, MapPin } from "lucide-react";
+import { Phone, MapPin, Mail } from "lucide-react";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -72,9 +72,7 @@ export default function Footer() {
               className="text-sm leading-relaxed"
               style={{ color: "rgba(193,255,180,0.65)" }}
             >
-              Conviction Capital for Fundamental Innovation.
-              <br />
-              An IIT Kanpur–Anchored Technology Investment Platform.
+              Disciplined capital for frontier innovation
             </p>
 
             {/* Socials */}
@@ -194,17 +192,20 @@ export default function Footer() {
               </a>
 
               <div
-                className="flex items-start gap-2.5 text-sm"
+                className="flex flex-col gap-2.5 text-sm"
                 style={{ color: "rgba(193,255,180,0.6)" }}
               >
-                <MapPin
-                  size={14}
-                  className="flex-shrink-0 mt-0.5"
-                  style={{ color: "#4ade80" }}
-                />
-                <span className="leading-relaxed">
-                  C Block, Phase 2, Industrial Area, Sector 62, Noida, Ghaziabad, Uttar Pradesh 201309
-                </span>
+                <a
+                  href="mailto:contact@dhanavritti.com"
+                  className="flex items-center gap-2.5 transition-colors duration-200 hover:text-white"
+                >
+                  <Mail
+                    size={14}
+                    className="flex-shrink-0"
+                    style={{ color: "#4ade80" }}
+                  />
+                  contact@dhanavritti.com
+                </a>
               </div>
             </div>
           </div>
