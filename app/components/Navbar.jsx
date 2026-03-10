@@ -319,8 +319,6 @@ export default function Navbar() {
                   <a
                     key={link.href}
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="py-3 border-b border-gray-100 flex items-center"
                     onClick={() => setMobileOpen(false)}
                   >
@@ -333,7 +331,6 @@ export default function Navbar() {
                       }}
                     >
                       {link.label}
-                      <ArrowUpRight size={13} strokeWidth={2.5} />
                     </span>
                   </a>
                 );
