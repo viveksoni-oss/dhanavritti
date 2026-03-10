@@ -101,7 +101,8 @@ export default function FocusAreas() {
     <section
       ref={sectionRef}
       id="focus-areas"
-      className="relative py-24 -mt-24 bg-linear-to-b from-white to-[#F5F5F0]"
+      className="relative py-24 -mt-24 bg-linear-to-b from-white to-[#F5F5F0] overflow-hidden"
+      // ✅ overflow-hidden on section itself as final safety net
     >
       <h2
         ref={headingRef}
@@ -136,7 +137,7 @@ export default function FocusAreas() {
             onClick={scrollPrev}
             aria-label="Previous"
             className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
-                       transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
             style={{
               background: "linear-gradient(135deg, #22c55e, #086020)",
               boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
@@ -147,56 +148,52 @@ export default function FocusAreas() {
           </button>
         )}
 
-        {/* Carousel */}
-        <div
-          ref={emblaRef}
-          className="flex-1"
-          style={{
-            // ✅ No overflow:hidden on mobile so card bleeds to edges
-            // Desktop keeps overflow for clean crop
-            overflow: isMobile ? "visible" : "hidden",
-            paddingBottom: "72px",
-            marginBottom: "-80px",
-            // ✅ Padding so side cards are slightly visible on all screens
-            paddingLeft: isMobile ? "24px" : "0px",
-            paddingRight: isMobile ? "24px" : "0px",
-          }}
-        >
-          <div className="flex items-center py-14">
-            {slides.map((area, i) => {
-              const focused = isFocused(i);
-              const first = isFirst(i);
+        {/* ✅ Clip wrapper — hard boundary, cards cannot escape page */}
+        <div className="flex-1 min-w-0 overflow-hidden">
+          <div
+            ref={emblaRef}
+            style={{
+              overflow: "visible", // ✅ embla tracks cards outside for smooth drag
+              paddingBottom: "72px",
+              marginBottom: "-80px",
+              paddingLeft: isMobile ? "16px" : "0px",
+              paddingRight: isMobile ? "16px" : "0px",
+            }}
+          >
+            <div className="flex items-center py-14">
+              {slides.map((area, i) => {
+                const focused = isFocused(i);
+                const first = isFirst(i);
 
-              return (
-                <div
-                  key={i}
-                  className="flex-shrink-0 flex justify-center"
-                  style={{
-                    // ✅ Mobile: 80% width so side cards peek in
-                    // Desktop: 25% so 4 cards fill the row
-                    width: isMobile ? "80%" : "25%",
-                    padding: "0 8px",
-                  }}
-                  onClick={() => !focused && emblaApi?.scrollTo(i)}
-                >
+                return (
                   <div
-                    className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                    key={i}
+                    className="flex-shrink-0 flex justify-center"
                     style={{
-                      transform: focused
-                        ? isMobile
-                          ? "scale(1.04)" // mobile: gentle scale, no translateX
-                          : `scale(1.08) translateX(${first ? "-10px" : "10px"})` // desktop: pair gap
-                        : "scale(0.84)",
-                      opacity: focused ? 1 : 0.45,
-                      filter: focused ? "none" : "blur(0.6px)",
-                      cursor: focused ? "default" : "pointer",
+                      width: isMobile ? "80%" : "25%",
+                      padding: "0 8px",
                     }}
+                    onClick={() => !focused && emblaApi?.scrollTo(i)}
                   >
-                    <FocusCard area={area} isCenter={focused} />
+                    <div
+                      className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
+                      style={{
+                        transform: focused
+                          ? isMobile
+                            ? "scale(1.04)"
+                            : `scale(1.08) translateX(${first ? "-10px" : "10px"})`
+                          : "scale(0.84)",
+                        opacity: focused ? 1 : 0.45,
+                        filter: focused ? "none" : "blur(0.6px)",
+                        cursor: focused ? "default" : "pointer",
+                      }}
+                    >
+                      <FocusCard area={area} isCenter={focused} />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
         </div>
 
@@ -206,7 +203,7 @@ export default function FocusAreas() {
             onClick={scrollNext}
             aria-label="Next"
             className="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center
-                       transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
+                     transition-all duration-300 hover:scale-110 active:scale-95 z-10 mx-3"
             style={{
               background: "linear-gradient(135deg, #22c55e, #086020)",
               boxShadow: "0 4px 18px rgba(8,96,32,0.35)",
@@ -218,7 +215,7 @@ export default function FocusAreas() {
         )}
       </div>
 
-      {/* ✅ Mobile swipe hint dots */}
+      {/* Mobile dots */}
       {isMobile && (
         <div className="flex justify-center gap-1.5 mt-6">
           {focusAreas.map((_, i) => (
