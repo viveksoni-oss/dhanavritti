@@ -32,7 +32,7 @@ export default function TeamCard({ member }) {
         className="w-full relative z-10 rounded-xl"
         style={{
           height: "250px",
-          clipPath: "inset(-90px 0 0 0 round 12px)", // ✅ top open 70px, rest clipped
+          clipPath: "inset(-90px 0 0 0 round  20px)", // ✅ top open 70px, rest clipped
         }}
       >
         {/* Green glow border frame */}
@@ -49,7 +49,7 @@ export default function TeamCard({ member }) {
 
         {/* Bottom fade — blends image into green content box */}
         <div
-          className="absolute bottom-0 left-0 right-0 z-20 pointer-events-none rounded-b-xl"
+          className="absolute -bottom-5 left-0 right-0 z-20 pointer-events-none rounded-b-xl"
           style={{
             height: "80px",
             background: "linear-gradient(to bottom, transparent, #052e0f)",
@@ -66,6 +66,7 @@ export default function TeamCard({ member }) {
           style={{
             height: "350px",
             top: "-80px",
+            maxHeight: "calc(250px + 80px)",
           }}
         />
       </div>

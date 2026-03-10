@@ -27,6 +27,13 @@ export const mentors = [
     linkedin: "https://www.linkedin.com/in/anurag-singh-8a1101",
     desc: "CIO, IITK FIRST; Founder-CEO of EMS USA (exited); built sales organizations, led marketing strategy, and mentored 260+ startups.",
   },
+  {
+    name: "Air Marshal BR Krishna",
+    img: "/mentor/Air Marshal BR Krishna.png",
+    offset: 40,
+    linkedin: "https://www.linkedin.com/",
+    desc: "Veteran Aerospace professional who is a leader in aerospaceoperations, flight testing, and defence strategy, with expertise in driving high-stakes projects, policy formulation, and operational excellence.",
+  },
   // {
   //   name: "Mousum Pal Choudhury",
   //   img: "/mentor/Mousum Pal Choudhury.png",

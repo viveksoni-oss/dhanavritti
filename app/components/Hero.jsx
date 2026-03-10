@@ -31,8 +31,9 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden w-full"
-      style={{ height: "calc(100svh - var(--navbar-height, 64px))" }}
+      className="relative overflow-x-hidden w-full"
+      style={{ minHeight: "calc(100svh - var(--navbar-height, 64px))" }}
+      // ✅ overflow-x-hidden only — vertical can grow freely
     >
       {/* Background */}
       <div
@@ -49,12 +50,14 @@ export default function Hero() {
         }}
       />
 
-      <div className="flex h-full">
+      <div className="flex min-h-[inherit]">
         {/* ── LEFT: image ── */}
         <div
           ref={leftRef}
-          className="relative hidden lg:block w-[42%] flex-shrink-0 h-full"
+          className="relative hidden lg:flex w-[42%] flex-shrink-0"
+          style={{ minHeight: "calc(100svh - var(--navbar-height, 64px))" }}
         >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
             src="/Hero Image .png"
             alt="Dhanavritti Ventures"
@@ -63,16 +66,19 @@ export default function Hero() {
         </div>
 
         {/* ── RIGHT: content ── */}
-        <div className="flex-1 flex flex-col justify-center items-center h-full">
+        <div className="flex-1 flex flex-col justify-center items-center py-12 px-8 xl:px-12">
+          {/* ✅ No overflow-y-scroll, no fixed h-full
+            py-12 gives top/bottom breathing room on short viewports */}
           <div
             ref={contentRef}
-            className="flex flex-col items-center gap-5 w-full px-8 xl:px-12"
+            className="flex flex-col items-center gap-5 w-full"
           >
-            {/* Logo — bigger + more negative margin */}
+            {/* Logo */}
+            {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src="/Logo/Dhanavritti-Venture-Transparent-Logo.png"
               alt="Dhanavritti Logo"
-              className="object-contain drop-shadow-sm"
+              className="md:scale-75 2xl:scale-100 object-contain drop-shadow-sm"
               style={{
                 width: "420px",
                 height: "420px",
@@ -81,14 +87,13 @@ export default function Hero() {
               }}
             />
 
-            {/* Heading — much bigger */}
+            {/* Heading */}
             <h1
-              className="text-4xl sm:text-5xl lg:text-6xl font-bold text-center leading-tight tracking-tight"
+              className="text-4xl sm:text-5xl lg:text-5xl xl:text-5xl font-bold text-center leading-tight tracking-tight"
               style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
             >
               Backing India&apos;s{" "}
               <span
-              className="pr-2"
                 style={{
                   background:
                     "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
@@ -96,6 +101,8 @@ export default function Hero() {
                   WebkitTextFillColor: "transparent",
                   backgroundClip: "text",
                   fontStyle: "italic",
+                  paddingRight: "4px",
+                  display: "inline-block",
                 }}
               >
                 Deep-Tech
@@ -103,7 +110,7 @@ export default function Hero() {
               Future
             </h1>
 
-            {/* Description — slightly bigger */}
+            {/* Description */}
             <p
               className="text-base sm:text-lg leading-relaxed text-center max-w-xl"
               style={{ color: "#4B5563" }}
@@ -111,12 +118,27 @@ export default function Hero() {
               Disciplined capital for frontier innovation
             </p>
 
-            {/* CTA */}
-            <Link 
-              href="/apply" 
-              className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-white font-semibold transition-all duration-300 shadow-md shadow-green-600/20 hover:scale-105 active:scale-95 mt-2"
+            {/* Faded sub-line */}
+            <p
+              className="text-center max-w-xs leading-snug"
               style={{
-                background: "linear-gradient(135deg, #22c55e, #086020)"
+                fontSize: "0.8rem",
+                color: "rgba(75,85,99,0.55)",
+                letterSpacing: "0.01em",
+              }}
+            >
+              Are you a deep-tech startup ready to fuel your next stage of
+              growth?
+            </p>
+
+            {/* CTA */}
+            <Link
+              href="/apply"
+              className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl
+                       text-white font-semibold transition-all duration-300
+                       shadow-md shadow-green-600/20 hover:scale-105 active:scale-95"
+              style={{
+                background: "linear-gradient(135deg, #22c55e, #086020)",
               }}
             >
               Apply Here

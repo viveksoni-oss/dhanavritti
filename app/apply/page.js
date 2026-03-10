@@ -36,12 +36,10 @@ export default function ApplyPage() {
     <main className="min-h-screen flex flex-col bg-[#f0f9f3]">
       <Navbar />
 
-      {/* ✅ Reduced spacer — tighter to header */}
 
       <div className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-6 py-8 md:py-12 gap-8 lg:gap-16">
         {/* Left Side: Content */}
-        <div className="w-full md:w-5/12 flex flex-col justify-center">
-          {/* ✅ Removed Application Portal badge */}
+        <div className="w-full md:w-5/12 flex flex-col">
 
           <h1
             className="text-4xl lg:text-5xl font-bold leading-tight mb-6"
@@ -97,36 +95,70 @@ export default function ApplyPage() {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Startup Name */}
+                {/* Company Name */}
                 <div className="space-y-2">
                   <label
-                    htmlFor="startupName"
+                    htmlFor="companyName"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Startup Name
+                    Company Name
                   </label>
                   <input
                     type="text"
-                    id="startupName"
+                    id="companyName"
                     required
                     placeholder="E.g. Quantum Dynamics"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>
 
-                {/* Startup Founder */}
+                {/* Founder Name */}
                 <div className="space-y-2">
                   <label
-                    htmlFor="startupFounder"
+                    htmlFor="founderName"
                     className="block text-sm font-medium text-gray-700"
                   >
-                    Startup Founder
+                    Founder Name
                   </label>
                   <input
                     type="text"
-                    id="startupFounder"
+                    id="founderName"
                     required
                     placeholder="E.g. Jane Doe"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                  />
+                </div>
+
+                {/* Contact Email */}
+                <div className="space-y-2">
+                  <label
+                    htmlFor="contactEmail"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Contact Email
+                  </label>
+                  <input
+                    type="email"
+                    id="contactEmail"
+                    required
+                    placeholder="founder@company.com"
+                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                  />
+                </div>
+
+                {/* Contact Phone Number */}
+                <div className="space-y-2">
+                  <label
+                    htmlFor="contactPhone"
+                    className="block text-sm font-medium text-gray-700"
+                  >
+                    Contact Phone Number
+                  </label>
+                  <input
+                    type="tel"
+                    id="contactPhone"
+                    required
+                    placeholder="+91 98765 43210"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>

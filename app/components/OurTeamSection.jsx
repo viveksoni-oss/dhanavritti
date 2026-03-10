@@ -29,6 +29,10 @@ export default function OurTeamSection() {
       name: "Mr. Anurag Singh",
     },
     {
+      img: "/mentor/headerMentor/Air Marshal BR Krishna.png",
+      name: "Air Marshal BR Krishna",
+    },
+    {
       img: "/mentor/headerMentor/Mr. Sandeep Sharma.png",
       name: "Mr. Sandeep Sharma",
     },
