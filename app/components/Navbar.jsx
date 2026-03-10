@@ -205,8 +205,6 @@ export default function Navbar() {
                       ref={(el) => {
                         linkRefs.current[i] = el;
                       }}
-                      target="_blank"
-                      rel="noopener noreferrer"
                       className="flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm
                                  font-semibold transition-all duration-300 hover:scale-105 active:scale-95"
                       style={{
@@ -224,7 +222,6 @@ export default function Navbar() {
                       }}
                     >
                       {link.label}
-                      <ArrowUpRight size={13} strokeWidth={2.5} />
                     </a>
                   );
                 }

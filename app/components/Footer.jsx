@@ -65,7 +65,7 @@ export default function Footer() {
             <img
               src="/Logo/Dhanavritti-Venture-Transparent-Logo.png"
               alt="Dhanavritti Logo"
-              className="w-80 -mt-7 object-contain"
+              className="w-80 -mt-2"
             />
           </div>
 
