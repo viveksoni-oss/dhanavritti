@@ -1,0 +1,119 @@
+{
+  "explorer.confirmDelete": false,
+  "files.autoSave": "afterDelay",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.stickyScroll.enabled": false,
+  "editor.fontSize": 16,
+  "explorer.confirmDragAndDrop": false,
+  "editor.wordWrap": "bounded",
+  "[plaintext]": {
+    "editor.defaultFormatter": "remimarsal.prettier-now"
+  },
+  "prisma.showPrismaDataPlatformNotification": false,
+  "git.autofetch": true,
+  "terminal.integrated.defaultProfile.windows": "Git Bash",
+  "workbench.iconTheme": "material-icon-theme",
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "typescript.updateImportsOnFileMove.enabled": "always",
+  "chat.editing.alwaysSaveWithGeneratedChanges": true,
+  "git.confirmSync": false,
+  "git.enableSmartCommit": true,
+  "github.copilot.advanced": {
+    "authProvider": "github"
+  },
+  "workbench.colorTheme": "Vesper",
+  "tailwindCSS.emmetCompletions": true,
+  "editor.cursorBlinking": "expand",
+  "workbench.sideBar.location": "right",
+  "workbench.activityBar.location": "top",
+  "editor.smoothScrolling": true,
+  "editor.cursorSmoothCaretAnimation": "explicit",
+  "editor.fontFamily": "FiraCode Nerd Font Propo, Consolas, 'Courier New', monospace",
+  "github.copilot.enable": {
+    "*": false,
+    "plaintext": false,
+    "markdown": false,
+    "scminput": false
+  },
+  "editor.bracketPairColorization.enabled": false,
+  "background.editor": {
+    "useFront": true,
+    "style": {
+      "background-position": "100% 100%",
+      "background-size": "auto",
+      "opacity": 0.6
+    },
+    "styles": [{}, {}, {}],
+    "images": [],
+    "interval": 0,
+    "random": false
+  },
+  "background.fullscreen": {
+    "images": [
+      "file:///C:/Users/Asus/Downloads/samurai-warrior-night-by-lake.jpg"
+    ],
+    "opacity": 0.15,
+    "size": "cover",
+    "position": "center",
+    "interval": 1000,
+    "random": true
+  },
+  "editor.lineNumbers": "relative",
+  "background.enabled": true,
+  "files.associations": {
+    "*.dbclient-js": "javascript",
+    "*.jsx": "javascriptreact",
+    ".env*": "dotenv",
+    "*.css": "tailwindcss"
+  },
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "explorer.confirmPasteNative": false,
+  "indentRainbow.colorOnWhiteSpaceOnly": true,
+  "indentRainbow.colors": [
+    "rgba(255,255,64,0.2)",
+    "rgba(127,255,127,0.2)",
+    "rgba(255,127,255,0.2)",
+    "rgba(79,236,236,0.2)"
+  ],
+  "editor.minimap.enabled": false,
+  "terminal.integrated.stickyScroll.enabled": false,
+  "highlight-matching-tag.highlightFromContent": true,
+  "indentRainbow.errorColor": "rgba(128,32,32,0)",
+  "indentRainbow.tabmixColor": "rgba(128,32,96)",
+  "extensions.experimental.affinity": {
+    "asvetliakov.vscode-neovim": 1
+  },
+  "gutterpreview.enableReferenceLookup": true,
+  "gutterpreview.paths": {},
+  "gutterpreview.sourceFolders": ["static", "public"],
+  "reactSnippets.settings.importReactOnTop": false,
+  "explorer.autoReveal": "focusNoScroll",
+  "editor.wordWrapColumn": 120,
+  "chat.instructionsFilesLocations": {
+    ".github/instructions": true,
+    ".claude/rules": true,
+    "~/.copilot/instructions": true,
+    "~/.claude/rules": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-collections-post-response.instructions.md": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-collections-pre-request.instructions.md": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-folder-post-response.instructions.md": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-folder-pre-request.instructions.md": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-http-request-post-response.instructions.md": true,
+    "C:\\Users\\Asus\\AppData\\Local\\Temp\\postman-http-request-pre-request.instructions.md": true
+  },
+  "files.simpleDialog.enable": true,
+  "diffEditor.ignoreTrimWhitespace": false,
+  "gitlens.ai.model": "vscode",
+  "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+  "apc.stylesheet": {
+    ".quick-input-widget": "width: 2000px !important; left: calc(50% - 500px) !important;"
+  },
+  "editor.tokenColorCustomizations": {
+    "textMateRules": []
+  },
+  "dotenv.enableAutocloaking": false,
+  "githubPullRequests.createOnPublishBranch": "never",
+  "chat.mcp.gallery.enabled": true
+}

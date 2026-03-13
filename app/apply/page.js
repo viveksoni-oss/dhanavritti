@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import {
@@ -11,36 +11,83 @@ import {
   FileText,
 } from "lucide-react";
 
+/* =========================
+   CONFIGURE THESE VARIABLES
+   ========================= */
+const FORM_ENDPOINT_EMAIL = "pradeepk@iitkfirst.com"; // remove extra trailing space
+const SECOND_ADMIN_EMAIL = "";
+const SITE_URL = "https://dhanavritti.com";
+const MAX_FILE_SIZE_MB = 5;
+
+const ADMIN_EMAIL_SUBJECT =
+  "NEW APPLICATION | Dhanavritti | Funding Deck Submission";
+
+const AUTO_RESPONSE_MESSAGE = `
+Dear Applicant,
+
+Thank you for submitting your deck to Dhanavritti.
+
+We have successfully received your application and our team will review it shortly. If your submission matches our current investment focus, we will get in touch with you.
+
+Warm regards,
+Dhanavritti Team
+https://dhanavritti.com
+`.trim();
+
 export default function ApplyPage() {
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [fileError, setFileError] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
 
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setIsSuccess(params.get("success") === "1");
+  }, []);
+
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      setFile(e.target.files[0]);
+    const selectedFile = e.target.files?.[0];
+    setFileError("");
+
+    if (!selectedFile) {
+      setFile(null);
+      return;
     }
+
+    const maxBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
+
+    if (selectedFile.size > maxBytes) {
+      setFile(null);
+      e.target.value = "";
+      setFileError(`File must be ${MAX_FILE_SIZE_MB}MB or smaller.`);
+      return;
+    }
+
+    setFile(selectedFile);
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
+    if (!file) {
+      e.preventDefault();
+      setFileError("Please upload your pitch deck or document.");
+      return;
+    }
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
-    }, 1500);
+    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+      e.preventDefault();
+      setFileError(`File must be ${MAX_FILE_SIZE_MB}MB or smaller.`);
+      return;
+    }
+
+    setIsSubmitting(true);
   };
 
   return (
     <main className="min-h-screen flex flex-col bg-[#f0f9f3]">
       <Navbar />
 
-
       <div className="flex-1 flex flex-col md:flex-row max-w-7xl mx-auto w-full px-6 py-8 md:py-12 gap-8 lg:gap-16">
-        {/* Left Side: Content */}
         <div className="w-full md:w-5/12 flex flex-col">
-
           <h1
             className="text-4xl lg:text-5xl font-bold leading-tight mb-6"
             style={{ fontFamily: "var(--font-display)", color: "#086020" }}
@@ -50,7 +97,7 @@ export default function ApplyPage() {
 
           <p className="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
             We are looking for bold, visionary founders building IP-driven
-            startups. Submit your pitch deck and join India's foremost
+            startups. Submit your pitch deck and join India&apos;s foremost
             science-led investment platform supported by IIT Kanpur.
           </p>
 
@@ -68,7 +115,6 @@ export default function ApplyPage() {
           </div>
         </div>
 
-        {/* Right Side: Form */}
         <div className="w-full md:w-7/12 flex items-center">
           <div className="bg-white w-full rounded-2xl shadow-xl shadow-green-900/5 p-8 sm:p-10 border border-green-100">
             {isSuccess ? (
@@ -76,26 +122,73 @@ export default function ApplyPage() {
                 <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mb-6">
                   <Navigation className="w-10 h-10 text-green-600" />
                 </div>
+
                 <h2
-                  className="text-3xl font-bold text-gray-900 mb-4"
-                  style={{ fontFamily: "var(--font-display)" }}
+                  className="text-3xl font-bold mb-4"
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    color: "#086020",
+                  }}
                 >
-                  Application Received!
+                  Deck Submitted Successfully
                 </h2>
-                <p className="text-gray-600 mb-8 max-w-md">
-                  Thank you for submitting your details. Our team will review
-                  your pitch deck and get back to you shortly.
+
+                <p className="text-gray-600 mb-3 max-w-md leading-relaxed">
+                  Thank you for submitting your application to Dhanavritti.
                 </p>
-                <button
-                  onClick={() => setIsSuccess(false)}
-                  className="px-8 py-3 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium rounded-xl transition-colors"
+
+                <p className="text-gray-600 mb-8 max-w-md leading-relaxed">
+                  We have successfully received your pitch deck and details. Our
+                  team will review your submission and contact you if there is a
+                  fit.
+                </p>
+
+                <a
+                  href="/apply"
+                  className="px-8 py-3 text-white font-medium rounded-xl transition-colors"
+                  style={{
+                    background: "linear-gradient(135deg, #22c55e, #086020)",
+                  }}
                 >
                   Submit Another Application
-                </button>
+                </a>
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Company Name */}
+              <form
+                action={`https://formsubmit.co/${FORM_ENDPOINT_EMAIL}`}
+                method="POST"
+                encType="multipart/form-data"
+                onSubmit={handleSubmit}
+                className="space-y-6"
+              >
+                <input
+                  type="hidden"
+                  name="_subject"
+                  value={ADMIN_EMAIL_SUBJECT}
+                />
+                <input type="hidden" name="_template" value="table" />
+                <input
+                  type="hidden"
+                  name="_next"
+                  value={`${SITE_URL}/apply?success=1`}
+                />
+                <input type="hidden" name="_captcha" value="true" />
+                <input
+                  type="hidden"
+                  name="_autoresponse"
+                  value={AUTO_RESPONSE_MESSAGE}
+                />
+
+                {SECOND_ADMIN_EMAIL ? (
+                  <input type="hidden" name="_cc" value={SECOND_ADMIN_EMAIL} />
+                ) : null}
+
+                <input
+                  type="hidden"
+                  name="form_name"
+                  value="Dhanavritti Funding Application"
+                />
+
                 <div className="space-y-2">
                   <label
                     htmlFor="companyName"
@@ -106,13 +199,13 @@ export default function ApplyPage() {
                   <input
                     type="text"
                     id="companyName"
+                    name="company_name"
                     required
                     placeholder="E.g. Quantum Dynamics"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>
 
-                {/* Founder Name */}
                 <div className="space-y-2">
                   <label
                     htmlFor="founderName"
@@ -123,13 +216,13 @@ export default function ApplyPage() {
                   <input
                     type="text"
                     id="founderName"
+                    name="founder_name"
                     required
                     placeholder="E.g. Jane Doe"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>
 
-                {/* Contact Email */}
                 <div className="space-y-2">
                   <label
                     htmlFor="contactEmail"
@@ -140,13 +233,13 @@ export default function ApplyPage() {
                   <input
                     type="email"
                     id="contactEmail"
+                    name="email"
                     required
                     placeholder="founder@company.com"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>
 
-                {/* Contact Phone Number */}
                 <div className="space-y-2">
                   <label
                     htmlFor="contactPhone"
@@ -157,13 +250,13 @@ export default function ApplyPage() {
                   <input
                     type="tel"
                     id="contactPhone"
+                    name="contact_phone"
                     required
                     placeholder="+91 98765 43210"
                     className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
                   />
                 </div>
 
-                {/* Document Upload */}
                 <div className="space-y-2">
                   <label className="block text-sm font-medium text-gray-700">
                     Pitch Deck / Document Upload
@@ -202,14 +295,15 @@ export default function ApplyPage() {
                             <p className="pl-1">or drag and drop</p>
                           </div>
                           <p className="text-xs leading-5 text-gray-500 mt-2">
-                            PDF, PPTX, or DOCX up to 5MB
+                            PDF, PPT, PPTX, DOC, DOCX up to {MAX_FILE_SIZE_MB}MB
                           </p>
                         </>
                       )}
                     </div>
+
                     <input
                       id="file-upload"
-                      name="file-upload"
+                      name="attachment"
                       type="file"
                       className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                       onChange={handleFileChange}
@@ -217,9 +311,12 @@ export default function ApplyPage() {
                       required
                     />
                   </div>
+
+                  {fileError ? (
+                    <p className="text-sm text-red-600">{fileError}</p>
+                  ) : null}
                 </div>
 
-                {/* Submit Button */}
                 <div className="pt-4">
                   <button
                     type="submit"
