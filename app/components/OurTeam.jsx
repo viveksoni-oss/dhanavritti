@@ -7,8 +7,8 @@ import { useRef, useState, useEffect } from "react";
 // Mousum Pal Choudhury (Partner):  https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25
 // Vipin Pathak (Partner):          https://www.linkedin.com/in/vipin-pathak
 
-const ORIG_W = 1224; // ← actual width of your team.png in pixels
-const ORIG_H = 800; // ← actual height of your team.png in pixels
+const ORIG_W = 1000; // ← actual width of your team.png in pixels
+const ORIG_H = 650; // ← actual height of your team.png in pixels
 
 // Coords from image-map.net at original resolution
 const areas = [
@@ -22,11 +22,11 @@ const areas = [
     href: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
     label: "Mousum Pal Choudhury LinkedIn",
   },
-  {
-    coords: [28, 527, 304, 799],
-    href: "https://www.linkedin.com/in/vipin-pathak",
-    label: "Vipin Pathak LinkedIn",
-  },
+  // {
+  //   coords: [28, 527, 304, 799],
+  //   href: "https://www.linkedin.com/in/vipin-pathak",
+  //   label: "Vipin Pathak LinkedIn",
+  // },
 ];
 
 export default function OurTeam() {
