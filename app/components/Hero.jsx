@@ -59,7 +59,7 @@ export default function Hero() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/Hero Image .png"
+            src="/Hero_Image.png"
             alt="Dhanavritti Ventures"
             className="w-full h-full object-cover object-center"
           />

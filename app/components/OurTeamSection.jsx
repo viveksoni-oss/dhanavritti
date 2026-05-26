@@ -154,18 +154,18 @@ export default function OurTeamSection() {
         {/* Main heading */}
 
         {/* Mentor strip + overlay heading */}
-        <div className="relative mt-16">
+        <div className="relative mt-16 px-8 sm:px-16 lg:px-32">
           <div
             ref={mentorCardsRef}
-            className="flex items-start justify-center" // ← items-start NOT items-end
-            style={{ gap: "0px" }}
+            className="flex items-start w-full"
           >
             {headerMentors.map((mentor, i) => (
               <div
                 key={i}
-                style={{ marginTop: i % 2 === 0 ? "0px" : "60px" }} // ✅ only here
+                className="flex-1 min-w-0"
+                style={{ marginTop: i % 2 === 0 ? "0" : "5.7vw" }}
               >
-                <MentorCard mentor={mentor} />
+                <MentorCard mentor={mentor} priority={i === 0} />
               </div>
             ))}
           </div>

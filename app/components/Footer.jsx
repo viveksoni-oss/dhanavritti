@@ -32,49 +32,27 @@ export default function Footer() {
       ref={footerRef}
       className="relative overflow-hidden"
       style={{
-        // ✅ top-left lighter green → bottom-right near black
-        background:
-          "linear-gradient(135deg, #0f5c28 0%, #083d1a 45%, #031508 100%)",
+        background: "#f0fdf4",
+        borderTop: "2px solid transparent",
+        borderImage:
+          "linear-gradient(90deg, transparent, #086020, #22c55e, #086020, transparent) 1",
       }}
     >
-      {/* Top accent line — transparent → bright green center → transparent */}
-      <div
-        className="h-[1.5px] w-full"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent 0%, rgba(74,222,128,0.2) 20%, rgba(134,239,172,0.75) 50%, rgba(74,222,128,0.2) 80%, transparent 100%)",
-        }}
-      />
-
-      {/* Faint top-left glow to reinforce lighter corner */}
-      <div
-        className="absolute top-0 left-0 pointer-events-none"
-        style={{
-          width: "50%",
-          height: "200px",
-          background:
-            "radial-gradient(ellipse at top left, rgba(34,197,94,0.08) 0%, transparent 70%)",
-        }}
-      />
-
       <div className="max-w-7xl mx-auto px-6 py-14 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {/* ── Brand ── */}
           <div className="footer-col flex flex-col gap-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
-              src="/Logo/Dhanavritti-Venture-Transparent-Logo.png"
+              src="/Logo/Dhanavritti-Venture-Logo.png"
               alt="Dhanavritti Logo"
-              className="w-80 -mt-2"
+              className="w-36 -mt-2"
             />
           </div>
 
           {/* ── About Us ── */}
           <div className="footer-col">
-            <h4
-              className="text-sm font-semibold mb-5"
-              style={{ color: "#a7f3c0" }} // ✅ slightly brighter heading on lighter bg
-            >
+            <h4 className="text-sm font-semibold mb-5 text-green-900">
               About Us
             </h4>
             <ul className="flex flex-col gap-3">
@@ -86,8 +64,7 @@ export default function Footer() {
                 <li key={link.label}>
                   <a
                     href={link.href}
-                    className="text-sm transition-colors duration-200 hover:text-white"
-                    style={{ color: "rgba(209,255,209,0.65)" }} // ✅ slightly brighter link text
+                    className="text-sm text-green-800 transition-colors duration-200 hover:text-green-600"
                   >
                     {link.label}
                   </a>
@@ -98,35 +75,22 @@ export default function Footer() {
 
           {/* ── Company Info ── */}
           <div className="footer-col">
-            <h4
-              className="text-sm font-semibold mb-5"
-              style={{ color: "#a7f3c0" }}
-            >
+            <h4 className="text-sm font-semibold mb-5 text-green-900">
               Company Info
             </h4>
             <div className="flex flex-col gap-4">
-              <p
-                className="text-sm leading-relaxed"
-                style={{ color: "rgba(209,255,209,0.65)" }}
-              >
+              <p className="text-sm leading-relaxed text-green-800">
                 Dhanavritti Ventures <br />
-                <span className="italic text-[13px]">
+                <span className="italic text-[13px] text-green-700">
                   Disciplined capital for frontier innovation
                 </span>
               </p>
-              <div
-                className="flex flex-col gap-2.5 text-sm"
-                style={{ color: "rgba(209,255,209,0.65)" }}
-              >
+              <div className="flex flex-col gap-2.5 text-sm text-green-800">
                 <a
                   href="mailto:contact@dhanavritti.com"
-                  className="flex items-center gap-2.5 transition-colors duration-200 hover:text-white"
+                  className="flex items-center gap-2.5 transition-colors duration-200 hover:text-green-600"
                 >
-                  <Mail
-                    size={14}
-                    className="flex-shrink-0"
-                    style={{ color: "#6ee7a0" }}
-                  />
+                  <Mail size={14} className="flex-shrink-0 text-green-600" />
                   contact@dhanavritti.com
                 </a>
               </div>
@@ -135,18 +99,11 @@ export default function Footer() {
         </div>
 
         {/* Divider */}
-        <div
-          className="mt-12 mb-6 h-px w-full"
-          style={{
-            background:
-              "linear-gradient(90deg, rgba(134,239,172,0.18), rgba(134,239,172,0.06), transparent)",
-            // ✅ slightly more visible on left (lighter side) fades to transparent right
-          }}
-        />
+        <div className="mt-12 mb-6 h-px w-full bg-green-200" />
 
         {/* Bottom bar */}
         <div className="flex items-center justify-center">
-          <p className="text-xs" style={{ color: "rgba(209,255,209,0.38)" }}>
+          <p className="text-xs text-green-700">
             © 2026 Dhanavritti Ventures. All rights reserved.
           </p>
         </div>
