@@ -1,19 +1,28 @@
-import { Linkedin } from "lucide-react";
+import Image from "next/image";
 
-export default function MentorCard({ mentor, priority = false }) {
+export default function MentorCard({
+  mentor,
+  priority = false,
+  filter = "grayscale(100%) brightness(0.75)",
+}) {
   return (
     <div
-      className="relative flex flex-col overflow-hidden w-full"
-      style={{ aspectRatio: "210 / 380" }}
+      className="relative h-[380px] w-[210px] flex-none overflow-hidden"
+      style={{
+        background:
+          "linear-gradient(135deg, rgba(26,26,26,0.2), rgba(107,114,128,0.34))",
+      }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
+      <Image
         src={mentor.img}
         alt={mentor.name}
-        loading={priority ? "eager" : "lazy"}
-        decoding="async"
-        className="w-full flex-1 object-cover object-top"
-        style={{ filter: "grayscale(100%) brightness(0.75)" }}
+        width={210}
+        height={380}
+        priority={priority}
+        sizes="210px"
+        unoptimized
+        className="h-full w-full object-cover object-top"
+        style={{ filter }}
       />
 
       {/* Green gradient detail strip */}

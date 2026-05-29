@@ -11,7 +11,7 @@ const navLinks = [
   { label: "IIT Kanpur Ecosystem", href: "#ecosystem" },
   { label: "Focus Areas", href: "#focus-areas" },
   { label: "Team", href: "#our-team" },
-  { label: "DTLTT", href: "/dtltt", external: true },
+  { label: "Strategic Advisor", href: "/strategic-advisor", external: true },
 ];
 
 export default function Navbar() {
@@ -196,7 +196,6 @@ export default function Navbar() {
                 const isActive = isHomePage && activeSection === link.href;
                 const isCurrentPage = pathname === link.href;
 
-                // ✅ DTLTT — special green pill
                 if (link.external) {
                   return (
                     <a

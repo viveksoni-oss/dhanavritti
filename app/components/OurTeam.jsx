@@ -2,31 +2,27 @@
 
 import { useRef, useState, useEffect } from "react";
 
-// ✅ Found LinkedIn profiles:
-// Anurag Singh (CIO, IITK FIRST): https://www.linkedin.com/in/anurag-singh-8a1101
-// Mousum Pal Choudhury (Partner):  https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25
-// Vipin Pathak (Partner):          https://www.linkedin.com/in/vipin-pathak
+const ORIG_W = 1035;
+const ORIG_H = 726;
+const LINKEDIN_URL = "https://www.linkedin.com/";
 
-const ORIG_W = 1000; // ← actual width of your team.png in pixels
-const ORIG_H = 650; // ← actual height of your team.png in pixels
-
-// Coords from image-map.net at original resolution
+// Rectangles are based on the original 1035 x 726 team image.
 const areas = [
   {
-    coords: [26, 33, 327, 328],
+    coords: [0, 20, 250, 276],
     href: "https://www.linkedin.com/in/anurag-singh-8a1101",
     label: "Anurag Singh LinkedIn",
   },
   {
-    coords: [840, 294, 1148, 547],
-    href: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
+    coords: [658, 258, 1000, 484],
+    href: LINKEDIN_URL,
     label: "Mousum Pal Choudhury LinkedIn",
   },
-  // {
-  //   coords: [28, 527, 304, 799],
-  //   href: "https://www.linkedin.com/in/vipin-pathak",
-  //   label: "Vipin Pathak LinkedIn",
-  // },
+  {
+    coords: [0, 466, 362, 720],
+    href: LINKEDIN_URL,
+    label: "Arindam Mukhopadhyay LinkedIn",
+  },
 ];
 
 export default function OurTeam() {
@@ -35,19 +31,25 @@ export default function OurTeam() {
 
   useEffect(() => {
     const update = () => {
-      if (imgRef.current) {
-        setImgSize({
-          width: imgRef.current.offsetWidth,
-          height: imgRef.current.offsetHeight,
-        });
-      }
+      if (!imgRef.current) return;
+
+      setImgSize({
+        width: imgRef.current.offsetWidth,
+        height: imgRef.current.offsetHeight,
+      });
     };
+
     update();
+    const observer = new ResizeObserver(update);
+    if (imgRef.current) observer.observe(imgRef.current);
     window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", update);
+    };
   }, []);
 
-  // Scale original coords → rendered image size
   const scaleCoords = (coords) => {
     const sx = imgSize.width / ORIG_W;
     const sy = imgSize.height / ORIG_H;
@@ -59,7 +61,6 @@ export default function OurTeam() {
   return (
     <section id="our-team" className="w-full py-16 px-4 bg-white">
       <div className="max-w-6xl mx-auto flex items-stretch gap-8">
-        {/* ── Image with clickable LinkedIn zones ── */}
         <div className="relative flex-1">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
@@ -67,15 +68,22 @@ export default function OurTeam() {
             src="/ourTeam/team.png"
             alt="Our Team"
             useMap="#team-map"
-            className="w-full h-full object-cover rounded-2xl "
+            className="w-full h-full object-cover rounded-2xl"
             style={{ display: "block" }}
+            onLoad={() => {
+              if (!imgRef.current) return;
+              setImgSize({
+                width: imgRef.current.offsetWidth,
+                height: imgRef.current.offsetHeight,
+              });
+            }}
           />
 
           <map name="team-map">
             {imgSize.width > 0 &&
-              areas.map((area, i) => (
+              areas.map((area) => (
                 <area
-                  key={i}
+                  key={area.label}
                   shape="rect"
                   coords={scaleCoords(area.coords)}
                   href={area.href}
@@ -88,11 +96,10 @@ export default function OurTeam() {
           </map>
         </div>
 
-        {/* ── Vertical TEAM heading ── */}
         <div className="flex flex-col items-center justify-between py-2 select-none">
           {["T", "E", "A", "M"].map((letter, i) => (
             <span
-              key={i}
+              key={letter}
               className="font-bold leading-none"
               style={{
                 fontSize: "clamp(3rem, 6vw, 6rem)",
@@ -112,7 +119,7 @@ export default function OurTeam() {
       <style>{`
         @keyframes fadeSlideIn {
           from { opacity: 0; transform: translateX(24px); }
-          to   { opacity: 1; transform: translateX(0); }
+          to { opacity: 1; transform: translateX(0); }
         }
       `}</style>
     </section>

@@ -23,28 +23,7 @@ export default function OurTeamSection() {
   const dtlttDescRef = useRef(null);
   const teamLabelRef = useRef(null);
   const teamCardsRef = useRef([]);
-  const headerMentors = [
-    {
-      img: "/mentor/headerMentor/Mr. Anurag Singh.png",
-      name: "Mr. Anurag Singh",
-    },
-    {
-      img: "/mentor/headerMentor/Air Marshal BR Krishna.png",
-      name: "Air Marshal BR Krishna",
-    },
-    {
-      img: "/mentor/headerMentor/Mr. Sandeep Sharma.png",
-      name: "Mr. Sandeep Sharma",
-    },
-    {
-      img: "/mentor/headerMentor/Rajeev Sharma.png",
-      name: "Rajeev Sharma",
-    },
-    {
-      img: "/mentor/headerMentor/Air Marshal Philip Thomas.png",
-      name: "Rajeev Sharma",
-    },
-  ];
+  const headerMentors = mentors;
 
   useEffect(() => {
     const allFade = [
@@ -157,15 +136,19 @@ export default function OurTeamSection() {
         <div className="relative mt-16 px-8 sm:px-16 lg:px-32">
           <div
             ref={mentorCardsRef}
-            className="flex items-start w-full"
+            className="grid grid-flow-col auto-cols-[210px] justify-center overflow-hidden"
           >
             {headerMentors.map((mentor, i) => (
               <div
                 key={i}
-                className="flex-1 min-w-0"
+                className="w-[210px]"
                 style={{ marginTop: i % 2 === 0 ? "0" : "5.7vw" }}
               >
-                <MentorCard mentor={mentor} priority={i === 0} />
+                <MentorCard
+                  mentor={mentor}
+                  priority={i === 0}
+                  filter="grayscale(100%) brightness(0.58) contrast(1.06)"
+                />
               </div>
             ))}
           </div>
@@ -183,19 +166,8 @@ export default function OurTeamSection() {
                   "0 4px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5)",
               }}
             >
-              Deep Tech Leadership
-              <br />
-              Think Tank
+              Strategic Advisor
             </h3>
-            <p
-              className="mt-3 text-2xl font-semibold italic"
-              style={{
-                color: "rgba(255,255,255,0.9)",
-                textShadow: "0 2px 16px rgba(0,0,0,0.6)",
-              }}
-            >
-              (DTLTT)
-            </p>
           </div>
         </div>
 
@@ -208,11 +180,8 @@ export default function OurTeamSection() {
             className="text-base sm:text-lg leading-relaxed font-medium"
             style={{ color: "#086020" }}
           >
-            DTLTT is a national strategic council founded by FIRST–IIT Kanpur
-            that provides independent, high-credibility guidance to align
-            industry, government, and academia on long-term deep-tech strategy
-            and to accelerate the translation of research into scalable national
-            outcomes.
+            Blending deep-tech expertise, policy insight, and commercialization
+            access.
           </p>
         </div>
 
@@ -229,22 +198,12 @@ export default function OurTeamSection() {
 
         {/* DTLTT Members grid label */}
         <div ref={teamLabelRef} className="text-center mb-10 px-6">
-          <span
-            className="inline-flex items-center gap-2 text-[10px] font-bold px-4 py-1.5 rounded-full uppercase tracking-widest"
-            style={{
-              color: "#086020",
-              background: "rgba(8,96,32,0.08)",
-              border: "1px solid rgba(8,96,32,0.18)",
-            }}
-          >
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
-            Deep Tech Leadership Think Tank
-          </span>
+          
           <h3
             className="mt-4 text-3xl sm:text-4xl font-bold leading-tight"
             style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
           >
-            Meet the{" "}
+            Strategic{" "}
             <span
               style={{
                 background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
@@ -253,14 +212,14 @@ export default function OurTeamSection() {
                 backgroundClip: "text",
               }}
             >
-              DTLTT Members
+              Advisory Board
             </span>
           </h3>
         </div>
 
         {/* DTLTT members grid */}
         <div className="max-w-7xl mx-auto px-6 py-20 pb-24">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-8 gap-y-24">
+          <div className="flex flex-wrap justify-center gap-x-8 gap-y-24">
             {mentors.map((member, i) => (
               <div key={i} ref={(el) => (teamCardsRef.current[i] = el)}>
                 <TeamCard member={member} />

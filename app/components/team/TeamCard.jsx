@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Linkedin } from "lucide-react";
 import { useRef } from "react";
 import { gsap } from "gsap";
@@ -8,7 +9,7 @@ export default function TeamCard({ member }) {
   return (
     <div
       ref={cardRef}
-      className="flex flex-col cursor-pointer group relative"
+      className="flex w-[280px] flex-none flex-col cursor-pointer group relative"
       style={{ background: "transparent", transition: "transform 0.35s ease" }}
       onMouseEnter={() =>
         gsap.to(cardRef.current, {
@@ -57,18 +58,23 @@ export default function TeamCard({ member }) {
         />
 
         {/* Image — 60px taller than container, overflows top only */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={member.img}
-          alt={member.name}
-          className="absolute left-0 right-0 w-full object-cover object-top rounded-xl
-                     transition-transform duration-700 ease-out group-hover:scale-105"
+        <div
+          className="absolute left-0 right-0 overflow-hidden rounded-xl transition-transform duration-700 ease-out group-hover:scale-105"
           style={{
             height: "350px",
             top: "-80px",
             maxHeight: "calc(250px + 80px)",
           }}
-        />
+        >
+          <Image
+            src={member.img}
+            alt={member.name}
+            fill
+            sizes="280px"
+            unoptimized
+            className="object-cover object-top"
+          />
+        </div>
       </div>
 
       {/* ── Green content box ── */}

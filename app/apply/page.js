@@ -14,8 +14,8 @@ import {
 /* =========================
    CONFIGURE THESE VARIABLES
    ========================= */
-const FORM_ENDPOINT_EMAIL = "pradeepk@iitkfirst.com"; // remove extra trailing space
-const SECOND_ADMIN_EMAIL = "";
+const FORM_ENDPOINT_EMAIL = "contact@dhanavritti.com"; // remove extra trailing space
+const SECOND_ADMIN_EMAIL = "pradeepk@iitkfirst.com";
 const SITE_URL = "https://dhanavritti.com";
 const MAX_FILE_SIZE_MB = 5;
 
