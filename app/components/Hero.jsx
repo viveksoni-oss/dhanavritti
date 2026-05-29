@@ -3,6 +3,7 @@
 import { useRef, useEffect } from "react";
 import { gsap } from "gsap";
 import { ArrowRight } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Hero() {
@@ -57,10 +58,13 @@ export default function Hero() {
           className="relative hidden lg:flex w-[42%] flex-shrink-0"
           style={{ minHeight: "calc(100svh - var(--navbar-height, 64px))" }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/Hero_Image.png"
+          <Image
+            src="/Hero_image.webp"
             alt="Dhanavritti Ventures"
+            width={640}
+            height={660}
+            priority
+            unoptimized
             className="w-full h-full object-cover object-center"
           />
         </div>
