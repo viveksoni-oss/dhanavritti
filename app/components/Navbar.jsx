@@ -11,7 +11,7 @@ const navLinks = [
   { label: "IIT Kanpur Ecosystem", href: "#ecosystem" },
   { label: "Focus Areas", href: "#focus-areas" },
   { label: "Team", href: "#our-team" },
-  { label: "Strategic Advisor", href: "/strategic-advisor", external: true },
+  { label: "Strategic Advisors", href: "/strategic-advisors", external: true },
 ];
 
 export default function Navbar() {

@@ -166,7 +166,7 @@ export default function OurTeamSection() {
                   "0 4px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5)",
               }}
             >
-              Strategic Advisor
+              Strategic Advisors
             </h3>
           </div>
         </div>

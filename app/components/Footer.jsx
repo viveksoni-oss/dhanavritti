@@ -66,7 +66,7 @@ export default function Footer() {
             <ul className="flex flex-col gap-3">
               {[
                 { label: "Why Dhanavritti", href: "#why-deeptech" },
-                { label: "Strategic Advisor", href: "/strategic-advisor" },
+                { label: "Strategic Advisors", href: "/strategic-advisors" },
                 { label: "Contact Us", href: "/apply" },
               ].map((link) => (
                 <li key={link.label}>
