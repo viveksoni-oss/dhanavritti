@@ -7,8 +7,9 @@ export default function MentorCard({
 }) {
   return (
     <div
-      className="relative h-[380px] w-[210px] flex-none overflow-hidden"
+      className="relative w-full flex-none overflow-hidden"
       style={{
+        aspectRatio: "210 / 380",
         background:
           "linear-gradient(135deg, rgba(26,26,26,0.2), rgba(107,114,128,0.34))",
       }}
@@ -19,7 +20,7 @@ export default function MentorCard({
         width={210}
         height={380}
         priority={priority}
-        sizes="210px"
+        sizes="(max-width: 768px) calc((100vw - 64px) / 6), 210px"
         unoptimized
         className="h-full w-full object-cover object-top"
         style={{ filter }}

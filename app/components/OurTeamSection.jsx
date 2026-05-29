@@ -136,12 +136,16 @@ export default function OurTeamSection() {
         <div className="relative mt-16 px-8 sm:px-16 lg:px-32">
           <div
             ref={mentorCardsRef}
-            className="grid grid-flow-col auto-cols-[210px] justify-center overflow-hidden"
+            className="hidden sm:grid grid-flow-col justify-center overflow-visible"
+            style={{
+              gridAutoColumns:
+                "clamp(48px, calc((100vw - 64px) / 6), 210px)",
+            }}
           >
             {headerMentors.map((mentor, i) => (
               <div
                 key={i}
-                className="w-[210px]"
+                className="w-full origin-top"
                 style={{ marginTop: i % 2 === 0 ? "0" : "5.7vw" }}
               >
                 <MentorCard
@@ -155,15 +159,12 @@ export default function OurTeamSection() {
 
           <div
             ref={dtlttHeadingRef}
-            className="absolute  inset-0 flex flex-col items-center justify-center pointer-events-none"
+            className="relative flex min-h-40 flex-col items-center justify-center pointer-events-none sm:absolute sm:inset-0 sm:min-h-0"
           >
             <h3
-              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight"
+              className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight text-green-dark sm:text-white sm:[text-shadow:0_4px_40px_rgba(0,0,0,0.7),0_2px_8px_rgba(0,0,0,0.5)]"
               style={{
                 fontFamily: "var(--font-display)",
-                color: "white",
-                textShadow:
-                  "0 4px 40px rgba(0,0,0,0.7), 0 2px 8px rgba(0,0,0,0.5)",
               }}
             >
               Strategic Advisors

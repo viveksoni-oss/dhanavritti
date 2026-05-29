@@ -34,11 +34,4 @@ export const mentors = [
     linkedin: "https://www.linkedin.com/",
     desc: "AI and cybersecurity researcher leading advancements in secure computing, intelligent systems, and quantum technologies at IIT Kanpur.",
   },
-  {
-    name: "Mr. Anurag Singh",
-    img: "/mentor/optimized/Mr. Anurag Singh.webp",
-    offset: 40,
-    linkedin: "https://www.linkedin.com/in/anurag-singh-8a1101",
-    desc: "CIO, IITK FIRST; Founder-CEO of EMS USA (exited); built sales organizations, led marketing strategy, and mentored 260+ startups.",
-  },
 ];
