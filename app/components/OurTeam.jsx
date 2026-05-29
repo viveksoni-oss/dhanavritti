@@ -15,12 +15,12 @@ const areas = [
   },
   {
     coords: [658, 258, 1000, 484],
-    href: LINKEDIN_URL,
+    href: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
     label: "Mousum Pal Choudhury LinkedIn",
   },
   {
     coords: [0, 466, 362, 720],
-    href: LINKEDIN_URL,
+    href: "https://www.linkedin.com/in/arindammukhopadhyay/",
     label: "Arindam Mukhopadhyay LinkedIn",
   },
 ];
