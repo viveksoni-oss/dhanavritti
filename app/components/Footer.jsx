@@ -46,9 +46,9 @@ export default function Footer() {
             "radial-gradient(circle at 20% 20%, rgba(134,239,172,0.16), transparent 32%), radial-gradient(circle at 82% 70%, rgba(34,197,94,0.14), transparent 34%)",
         }}
       />
+
       <div className="max-w-7xl mx-auto px-6 py-14 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-          {/* ── Brand ── */}
           <div className="footer-col flex flex-col gap-5">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
@@ -58,7 +58,6 @@ export default function Footer() {
             />
           </div>
 
-          {/* ── About Us ── */}
           <div className="footer-col">
             <h4 className="text-sm font-semibold mb-5 text-green-100">
               About Us
@@ -81,7 +80,6 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* ── Company Info ── */}
           <div className="footer-col">
             <h4 className="text-sm font-semibold mb-5 text-green-100">
               Company Info
@@ -106,14 +104,18 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Divider */}
         <div className="mt-12 mb-6 h-px w-full bg-green-200/25" />
 
-        {/* Bottom bar */}
-        <div className="flex items-center justify-center">
+        <div className="flex flex-col items-center justify-between gap-3 sm:flex-row">
           <p className="text-xs text-green-100/70">
-            © 2026 Dhanavritti Ventures. All rights reserved.
+            &copy; 2026 Dhanavritti Ventures. All rights reserved.
           </p>
+          <a
+            href="/privacy-policy"
+            className="text-xs text-green-100/70 transition-colors duration-200 hover:text-white"
+          >
+            Privacy Policy
+          </a>
         </div>
       </div>
     </footer>

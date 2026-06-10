@@ -22,6 +22,7 @@ export default function FocusAreas() {
 
   const [selectedIndex, setSelectedIndex] = useState(TOTAL);
   const [isMobile, setIsMobile] = useState(false);
+  const selectedIndexRef = useRef(TOTAL);
 
   // ✅ Detect mobile
   useEffect(() => {
@@ -43,9 +44,63 @@ export default function FocusAreas() {
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
+  const scrollToFocusArea = useCallback(
+    (focusIndex) => {
+      if (!emblaApi) return;
+
+      const targetMod = ((focusIndex % TOTAL) + TOTAL) % TOTAL;
+      const current = selectedIndexRef.current;
+      const snapCount = emblaApi.scrollSnapList().length;
+
+      let nearest = targetMod;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      for (let i = targetMod; i < snapCount; i += TOTAL) {
+        const distance = Math.abs(i - current);
+        if (distance < nearestDistance) {
+          nearest = i;
+          nearestDistance = distance;
+        }
+      }
+
+      emblaApi.scrollTo(nearest);
+    },
+    [emblaApi],
+  );
+
+  const scrollOneStepTowardCard = useCallback(
+    (focusIndex) => {
+      if (!emblaApi) return;
+
+      const targetMod = ((focusIndex % TOTAL) + TOTAL) % TOTAL;
+      const current = selectedIndexRef.current;
+      const snapCount = emblaApi.scrollSnapList().length;
+
+      let nearest = targetMod;
+      let nearestDistance = Number.POSITIVE_INFINITY;
+
+      for (let i = targetMod; i < snapCount; i += TOTAL) {
+        const distance = Math.abs(i - current);
+        if (distance < nearestDistance) {
+          nearest = i;
+          nearestDistance = distance;
+        }
+      }
+
+      if (nearest === current) return;
+      if (nearest > current) emblaApi.scrollNext();
+      else emblaApi.scrollPrev();
+    },
+    [emblaApi],
+  );
+
   useEffect(() => {
     if (!emblaApi) return;
-    const onSelect = () => setSelectedIndex(emblaApi.selectedScrollSnap());
+    const onSelect = () => {
+      const snap = emblaApi.selectedScrollSnap();
+      selectedIndexRef.current = snap;
+      setSelectedIndex(snap);
+    };
     onSelect();
     emblaApi.on("select", onSelect);
     return () => emblaApi.off("select", onSelect);
@@ -173,7 +228,7 @@ export default function FocusAreas() {
                       width: isMobile ? "80%" : "25%",
                       padding: "0 8px",
                     }}
-                    onClick={() => !focused && emblaApi?.scrollTo(i)}
+                    onClick={() => !focused && scrollOneStepTowardCard(i)}
                   >
                     <div
                       className="w-full transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
@@ -221,7 +276,7 @@ export default function FocusAreas() {
           {focusAreas.map((_, i) => (
             <button
               key={i}
-              onClick={() => emblaApi?.scrollTo(i + TOTAL)}
+              onClick={() => scrollToFocusArea(i)}
               className="rounded-full transition-all duration-300"
               style={{
                 width: i === selectedIndex % TOTAL ? "20px" : "6px",

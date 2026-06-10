@@ -1,127 +1,191 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import Image from "next/image";
+import { Linkedin } from "lucide-react";
+import { ourTeamMembers } from "./team/ourTeamData";
 
-const ORIG_W = 1035;
-const ORIG_H = 726;
-const LINKEDIN_URL = "https://www.linkedin.com/";
+const BAND_TEXTURE = encodeURIComponent(
+  `<svg xmlns='http://www.w3.org/2000/svg' width='140' height='140'>` +
+    `<g fill='none' stroke-linejoin='round' stroke-linecap='round' stroke-width='1.5'>` +
+    `<path d='M0 96 L28 64 L56 84 L84 48 L112 72 L140 96' stroke='rgba(255,255,255,0.075)'/>` +
+    `<path d='M0 131 L28 99 L56 119 L84 83 L112 107 L140 131' stroke='rgba(8,96,32,0.2)'/>` +
+    `</g></svg>`,
+);
 
-// Rectangles are based on the original 1035 x 726 team image.
-const areas = [
-  {
-    coords: [0, 20, 250, 276],
-    href: "https://www.linkedin.com/in/anurag-singh-8a1101",
-    label: "Anurag Singh LinkedIn",
-  },
-  {
-    coords: [658, 258, 1000, 484],
-    href: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
-    label: "Mousum Pal Choudhury LinkedIn",
-  },
-  {
-    coords: [0, 466, 362, 720],
-    href: "https://www.linkedin.com/in/arindammukhopadhyay/",
-    label: "Arindam Mukhopadhyay LinkedIn",
-  },
-];
+function TeamMemberCard({ member, index }) {
+  const isReverse = index % 2 === 1;
+  const clipPath = isReverse
+    ? "polygon(0 18%, 100% 0, 100% 100%, 0 72%)"
+    : "polygon(0 0, 100% 18%, 100% 72%, 0 100%)";
 
-export default function OurTeam() {
-  const imgRef = useRef(null);
-  const [imgSize, setImgSize] = useState({ width: 0, height: 0 });
-
-  useEffect(() => {
-    const update = () => {
-      if (!imgRef.current) return;
-
-      setImgSize({
-        width: imgRef.current.offsetWidth,
-        height: imgRef.current.offsetHeight,
-      });
-    };
-
-    update();
-    const observer = new ResizeObserver(update);
-    if (imgRef.current) observer.observe(imgRef.current);
-    window.addEventListener("resize", update);
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("resize", update);
-    };
-  }, []);
-
-  const scaleCoords = (coords) => {
-    const sx = imgSize.width / ORIG_W;
-    const sy = imgSize.height / ORIG_H;
-    return coords
-      .map((v, i) => Math.round(i % 2 === 0 ? v * sx : v * sy))
-      .join(",");
-  };
-
-  return (
-    <section id="our-team" className="w-full py-16 px-4 bg-white">
-      <div className="max-w-6xl mx-auto flex items-stretch gap-8">
-        <div className="relative flex-1">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            ref={imgRef}
-            src="/ourTeam/team.png"
-            alt="Our Team"
-            useMap="#team-map"
-            className="w-full h-full object-cover rounded-2xl"
-            style={{ display: "block" }}
-            onLoad={() => {
-              if (!imgRef.current) return;
-              setImgSize({
-                width: imgRef.current.offsetWidth,
-                height: imgRef.current.offsetHeight,
-              });
-            }}
-          />
-
-          <map name="team-map">
-            {imgSize.width > 0 &&
-              areas.map((area) => (
-                <area
-                  key={area.label}
-                  shape="rect"
-                  coords={scaleCoords(area.coords)}
-                  href={area.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  alt={area.label}
-                  title={area.label}
-                />
-              ))}
-          </map>
-        </div>
-
-        <div className="flex flex-col items-center justify-between py-2 select-none">
-          {["T", "E", "A", "M"].map((letter, i) => (
-            <span
-              key={letter}
-              className="font-bold leading-none"
-              style={{
-                fontSize: "clamp(3rem, 6vw, 6rem)",
-                color: "#1A1A1A",
-                fontFamily: "var(--font-display)",
-                animation: "fadeSlideIn 0.5s ease forwards",
-                animationDelay: `${i * 0.12}s`,
-                opacity: 0,
-              }}
-            >
-              {letter}
-            </span>
-          ))}
-        </div>
+  const photo = (
+    <div className="relative min-h-[220px] overflow-visible sm:min-h-[245px] lg:min-h-[260px] ">
+      <div className="absolute inset-0 overflow-hidden">
+        <Image
+          src={member.img}
+          alt={member.name}
+          fill
+          sizes="(max-width: 640px) 150px, (max-width: 1024px) 220px, 260px"
+          priority={index === 0}
+          className={`object-contain ${
+            isReverse ? "object-right-bottom" : "object-left-bottom"
+          }`}
+        />
       </div>
 
-      <style>{`
-        @keyframes fadeSlideIn {
-          from { opacity: 0; transform: translateX(24px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-      `}</style>
+      <div
+        className={`absolute bottom-0 z-10 px-3 py-3 sm:px-4 ${
+          isReverse ? "right-0 text-right" : "left-0 text-left"
+        }`}
+        style={{
+          width: "fit-content",
+          minWidth: "250px",
+          maxWidth: "min(220%, 460px)",
+          background: isReverse
+            ? "linear-gradient(270deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.28) 84%, rgba(245,245,240,0.04) 100%)"
+            : "linear-gradient(90deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.28) 84%, rgba(245,245,240,0.04) 100%)",
+          boxShadow:
+            "0 -8px 18px rgba(26,26,26,0.14), 0 6px 16px rgba(8,96,32,0.18)",
+        }}
+      >
+        <h3
+          className="whitespace-nowrap font-extrabold uppercase leading-none"
+          style={{
+            color: "var(--charcoal)",
+            fontSize: "clamp(0.72rem, 1.6vw, 1.2rem)",
+            letterSpacing: "0.02em",
+          }}
+        >
+          {member.name}
+        </h3>
+        <div
+          className={`mt-1.5 flex items-center gap-2 ${
+            isReverse ? "justify-end" : ""
+          }`}
+        >
+          <span
+            className="whitespace-nowrap leading-none"
+            style={{
+              color: "#41544b",
+              fontSize: "clamp(0.64rem, 1.15vw, 0.95rem)",
+            }}
+          >
+            {member.role}
+          </span>
+          {member.linkedin && (
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={`${member.name} on LinkedIn`}
+              className="inline-flex h-4 w-4 flex-shrink-0 items-center justify-center rounded-[3px] bg-[#0A66C2] text-white sm:h-5 sm:w-5"
+            >
+              <Linkedin className="h-[70%] w-[70%]" strokeWidth={2.4} />
+            </a>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+
+  const content = (
+    <div className="flex min-w-0 items-center px-5 py-10 sm:px-8 lg:px-12">
+      <ul
+        className="flex flex-col gap-2 text-white"
+        style={{
+          filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.32))",
+          fontSize: "clamp(0.78rem, 1.55vw, 1.18rem)",
+          lineHeight: 1.35,
+        }}
+      >
+        {member.points.map((point) => (
+          <li key={point} className="flex items-start gap-3">
+            <span className="mt-[0.55em] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white opacity-90" />
+            <span>{point}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+
+  return (
+    <article
+      className="relative w-full -my-2"
+      style={{
+        filter:
+          "drop-shadow(0 24px 16px rgba(26,26,26,0.34)) drop-shadow(0 8px 8px rgba(8,96,32,0.2))",
+      }}
+    >
+      <div
+        className={`relative grid min-h-[220px] overflow-hidden sm:min-h-[245px] lg:min-h-[260px] ${
+          isReverse
+            ? "grid-cols-[1fr_150px] sm:grid-cols-[1fr_220px] lg:grid-cols-[1fr_260px]"
+            : "grid-cols-[150px_1fr] sm:grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr]"
+        }`}
+        style={{
+          clipPath,
+          backgroundImage: `url("data:image/svg+xml,${BAND_TEXTURE}"), linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px), radial-gradient(ellipse at 12% 0%, rgba(255,255,255,0.16) 0%, transparent 48%), linear-gradient(105deg, var(--green-primary) 0%, #1f9a3a 46%, var(--green-dark) 100%)`,
+          backgroundSize:
+            "140px 140px, 35px 35px, 35px 35px, 100% 100%, 100% 100%",
+        }}
+      >
+        {isReverse ? (
+          <>
+            {content}
+            {photo}
+          </>
+        ) : (
+          <>
+            {photo}
+            {content}
+          </>
+        )}
+      </div>
+    </article>
+  );
+}
+
+export default function OurTeam() {
+  return (
+    <section
+      id="our-team"
+      className="w-full overflow-hidden px-3 py-12 sm:px-4 sm:py-16"
+      style={{ background: "var(--off-white)" }}
+    >
+      <div className="mx-auto flex w-full max-w-6xl items-stretch gap-3 sm:gap-5">
+        <div className="flex min-w-0 flex-1 flex-col gap-px">
+          {ourTeamMembers.map((member, index) => (
+            <TeamMemberCard
+              key={`${member.name}-${index}`}
+              member={member}
+              index={index}
+            />
+          ))}
+        </div>
+
+        <aside className="hidden flex-none items-center justify-center sm:flex">
+          <div
+            className="flex flex-col items-center justify-center"
+            style={{ gap: "clamp(0.45rem, 1.25vw, 1.1rem)" }}
+            aria-label="Team"
+          >
+            {["T", "E", "A", "M"].map((letter) => (
+              <span
+                key={letter}
+                className="font-bold leading-none"
+                style={{
+                  color: "var(--green-dark)",
+                  fontFamily: "var(--font-display)",
+                  fontSize: "clamp(2.2rem, 4.7vw, 4.4rem)",
+                }}
+                aria-hidden="true"
+              >
+                {letter}
+              </span>
+            ))}
+          </div>
+        </aside>
+      </div>
     </section>
   );
 }
