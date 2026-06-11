@@ -3,14 +3,14 @@ import Footer from "../components/Footer";
 import OurTeamSection from "../components/OurTeamSection";
 
 export const metadata = {
-  title: "Strategic Advisors and Deep-Tech Leadership",
+  title: "Strategic Advisors",
   description:
-    "Meet the Deep Tech Leadership Think Tank (DTLTT), the visionaries, scientists, and strategists backing India's deep-tech future with Dhanavritti Ventures.",
+    "Meet the scientific, strategic, and venture leaders supporting Dhanavritti Ventures' deep-tech investment platform.",
   alternates: {
     canonical: "/strategic-advisors",
   },
   openGraph: {
-    title: "Strategic Advisors and Deep-Tech Leadership | Dhanavritti Ventures",
+    title: "Strategic Advisors | Dhanavritti Ventures",
     description:
       "Meet the scientific, strategic, and venture leaders supporting Dhanavritti Ventures' deep-tech investment platform.",
     url: "/strategic-advisors",

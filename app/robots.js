@@ -1,5 +1,5 @@
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://dhanavritti.vercel.app";
+  process.env.SITE_URL?.replace(/\/$/, "") || "https://dhanavritti.vercel.app";
 
 export const dynamic = "force-static";
 

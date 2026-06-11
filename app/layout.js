@@ -2,7 +2,7 @@ import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
 const siteUrl =
-  process.env.NEXT_PUBLIC_SITE_URL || "https://dhanavritti.vercel.app";
+  process.env.SITE_URL?.replace(/\/$/, "") || "https://dhanavritti.vercel.app";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
@@ -18,9 +18,9 @@ const inter = Inter({
   display: "swap",
 });
 
-const title = "Dhanavritti Ventures | IIT Kanpur Deep-Tech Investment Platform";
+const title = "Dhanavritti Ventures | Deep-Tech Investment";
 const description =
-  "Dhanavritti Ventures is an IIT Kanpur anchored deep-tech investment platform backing IP-driven startups in India across AI, semiconductors, robotics, medtech, aerospace, cybersecurity, advanced materials, and frontier science.";
+  "IIT Kanpur anchored platform backing IP-driven deep-tech startups in India with capital, ecosystem access, and venture support.";
 
 export const metadata = {
   metadataBase: new URL(siteUrl),
