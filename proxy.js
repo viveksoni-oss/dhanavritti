@@ -17,7 +17,7 @@ function getIP(request) {
   );
 }
 
-export function middleware(request) {
+export function proxy(request) {
   // Only rate-limit the apply API endpoint
   if (!request.nextUrl.pathname.startsWith("/api/apply")) {
     return NextResponse.next();

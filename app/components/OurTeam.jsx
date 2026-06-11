@@ -15,11 +15,11 @@ const BAND_TEXTURE = encodeURIComponent(
 function TeamMemberCard({ member, index }) {
   const isReverse = index % 2 === 1;
   const clipPath = isReverse
-    ? "polygon(0 18%, 100% 0, 100% 100%, 0 72%)"
-    : "polygon(0 0, 100% 18%, 100% 72%, 0 100%)";
+    ? "polygon(0 calc(50% - 70px), 100% 0, 100% 265px, 0 calc(50% + 70px))"
+    : "polygon(0 0, 100% calc(50% - 70px), 100% calc(50% + 70px), 0 265px)";
 
   const photo = (
-    <div className="relative min-h-[220px] overflow-visible sm:min-h-[245px] lg:min-h-[260px] ">
+    <div className="relative min-h-[220px] overflow-visible sm:min-h-[245px] lg:min-h-[265px] ">
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src={member.img}
@@ -42,10 +42,8 @@ function TeamMemberCard({ member, index }) {
           minWidth: "250px",
           maxWidth: "min(220%, 460px)",
           background: isReverse
-            ? "linear-gradient(270deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.28) 84%, rgba(245,245,240,0.04) 100%)"
-            : "linear-gradient(90deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.28) 84%, rgba(245,245,240,0.04) 100%)",
-          boxShadow:
-            "0 -8px 18px rgba(26,26,26,0.14), 0 6px 16px rgba(8,96,32,0.18)",
+            ? "linear-gradient(270deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.24) 82%, rgba(245,245,240,0) 100%)"
+            : "linear-gradient(90deg, rgba(245,245,240,0.94) 0%, rgba(245,245,240,0.74) 58%, rgba(245,245,240,0.24) 82%, rgba(245,245,240,0) 100%)",
         }}
       >
         <h3
@@ -110,14 +108,14 @@ function TeamMemberCard({ member, index }) {
 
   return (
     <article
-      className="relative w-full -my-2"
+      className="relative w-full -my-5"
       style={{
         filter:
           "drop-shadow(0 24px 16px rgba(26,26,26,0.34)) drop-shadow(0 8px 8px rgba(8,96,32,0.2))",
       }}
     >
       <div
-        className={`relative grid min-h-[220px] overflow-hidden sm:min-h-[245px] lg:min-h-[260px] ${
+        className={`relative grid min-h-[220px] overflow-hidden sm:min-h-[245px] lg:min-h-[265px] ${
           isReverse
             ? "grid-cols-[1fr_150px] sm:grid-cols-[1fr_220px] lg:grid-cols-[1fr_260px]"
             : "grid-cols-[150px_1fr] sm:grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr]"
@@ -153,7 +151,7 @@ export default function OurTeam() {
       style={{ background: "var(--off-white)" }}
     >
       <div className="mx-auto flex w-full max-w-6xl items-stretch gap-3 sm:gap-5">
-        <div className="flex min-w-0 flex-1 flex-col gap-px">
+        <div className="flex min-w-0 flex-1 flex-col gap-0">
           {ourTeamMembers.map((member, index) => (
             <TeamMemberCard
               key={`${member.name}-${index}`}
