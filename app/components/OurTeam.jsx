@@ -147,7 +147,7 @@ export default function OurTeam() {
   return (
     <section
       id="our-team"
-      className="w-full overflow-hidden px-3 py-12 sm:px-4 sm:py-16"
+      className="w-full  px-3 py-12 sm:px-4 sm:py-16 md:pt-1"
       style={{ background: "var(--off-white)" }}
     >
       <div className="mx-auto flex w-full max-w-6xl items-stretch gap-3 sm:gap-5">
