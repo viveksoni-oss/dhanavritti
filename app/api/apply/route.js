@@ -22,7 +22,7 @@ We have successfully received your application and our team will review it short
 
 Warm regards,
 Dhanavritti Team
-${process.env.SITE_URL || "https://dhanavritti.com"}
+${process.env.SITE_URL?.replace(/\/$/, "") || "https://dhanavritti.vercel.app"}
 `.trim();
 
 function getRequiredEnv(name) {
