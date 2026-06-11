@@ -1,7 +1,8 @@
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 
-const siteUrl = "https://dhanavritti.com";
+const siteUrl =
+  process.env.NEXT_PUBLIC_SITE_URL || "https://dhanavritti.vercel.app";
 
 const playfair = Playfair_Display({
   variable: "--font-display",
