@@ -12,6 +12,7 @@ const ALLOWED_MIME_TYPES = new Set([
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
 ]);
+const ALLOWED_FILE_EXTENSIONS = new Set(["pdf", "ppt", "pptx", "doc", "docx"]);
 
 const AUTO_RESPONSE_MESSAGE = `
 Dear Applicant,
@@ -60,6 +61,10 @@ function escapeHtml(value) {
 function formatFileSize(bytes) {
   if (!bytes) return "0 KB";
   return `${Math.round(bytes / 1024)} KB`;
+}
+
+function getFileExtension(fileName) {
+  return String(fileName).split(".").pop()?.toLowerCase() || "";
 }
 
 function emailShell({ eyebrow, title, intro, children }) {
@@ -305,6 +310,13 @@ export async function POST(request) {
     if (attachment.size > MAX_FILE_SIZE_BYTES) {
       return Response.json(
         { error: `File must be ${MAX_FILE_SIZE_MB}MB or smaller.` },
+        { status: 400 },
+      );
+    }
+
+    if (!ALLOWED_FILE_EXTENSIONS.has(getFileExtension(attachment.name))) {
+      return Response.json(
+        { error: "Only PDF, PPT, PPTX, DOC, and DOCX files are supported." },
         { status: 400 },
       );
     }

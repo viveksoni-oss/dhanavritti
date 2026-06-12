@@ -4,6 +4,7 @@ export default function FocusCard({ area, isCenter }) {
       className="relative rounded-3xl overflow-hidden w-full transition-all duration-500"
       style={{
         aspectRatio: "2/3",
+        maxHeight: "430px",
         boxShadow: isCenter
           ? "0 32px 64px rgba(0,0,0,0.22)"
           : "0 6px 20px rgba(0,0,0,0.08)",

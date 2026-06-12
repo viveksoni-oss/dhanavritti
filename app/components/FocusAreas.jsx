@@ -159,32 +159,40 @@ export default function FocusAreas() {
       className="relative py-24 -mt-24 bg-linear-to-b from-white to-[#F5F5F0] overflow-hidden"
       // ✅ overflow-hidden on section itself as final safety net
     >
-      <h2
-        ref={headingRef}
-        className="text-center text-5xl sm:text-6xl font-bold mb-14 leading-tight tracking-tight"
-        style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
-      >
-        Focus{" "}
+      <div ref={headingRef} className="flex flex-col items-center text-center mb-14">
         <span
-          style={{
-            background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            fontStyle: "italic",
-            paddingRight: "6px",
-            marginRight: "-6px",
-            display: "inline-block",
-          }}
+          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-5"
+          style={{ background: "rgba(8,96,32,0.08)", color: "#086020", border: "1px solid rgba(8,96,32,0.2)" }}
         >
-          Areas
+          <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
+          Where We Invest
         </span>
-      </h2>
+        <h2
+          className="text-5xl sm:text-6xl font-bold leading-tight tracking-tight"
+          style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
+        >
+          Focus{" "}
+          <span
+            style={{
+              background: "linear-gradient(135deg, #086020 0%, #22c55e 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundClip: "text",
+              fontStyle: "italic",
+              paddingRight: "6px",
+              marginRight: "-6px",
+              display: "inline-block",
+            }}
+          >
+            Areas
+          </span>
+        </h2>
+      </div>
 
       <div
         ref={trackRef}
         className="flex items-center"
-        style={{ minHeight: "480px" }}
+        style={{ minHeight: isMobile ? "clamp(360px, 68vw, 460px)" : "480px" }}
       >
         {/* Left Arrow — hidden on mobile */}
         {!isMobile && (
@@ -225,7 +233,7 @@ export default function FocusAreas() {
                     key={i}
                     className="flex-shrink-0 flex justify-center"
                     style={{
-                      width: isMobile ? "80%" : "25%",
+                      width: isMobile ? "min(76%, 330px)" : "25%",
                       padding: "0 8px",
                     }}
                     onClick={() => !focused && scrollOneStepTowardCard(i)}
@@ -235,7 +243,7 @@ export default function FocusAreas() {
                       style={{
                         transform: focused
                           ? isMobile
-                            ? "scale(1.04)"
+                            ? "scale(1.02)"
                             : `scale(1.08) translateX(${first ? "-10px" : "10px"})`
                           : "scale(0.84)",
                         opacity: focused ? 1 : 0.45,

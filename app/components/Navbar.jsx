@@ -191,7 +191,7 @@ export default function Navbar() {
             </a>
 
             {/* ── Desktop links ── */}
-            <div className="hidden md:flex items-center gap-4 lg:gap-7">
+            <div className="hidden min-[801px]:flex items-center gap-4 lg:gap-7">
               {navLinks.map((link, i) => {
                 const isActive = isHomePage && activeSection === link.href;
                 const isCurrentPage = pathname === link.href;
@@ -260,7 +260,7 @@ export default function Navbar() {
 
             {/* ── Hamburger ── */}
             <button
-              className="md:hidden flex flex-col gap-[5px] w-9 h-9 justify-center items-center
+              className="min-[801px]:hidden flex flex-col gap-[5px] w-9 h-9 justify-center items-center
                          rounded-md hover:bg-black/5 transition-colors flex-shrink-0"
               onClick={() => setMobileOpen((p) => !p)}
               aria-label="Toggle menu"
@@ -295,7 +295,7 @@ export default function Navbar() {
         {/* ── Mobile menu — OUTSIDE <nav> so it never causes nav reflow ── */}
         <div
           ref={mobileMenuRef}
-          className="md:hidden overflow-hidden border-t border-black/5 w-full"
+          className="min-[801px]:hidden overflow-hidden border-t border-black/5 w-full"
           style={{
             height: 0,
             opacity: 0,

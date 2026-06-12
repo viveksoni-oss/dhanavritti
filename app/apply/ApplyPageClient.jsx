@@ -14,11 +14,92 @@ import {
 const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
 
 const MAX_FILE_SIZE_MB = 5;
+const MAX_FILE_SIZE_BYTES = MAX_FILE_SIZE_MB * 1024 * 1024;
+const ALLOWED_FILE_EXTENSIONS = new Set(["pdf", "ppt", "pptx", "doc", "docx"]);
+const ALLOWED_FILE_TYPES = new Set([
+  "application/pdf",
+  "application/msword",
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "application/vnd.ms-powerpoint",
+  "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+]);
+
+const INITIAL_FORM_VALUES = {
+  companyName: "",
+  founderName: "",
+  contactEmail: "",
+  contactPhone: "",
+};
+
+const INITIAL_FORM_ERRORS = {
+  companyName: "",
+  founderName: "",
+  contactEmail: "",
+  contactPhone: "",
+};
+
+function getFileExtension(fileName) {
+  return fileName.split(".").pop()?.toLowerCase() || "";
+}
+
+function isAllowedFile(file) {
+  const extension = getFileExtension(file.name);
+  return ALLOWED_FILE_EXTENSIONS.has(extension) && (!file.type || ALLOWED_FILE_TYPES.has(file.type));
+}
+
+function getPhoneDigits(value) {
+  const digits = value.replace(/\D/g, "");
+  return digits.startsWith("91") && digits.length === 12 ? digits.slice(2) : digits;
+}
+
+function validateField(name, value) {
+  const trimmed = value.trim();
+
+  if (!trimmed) {
+    return "This field is required.";
+  }
+
+  if (/[<>]/.test(trimmed)) {
+    return "Please remove invalid characters.";
+  }
+
+  if (name === "founderName" && !/^[A-Za-z][A-Za-z .'-]{1,79}$/.test(trimmed)) {
+    return "Please enter a valid founder name.";
+  }
+
+  if (name === "companyName" && trimmed.length < 2) {
+    return "Please enter a valid company name.";
+  }
+
+  if (name === "contactEmail" && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(trimmed)) {
+    return "Please enter a valid email address.";
+  }
+
+  if (name === "contactPhone") {
+    const digits = getPhoneDigits(trimmed);
+
+    if (!/^[+\d\s()-]+$/.test(trimmed)) {
+      return "Please use only numbers, spaces, +, -, or brackets.";
+    }
+
+    if (digits.length > 10) {
+      return "Phone number cannot be more than 10 digits.";
+    }
+
+    if (digits.length < 10) {
+      return "Phone number must be 10 digits.";
+    }
+  }
+
+  return "";
+}
 
 export default function ApplyPageClient({ isSuccess }) {
   const [file, setFile] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [fileError, setFileError] = useState("");
+  const [formValues, setFormValues] = useState(INITIAL_FORM_VALUES);
+  const [formErrors, setFormErrors] = useState(INITIAL_FORM_ERRORS);
   const [submitError, setSubmitError] = useState("");
   const turnstileRef = useRef(null);
   const widgetIdRef = useRef(null);
@@ -52,29 +133,72 @@ export default function ApplyPageClient({ isSuccess }) {
       return;
     }
 
-    const maxBytes = MAX_FILE_SIZE_MB * 1024 * 1024;
-
-    if (selectedFile.size > maxBytes) {
+    if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
       setFile(null);
       e.target.value = "";
       setFileError(`File must be ${MAX_FILE_SIZE_MB}MB or smaller.`);
       return;
     }
 
+    if (!isAllowedFile(selectedFile)) {
+      setFile(null);
+      e.target.value = "";
+      setFileError("Only PDF, PPT, PPTX, DOC, and DOCX files are supported.");
+      return;
+    }
+
     setFile(selectedFile);
+  };
+
+  const handleInputChange = (field) => (e) => {
+    const { value } = e.target;
+    setFormValues((current) => ({ ...current, [field]: value }));
+    setFormErrors((current) => ({
+      ...current,
+      [field]: value ? validateField(field, value) : "",
+    }));
+  };
+
+  const handleInputBlur = (field) => (e) => {
+    setFormErrors((current) => ({
+      ...current,
+      [field]: validateField(field, e.target.value),
+    }));
+  };
+
+  const validateForm = () => {
+    const nextErrors = Object.fromEntries(
+      Object.entries(formValues).map(([field, value]) => [
+        field,
+        validateField(field, value),
+      ]),
+    );
+
+    setFormErrors(nextErrors);
+
+    return Object.values(nextErrors).every((error) => !error);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitError("");
 
+    if (!validateForm()) {
+      return;
+    }
+
     if (!file) {
       setFileError("Please upload your pitch deck or document.");
       return;
     }
 
-    if (file.size > MAX_FILE_SIZE_MB * 1024 * 1024) {
+    if (file.size > MAX_FILE_SIZE_BYTES) {
       setFileError(`File must be ${MAX_FILE_SIZE_MB}MB or smaller.`);
+      return;
+    }
+
+    if (!isAllowedFile(file)) {
+      setFileError("Only PDF, PPT, PPTX, DOC, and DOCX files are supported.");
       return;
     }
 
@@ -202,9 +326,19 @@ export default function ApplyPageClient({ isSuccess }) {
                     id="companyName"
                     name="company_name"
                     required
+                    value={formValues.companyName}
+                    onChange={handleInputChange("companyName")}
+                    onBlur={handleInputBlur("companyName")}
                     placeholder="E.g. Quantum Dynamics"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                    className={`w-full px-4 py-3 rounded-lg border outline-none transition-shadow bg-gray-50/50 focus:ring-2 ${
+                      formErrors.companyName
+                        ? "border-red-300 focus:border-red-500 focus:ring-red-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-500"
+                    }`}
                   />
+                  {formErrors.companyName ? (
+                    <p className="text-sm text-red-600">{formErrors.companyName}</p>
+                  ) : null}
                 </div>
 
                 <div className="space-y-2">
@@ -219,9 +353,19 @@ export default function ApplyPageClient({ isSuccess }) {
                     id="founderName"
                     name="founder_name"
                     required
+                    value={formValues.founderName}
+                    onChange={handleInputChange("founderName")}
+                    onBlur={handleInputBlur("founderName")}
                     placeholder="E.g. Jane Doe"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                    className={`w-full px-4 py-3 rounded-lg border outline-none transition-shadow bg-gray-50/50 focus:ring-2 ${
+                      formErrors.founderName
+                        ? "border-red-300 focus:border-red-500 focus:ring-red-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-500"
+                    }`}
                   />
+                  {formErrors.founderName ? (
+                    <p className="text-sm text-red-600">{formErrors.founderName}</p>
+                  ) : null}
                 </div>
 
                 <div className="space-y-2">
@@ -236,9 +380,19 @@ export default function ApplyPageClient({ isSuccess }) {
                     id="contactEmail"
                     name="email"
                     required
+                    value={formValues.contactEmail}
+                    onChange={handleInputChange("contactEmail")}
+                    onBlur={handleInputBlur("contactEmail")}
                     placeholder="founder@company.com"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                    className={`w-full px-4 py-3 rounded-lg border outline-none transition-shadow bg-gray-50/50 focus:ring-2 ${
+                      formErrors.contactEmail
+                        ? "border-red-300 focus:border-red-500 focus:ring-red-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-500"
+                    }`}
                   />
+                  {formErrors.contactEmail ? (
+                    <p className="text-sm text-red-600">{formErrors.contactEmail}</p>
+                  ) : null}
                 </div>
 
                 <div className="space-y-2">
@@ -253,9 +407,21 @@ export default function ApplyPageClient({ isSuccess }) {
                     id="contactPhone"
                     name="contact_phone"
                     required
+                    value={formValues.contactPhone}
+                    onChange={handleInputChange("contactPhone")}
+                    onBlur={handleInputBlur("contactPhone")}
                     placeholder="+91 98765 43210"
-                    className="w-full px-4 py-3 rounded-lg border border-gray-200 focus:ring-2 focus:ring-green-500 focus:border-green-500 outline-none transition-shadow bg-gray-50/50"
+                    inputMode="tel"
+                    maxLength={18}
+                    className={`w-full px-4 py-3 rounded-lg border outline-none transition-shadow bg-gray-50/50 focus:ring-2 ${
+                      formErrors.contactPhone
+                        ? "border-red-300 focus:border-red-500 focus:ring-red-200"
+                        : "border-gray-200 focus:border-green-500 focus:ring-green-500"
+                    }`}
                   />
+                  {formErrors.contactPhone ? (
+                    <p className="text-sm text-red-600">{formErrors.contactPhone}</p>
+                  ) : null}
                 </div>
 
                 <div className="space-y-2">

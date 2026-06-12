@@ -78,6 +78,13 @@ export default function Mentors() {
           ref={headingRef}
           className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none"
         >
+          <span
+            className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4"
+            style={{ background: "rgba(255,255,255,0.15)", color: "rgba(255,255,255,0.92)", border: "1px solid rgba(255,255,255,0.3)", backdropFilter: "blur(4px)" }}
+          >
+            <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            Strategic Advisors
+          </span>
           <h2
             className="text-5xl sm:text-6xl lg:text-7xl font-bold text-center leading-tight"
             style={{
