@@ -36,7 +36,7 @@ function Nameplate({ member, isReverse, mobile = false }) {
         className="whitespace-nowrap font-extrabold uppercase leading-none"
         style={{
           color: "var(--charcoal)",
-          fontSize: mobile ? "0.82rem" : "clamp(0.54rem, 1.28vw, 1rem)",
+          fontSize: mobile ? "0.82rem" : "clamp(0.45rem, 1.28vw, 1rem)",
           letterSpacing: "0.03em",
         }}
       >
@@ -47,7 +47,7 @@ function Nameplate({ member, isReverse, mobile = false }) {
           className="whitespace-nowrap"
           style={{
             color: "#41544b",
-            fontSize: mobile ? "0.75rem" : "clamp(0.5rem, 1.3vw, 0.92rem)",
+            fontSize: mobile ? "0.75rem" : "clamp(0.42rem, 1.3vw, 0.92rem)",
             lineHeight: 1,
           }}
         >
@@ -69,105 +69,21 @@ function Nameplate({ member, isReverse, mobile = false }) {
   );
 }
 
-/* ── Mobile card: photo left (full-figure contained) + name+bullets right ── */
-function MobileCard({ member, index }) {
-  const isReverse = index % 2 === 1;
-  const clipPath = isReverse
-    ? "polygon(0 18px, 100% 0, 100% calc(100% - 18px), 0 100%)"
-    : "polygon(0 0, 100% 18px, 100% 100%, 0 calc(100% - 18px))";
-
-  const photoSide = (
-    <div className="relative overflow-hidden">
-      <Image
-        src={member.img}
-        alt={member.name}
-        fill
-        sizes="148px"
-        priority={index === 0}
-        className="object-contain object-bottom"
-      />
-    </div>
-  );
-
-  const contentSide = (
-    <div className="flex min-w-0 flex-col justify-center gap-2.5 py-4 pl-2 pr-4" style={{ overflow: "hidden" }}>
-      {/* Name block */}
-      <div>
-        <h3
-          className="whitespace-nowrap font-extrabold uppercase leading-tight"
-          style={{ color: "var(--charcoal)", fontSize: "0.68rem", letterSpacing: "0.02em" }}
-        >
-          {member.name}
-        </h3>
-        <div className="mt-0.5 flex items-center gap-1.5">
-          <span className="whitespace-nowrap" style={{ color: "#41544b", fontSize: "0.62rem", lineHeight: 1 }}>
-            {member.role}
-          </span>
-          {member.linkedin && (
-            <a
-              href={member.linkedin}
-              target="_blank"
-              rel="noopener noreferrer"
-              aria-label={`${member.name} on LinkedIn`}
-              className="relative z-50 inline-flex h-3.5 w-3.5 flex-shrink-0 items-center justify-center rounded-[2px] bg-[#0A66C2] text-white"
-            >
-              <Linkedin className="h-[70%] w-[70%]" strokeWidth={2.4} />
-            </a>
-          )}
-        </div>
-      </div>
-      {/* Bullets */}
-      <ul
-        className="flex flex-col gap-1.5 text-white"
-        style={{ filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.28))", fontSize: "0.69rem", lineHeight: 1.38 }}
-      >
-        {member.points.map((pt) => (
-          <li key={pt} style={{ display: "grid", gridTemplateColumns: "8px 1fr", gap: "6px", alignItems: "start" }}>
-            <span className="mt-[0.55em] h-1 w-1 rounded-full bg-white opacity-90" style={{ justifySelf: "center" }} />
-            <span>{pt}</span>
-          </li>
-        ))}
-      </ul>
-    </div>
-  );
-
-  const gridCols = isReverse
-    ? "1fr 38%"
-    : "38% 1fr";
-
-  return (
-    <article className="relative my-1.5 w-full" style={{ filter: SHADOW }}>
-      <div
-        className="relative overflow-hidden"
-        style={{
-          clipPath,
-          minHeight: 160,
-          display: "grid",
-          gridTemplateColumns: gridCols,
-          ...BG_STYLE,
-        }}
-      >
-        {isReverse ? <>{contentSide}{photoSide}</> : <>{photoSide}{contentSide}</>}
-      </div>
-    </article>
-  );
-}
-
 /* ── Desktop card: side-by-side ── */
-function DesktopCard({ member, index, spacious = false }) {
+function DesktopCard({ member, index }) {
   const isReverse = index % 2 === 1;
   const desktopClipPath = isReverse
-    ? "polygon(0 calc(50% - 70px), 100% 0, 100% 265px, 0 calc(50% + 70px))"
-    : "polygon(0 0, 100% calc(50% - 70px), 100% calc(50% + 70px), 0 265px)";
+    ? "polygon(0 calc(50% - var(--team-notch)), 100% 0, 100% var(--team-card-height), 0 calc(50% + var(--team-notch)))"
+    : "polygon(0 0, 100% calc(50% - var(--team-notch)), 100% calc(50% + var(--team-notch)), 0 var(--team-card-height))";
 
   const photoCol = (
-    <div className="relative min-h-[245px] lg:min-h-[265px]">
+    <div className="relative min-h-[var(--team-card-height)]">
       <div className="absolute inset-0 overflow-hidden">
         <Image
           src={member.img}
           alt={member.name}
           fill
-          sizes="(max-width: 1024px) 220px, 260px"
+          sizes="(max-width: 767px) 30vw, 260px"
           priority={index === 0}
           className={`object-contain ${isReverse ? "object-right-bottom" : "object-left-bottom"}`}
         />
@@ -177,7 +93,7 @@ function DesktopCard({ member, index, spacious = false }) {
         className={`absolute bottom-0 z-40 ${
           isReverse ? "right-0 text-right" : "left-0"
         }`}
-        style={{ width: "265px" }}
+        style={{ width: "var(--team-nameplate-width)" }}
       >
         <Nameplate member={member} isReverse={isReverse} />
       </div>
@@ -185,14 +101,14 @@ function DesktopCard({ member, index, spacious = false }) {
   );
 
   const contentCol = (
-    <div className="flex min-w-0 items-center px-8 py-10 lg:px-12">
+    <div className="flex min-w-0 items-center px-[clamp(0.75rem,4vw,3rem)] py-[clamp(1rem,4vw,2.5rem)]">
       <ul
-        className="flex flex-col gap-2.5 text-white"
-        style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.32))", fontSize: "clamp(0.72rem, 1.6vw, 1.1rem)", lineHeight: 1.3 }}
+        className="flex flex-col gap-[clamp(0.35rem,1.4vw,0.625rem)] text-white"
+        style={{ filter: "drop-shadow(0 1px 3px rgba(0,0,0,0.32))", fontSize: "clamp(0.5rem, 1.6vw, 1.1rem)", lineHeight: 1.3 }}
       >
         {member.points.map((pt) => (
-          <li key={pt} className="flex items-start gap-3">
-            <span className="mt-[0.55em] h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white opacity-90" />
+          <li key={pt} className="flex items-start gap-[clamp(0.35rem,1vw,0.75rem)]">
+            <span className="mt-[0.55em] h-[clamp(0.2rem,0.6vw,0.375rem)] w-[clamp(0.2rem,0.6vw,0.375rem)] flex-shrink-0 rounded-full bg-white opacity-90" />
             <span>{pt}</span>
           </li>
         ))}
@@ -201,17 +117,20 @@ function DesktopCard({ member, index, spacious = false }) {
   );
 
   return (
-    <article className={`relative w-full ${spacious ? "my-0" : "-my-5"}`} style={{ filter: SHADOW, zIndex: spacious ? undefined : 20 - index }}>
+    <article className="relative w-full -my-[clamp(0.35rem,2vw,1.25rem)]" style={{ filter: SHADOW, zIndex: 20 - index }}>
       <div
-        className={`team-banner-card relative grid min-h-[245px] overflow-hidden lg:min-h-[265px] ${
-          isReverse
-            ? "grid-cols-[1fr_220px] lg:grid-cols-[1fr_260px]"
-            : "grid-cols-[220px_1fr] lg:grid-cols-[260px_1fr]"
-        }`}
+        className="team-banner-card relative grid min-h-[var(--team-card-height)] overflow-hidden"
         style={{
           clipPath: "polygon(0 0, 100% 0, 100% 100%, 0 100%)",
+          gridTemplateColumns: isReverse
+            ? "1fr var(--team-photo-width)"
+            : "var(--team-photo-width) 1fr",
           ...BG_STYLE,
           "--desktop-clip-path": desktopClipPath,
+          "--team-card-height": "clamp(150px, 25vw, 265px)",
+          "--team-photo-width": "clamp(118px, 30vw, 260px)",
+          "--team-nameplate-width": "clamp(118px, 30vw, 265px)",
+          "--team-notch": "clamp(38px, 7vw, 70px)",
         }}
       >
         {isReverse ? <>{contentCol}{photoCol}</> : <>{photoCol}{contentCol}</>}
@@ -221,22 +140,7 @@ function DesktopCard({ member, index, spacious = false }) {
 }
 
 function TeamMemberCard({ member, index }) {
-  return (
-    <>
-      {/* mobile + sm: mobile card */}
-      <div className="md:hidden">
-        <MobileCard member={member} index={index} />
-      </div>
-      {/* md only: zoomed + spacious (heading is at top instead of aside) */}
-      <div className="hidden md:block lg:hidden" style={{ zoom: "72%" }}>
-        <DesktopCard member={member} index={index} spacious />
-      </div>
-      {/* lg+: full-size, original overlap layout */}
-      <div className="hidden lg:block">
-        <DesktopCard member={member} index={index} />
-      </div>
-    </>
-  );
+  return <DesktopCard member={member} index={index} />;
 }
 
 export default function OurTeam() {
@@ -246,17 +150,16 @@ export default function OurTeam() {
       className="w-full px-3 py-12 md:px-4 md:py-16 md:pt-1"
       style={{ background: "var(--off-white)" }}
     >
-      {/* Section heading — md range only (below lg, replaces the vertical TEAM aside) */}
-      <div className="hidden md:flex lg:hidden flex-col items-center text-center mb-10">
+      <div className="mx-auto mb-8 flex max-w-6xl flex-col items-center text-center md:mb-6">
         <span
-          className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest px-4 py-1.5 rounded-full mb-4"
+          className="mb-4 inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-widest xl:mb-0"
           style={{ background: "rgba(8,96,32,0.08)", color: "#086020", border: "1px solid rgba(8,96,32,0.2)" }}
         >
-          <span className="w-1.5 h-1.5 rounded-full bg-green-600 animate-pulse" />
+          <span className="h-1.5 w-1.5 rounded-full bg-green-600 animate-pulse" />
           The People Behind DV
         </span>
         <h2
-          className="text-4xl sm:text-5xl font-bold leading-tight"
+          className="text-4xl font-bold leading-tight sm:text-5xl xl:hidden"
           style={{ fontFamily: "var(--font-display)", color: "#1A1A1A" }}
         >
           Our{" "}
@@ -274,8 +177,8 @@ export default function OurTeam() {
         </h2>
       </div>
 
-      <div className="mx-auto flex w-full max-w-6xl items-stretch gap-3 md:gap-5">
-        <div className="flex min-w-0 flex-1 flex-col gap-0 md:gap-5 lg:gap-0">
+      <div className="mx-auto flex w-full max-w-6xl items-stretch gap-[clamp(0.35rem,1.8vw,1.25rem)]">
+        <div className="flex min-w-0 flex-1 flex-col gap-0">
           {ourTeamMembers.map((member, index) => (
             <TeamMemberCard
               key={`${member.name}-${index}`}
@@ -285,11 +188,11 @@ export default function OurTeam() {
           ))}
         </div>
 
-        {/* Vertical TEAM letters — lg+ only */}
-        <aside className="hidden lg:flex flex-none items-center justify-center">
+        {/* Vertical TEAM letters */}
+        <aside className="hidden flex-none items-center justify-center xl:flex">
           <div
             className="flex flex-col items-center justify-center"
-            style={{ gap: "clamp(0.45rem, 1.25vw, 1.1rem)" }}
+            style={{ gap: "clamp(0.22rem, 1.25vw, 1.1rem)" }}
             aria-label="Team"
           >
             {["T", "E", "A", "M"].map((letter) => (
@@ -299,7 +202,7 @@ export default function OurTeam() {
                 style={{
                   color: "var(--green-dark)",
                   fontFamily: "var(--font-display)",
-                  fontSize: "clamp(2.2rem, 4.7vw, 4.4rem)",
+                  fontSize: "clamp(1.05rem, 4.7vw, 4.4rem)",
                 }}
                 aria-hidden="true"
               >
