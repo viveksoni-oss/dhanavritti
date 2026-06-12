@@ -82,12 +82,12 @@ export default function Hero() {
             <img
               src="/Logo/Dhanavritti-Venture-Transparent-Logo.png"
               alt="Dhanavritti Logo"
-              className="md:scale-75 2xl:scale-100 object-contain drop-shadow-sm"
+              className="object-contain drop-shadow-sm"
               style={{
-                width: "420px",
-                height: "420px",
-                marginTop: "-120px",
-                marginBottom: "-120px",
+                width: "clamp(200px, 52vw, 420px)",
+                height: "clamp(200px, 52vw, 420px)",
+                marginTop: "clamp(-57px, -14.9vw, -120px)",
+                marginBottom: "clamp(-57px, -14.9vw, -120px)",
               }}
             />
 

@@ -211,3 +211,9 @@ body {
   align-items: flex-end;
   padding: 24px;
 }
+
+@media (min-width: 640px) {
+  .team-banner-card {
+    clip-path: var(--desktop-clip-path) !important;
+  }
+}

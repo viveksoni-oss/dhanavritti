@@ -60,7 +60,7 @@ export default function EcosystemGrid() {
         className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-40 h-40 rounded-full bg-white shadow-xl flex items-center justify-center z-20 border-4 border-green-600"
       >
         <img
-          src="/iitk-logo.png"
+          src="/Icons/IIT_Logo_green.png"
           alt="IIT Kanpur"
           className="w-28 h-28 object-contain"
         />

@@ -9,7 +9,7 @@ export default function TeamCard({ member }) {
   return (
     <div
       ref={cardRef}
-      className="flex w-[280px] flex-none flex-col cursor-pointer group relative"
+      className="flex w-[min(280px,calc(100vw-48px))] flex-none flex-col cursor-pointer group relative"
       style={{ background: "transparent", transition: "transform 0.35s ease" }}
       onMouseEnter={() =>
         gsap.to(cardRef.current, {
@@ -32,7 +32,7 @@ export default function TeamCard({ member }) {
       <div
         className="w-full relative z-10 rounded-xl"
         style={{
-          height: "250px",
+          height: "clamp(222px, 63vw, 250px)",
           clipPath: "inset(-90px 0 0 0 round  20px)", // ✅ top open 70px, rest clipped
         }}
       >
@@ -61,9 +61,9 @@ export default function TeamCard({ member }) {
         <div
           className="absolute left-0 right-0 overflow-hidden rounded-xl transition-transform duration-700 ease-out group-hover:scale-105"
           style={{
-            height: "350px",
+            height: "clamp(310px, 88vw, 350px)",
             top: "-80px",
-            maxHeight: "calc(250px + 80px)",
+            maxHeight: "calc(clamp(222px, 63vw, 250px) + 80px)",
           }}
         >
           <Image

@@ -3,7 +3,7 @@ export const ourTeamMembers = [
   {
     name: "Anurag Singh",
     role: "Managing Partner",
-    img: "/ourTeam/anurag-singh-45.webp",
+    img: "/ourTeam/anurag-singh-cutout.webp",
     linkedin: "https://www.linkedin.com/in/anurag-singh-8a1101",
     points: [
       "CIO, IITK FIRST; former CEO, IITK FIRST",
@@ -14,7 +14,7 @@ export const ourTeamMembers = [
   {
     name: "Mousum Pal Choudhury",
     role: "Investment Advisor",
-    img: "/ourTeam/mousum-pal-choudhury-45.webp",
+    img: "/ourTeam/mousum-pal-choudhury-cutout.webp",
     linkedin: "https://www.linkedin.com/in/mousum-pal-choudhury-07a8b25",
     points: [
       "20+ years across PE, growth capital & M&A",
@@ -24,7 +24,7 @@ export const ourTeamMembers = [
   {
     name: "Arindam Mukhopadhyay",
     role: "Partner",
-    img: "/ourTeam/arindam-mukhopadhyay-45.webp",
+    img: "/ourTeam/arindam-mukhopadhyay-cutout.webp",
     linkedin: "https://www.linkedin.com/in/arindammukhopadhyay/",
     points: [
       "20+ year in management consulting",

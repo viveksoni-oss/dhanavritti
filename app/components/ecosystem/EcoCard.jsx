@@ -1,140 +1,114 @@
-export default function EcoCard({ quadrant, cardRef, position = "top" }) {
-  const { title, Icon, logoSrc, points, mirror } = quadrant;
-  const isBottom = position === "bottom";
+"use client";
 
-  const BulletList = () => (
-    <ul className="flex-1 flex flex-col justify-center gap-4 relative z-10 px-6 py-6">
+function IconRect({ title, imgSrc, logoSrc, circleCorner, innerGradient, isBottom }) {
+  // Quarter-circle at the INWARD corner (toward IIT logo center)
+  const circleStyle = {
+    width: 112,
+    height: 112,
+    borderRadius: "50%",
+    background: innerGradient,
+    opacity: 0.55,
+    position: "absolute",
+    [circleCorner.h]: -61,
+    [circleCorner.v]: -61,
+  };
+
+  // Rounded-rect at the OUTWARD corner (opposite of circle)
+  const rectH = circleCorner.h === "right" ? "left" : "right";
+  const rectV = circleCorner.v === "bottom" ? "top" : "bottom";
+  const rectStyle = {
+    width: 100,
+    height: 100,
+    borderRadius: 30,
+    background: innerGradient,
+    opacity: 0.48,
+    position: "absolute",
+    [rectH]: -62,
+    [rectV]: -62,
+  };
+
+  const src = logoSrc || imgSrc;
+
+  return (
+    <div
+      className="relative overflow-hidden flex-shrink-0 bg-white rounded-xl md:rounded-2xl shadow-sm flex flex-col items-center justify-center gap-2 md:gap-3 z-10"
+      style={{ width: "clamp(96px, 17vw, 176px)", minHeight: "clamp(110px, 18vw, 180px)", margin: "clamp(5px, 1.2vw, 12px)" }}
+    >
+      <div style={circleStyle} />
+      <div style={rectStyle} />
+
+      {/* Bottom-row cards: icon first, title below. Top-row: title first, icon below. */}
+      {isBottom ? (
+        <>
+          {src && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={src} alt={title} className="relative z-10 object-contain" style={{ width: "clamp(38px, 8vw, 76px)", height: "clamp(38px, 8vw, 76px)" }} />
+          )}
+          <p className="relative z-10 text-[8px] md:text-[10px] font-bold text-center uppercase tracking-widest leading-tight px-2 md:px-3" style={{ color: "#4B5563" }}>
+            {title}
+          </p>
+        </>
+      ) : (
+        <>
+          <p className="relative z-10 text-[8px] md:text-[10px] font-bold text-center uppercase tracking-widest leading-tight px-2 md:px-3" style={{ color: "#4B5563" }}>
+            {title}
+          </p>
+          {src && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={src} alt={title} className="relative z-10 object-contain" style={{ width: "clamp(38px, 8vw, 76px)", height: "clamp(38px, 8vw, 76px)" }} />
+          )}
+        </>
+      )}
+    </div>
+  );
+}
+
+function BulletList({ points }) {
+  return (
+    <ul className="flex-1 flex flex-col justify-center gap-3 px-5 py-5 relative z-10">
       {points.map((p, i) => (
-        <li
-          key={i}
-          className="flex items-start gap-3 text-sm leading-snug"
-          style={{ color: "#374151" }}
-        >
-          <span
-            className="mt-[5px] w-2.5 h-2.5 rounded-full flex-shrink-0"
-            style={{ background: "#086020" }}
-          />
-          <span className="font-medium">{p}</span>
+        <li key={i} className="flex items-start gap-2 text-sm leading-snug">
+          <span className="mt-[5px] w-2 h-2 rounded-full flex-shrink-0" style={{ background: "#086020" }} />
+          <span className="font-semibold" style={{ color: "#1a3320" }}>{p}</span>
         </li>
       ))}
     </ul>
   );
+}
 
-  const SubCard = () => (
-    <div
-      className="relative flex-shrink-0 w-48 overflow-hidden flex flex-col items-center justify-center gap-4 rounded-2xl p-6 shadow-xl z-10 m-4"
-      style={{
-        background: "white",
-        minHeight: "180px",
-      }}
-    >
-      {/*
-        Green circle accent:
-        - top cards   → top corner (toward outside edge)
-        - bottom cards → bottom corner (toward outside edge)
-        - mirror=false → left side | mirror=true → right side
-      */}
-      <div
-        className="absolute w-20 h-20 rounded-full"
-        style={{
-          background: "linear-gradient(135deg, #86efac, #22c55e)",
-          ...(isBottom
-            ? {
-                bottom: "-36px",
-                ...(mirror ? { right: "-36px" } : { left: "-36px" }),
-              }
-            : {
-                top: "-36px",
-                ...(mirror ? { right: "-36px" } : { left: "-36px" }),
-              }),
-        }}
-      />
-      <div
-        className="absolute w-40 h-40 rounded-full"
-        style={{
-          background: "linear-gradient(135deg, #86efac, #22c55e)",
-          ...(isBottom
-            ? {
-                top: "-60px",
-                ...(mirror ? { left: "-36px" } : { right: "-36px" }),
-              }
-            : {
-                bottom: "-36px",
-                ...(mirror ? { left: "-36px" } : { right: "-36px" }),
-              }),
-        }}
-      />
+export default function EcoCard({ quadrant, isBottom = false }) {
+  const { title, imgSrc, logoSrc, points, mirror, cardBg, innerGradient, circleCorner } = quadrant;
 
-      <p
-        className="text-[10px] font-bold text-center uppercase tracking-widest leading-tight relative z-10"
-        style={{ color: "#4B5563" }}
-      >
-        {title}
-      </p>
-
-      {logoSrc ? (
-        <img
-          src={logoSrc}
-          alt={title}
-          className="w-20 h-20 object-contain relative z-10"
-        />
-      ) : (
-        Icon && (
-          <div
-            className="w-14 h-14 rounded-2xl flex items-center justify-center relative z-10"
-            style={{
-              background: "rgba(8,96,32,0.07)",
-              border: "1px solid rgba(8,96,32,0.1)",
-            }}
-          >
-            <Icon size={28} strokeWidth={1.5} color="#086020" />
-          </div>
-        )
-      )}
-    </div>
-  );
+  const outerSmall = {
+    position: "absolute",
+    width: 64,
+    height: 64,
+    borderRadius: "50%",
+    border: "2px solid rgba(255,255,255,0.5)",
+    top: -32,
+    ...(mirror ? { right: -32 } : { left: -32 }),
+  };
 
   return (
     <div
-      ref={cardRef}
       className="relative overflow-hidden flex items-center rounded-3xl"
       style={{
-        background: "linear-gradient(135deg, #ddf0b8 0%, #cce8a0 100%)",
-        minHeight: "200px",
-        border: "1.5px solid rgba(134,239,172,0.6)",
+        background: cardBg,
+        border: "1.5px solid rgba(255,255,255,0.35)",
+        minHeight: 200,
       }}
     >
-      {/* Small partial circle — outer corner (away from center) */}
-      <div
-        className="absolute w-20 h-20 rounded-full"
-        style={{
-          border: "3px solid rgba(134,239,172,0.9)",
-          ...(mirror
-            ? { top: "-40px", right: "-40px" }
-            : { top: "-40px", left: "-40px" }),
-        }}
-      />
-
-      {/* Large partial circle — inner corner (toward grid center) */}
-      <div
-        className="absolute w-52 h-52 rounded-full"
-        style={{
-          border: "3px solid rgba(34,197,94,0.25)",
-          ...(mirror
-            ? { bottom: "-104px", left: "-104px" }
-            : { bottom: "-104px", right: "-104px" }),
-        }}
-      />
+      <div style={outerSmall} />
 
       {mirror ? (
         <>
-          <SubCard />
-          <BulletList />
+          <IconRect title={title} imgSrc={imgSrc} logoSrc={logoSrc} circleCorner={circleCorner} innerGradient={innerGradient} isBottom={isBottom} />
+          <BulletList points={points} />
         </>
       ) : (
         <>
-          <BulletList />
-          <SubCard />
+          <BulletList points={points} />
+          <IconRect title={title} imgSrc={imgSrc} logoSrc={logoSrc} circleCorner={circleCorner} innerGradient={innerGradient} isBottom={isBottom} />
         </>
       )}
     </div>
