@@ -93,11 +93,11 @@ export default function Footer() {
               </p>
               <div className="flex flex-col gap-2.5 text-sm text-green-100/85">
                 <a
-                  href="mailto:contact@dhanavritti.com"
+                  href="mailto:anurag@dhanavritti.com"
                   className="flex items-center gap-2.5 transition-colors duration-200 hover:text-white"
                 >
                   <Mail size={14} className="flex-shrink-0 text-green-300" />
-                  contact@dhanavritti.com
+                  anurag@dhanavritti.com
                 </a>
               </div>
             </div>

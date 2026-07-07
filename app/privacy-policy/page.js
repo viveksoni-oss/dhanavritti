@@ -156,11 +156,11 @@ export default function PrivacyPolicyPage() {
             <p className="mt-3 text-sm leading-7 text-gray-700 sm:text-base">
               For privacy questions or requests, contact us at{" "}
               <a
-                href="mailto:contact@dhanavritti.com"
+                href="mailto:anurag@dhanavritti.com"
                 className="font-semibold underline decoration-green-700/30 underline-offset-4"
                 style={{ color: "var(--green-dark)" }}
               >
-                contact@dhanavritti.com
+                anurag@dhanavritti.com
               </a>
               .
             </p>

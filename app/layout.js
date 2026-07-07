@@ -106,7 +106,7 @@ const organizationJsonLd = {
   ],
   url: siteUrl,
   logo: `${siteUrl}/Logo/Dhanavritti-Venture-Logo.png`,
-  email: "contact@dhanavritti.com",
+  email: "anurag@dhanavritti.com",
   description,
   areaServed: "India",
   knowsAbout: [
