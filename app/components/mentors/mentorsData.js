@@ -13,13 +13,7 @@ export const mentors = [
     linkedin: "https://www.linkedin.com/in/saurabhkumar-diplomat/",
     desc: "Veteran diplomat driving global trade, India-EU relations, and international expansion through decades of strategic foreign policy leadership.",
   },
-  {
-    name: "Dr. Devesh Chaturvedi",
-    img: "/mentor/optimized/Dr. Devesh Chaturvedi.webp",
-    offset: 0,
-    linkedin: "https://www.linkedin.com/",
-    desc: "Policy expert advancing digital agriculture, governance innovation, and public-sector transformation through landmark national initiatives like PM-KISAN.",
-  },
+
   {
     name: "Prof. J G Rao",
     img: "/mentor/optimized/Prof. J G Rao.webp",
